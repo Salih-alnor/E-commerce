@@ -5,6 +5,7 @@ import Home from '../../screens/Home';
 import Search from '../../screens/Search';
 import Cart from '../../screens/Cart';
 import Profile from '../../screens/Profile';
+import COLORS from '../../assets/colors';
 
 
 import home from "../../assets/images/tabBarIcons/home.png"
@@ -17,7 +18,7 @@ const TabBar = () => {
 
     const Icon = ({src, focuse}) => {
         return <Image style={[styles.icon, {
-            tintColor: focuse ? "#6055D8" : "#9E9E9E"
+            tintColor: focuse ? COLORS.mainColor : COLORS.secondaryColor
         }]} source={src}/>
     }
   return (
@@ -43,6 +44,9 @@ const styles = StyleSheet.create({
 
     tabBar: {
         height: 60,
+        backgroundColor: COLORS.white,
+        borderColor: COLORS.white,
+        borderTopWidth: .1
         
     }
 })
