@@ -25,7 +25,8 @@ const TabBar = () => {
     <Tab.Navigator screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBar
+        tabBarStyle: styles.tabBar,
+        tabBarHideOnKeyboard: true
     }}>
         <Tab.Screen options={{tabBarIcon : ({focused}) => <Icon src={home} focuse={focused}/>}} name='home' component={Home}/>
         <Tab.Screen options={{tabBarIcon : ({focused}) => <Icon src={search} focuse={focused}/>}} name='search' component={Search}/>

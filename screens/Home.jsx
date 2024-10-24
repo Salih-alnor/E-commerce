@@ -3,23 +3,31 @@ import React from "react";
 import Header from "../components/home-compnents/Header";
 import COLORS from "../assets/colors";
 import SearchBox from "../components/home-compnents/SearchBox";
+import SliderBox from "../components/home-compnents/SliderBox";
+import Featured from "../components/home-compnents/Featured";
 
 const Home = () => {
   const homeComponents = () => {
     return (
       <View>
-        <Header />
         <SearchBox />
+        <SliderBox />
+        <Featured />
       </View>
     );
   };
-  return <View style={styles.container}>
-    <FlatList 
-    data={[""]}
-    renderItem={homeComponents}
-    keyExtractor={(item, index) => index.toString()}
-    />
-  </View>;
+  return (
+    <View style={styles.container}>
+      <Header />
+      <FlatList
+      showsVerticalScrollIndicator={false}
+        onScrollEndDrag={() => console.log("hello")}
+        data={[""]}
+        renderItem={homeComponents}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  );
 };
 
 export default Home;
