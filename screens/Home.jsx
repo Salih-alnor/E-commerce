@@ -6,13 +6,17 @@ import SearchBox from "../components/home-compnents/SearchBox";
 import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
 
-const Home = () => {
+
+
+const Home = ({navigation}) => {
   const homeComponents = () => {
     return (
       <View>
+        
         <SearchBox />
         <SliderBox />
-        <Featured />
+        <Featured title="Featured" navigation={navigation}/>
+        <Featured title="Most Popular"/>
       </View>
     );
   };
@@ -20,8 +24,7 @@ const Home = () => {
     <View style={styles.container}>
       <Header />
       <FlatList
-      showsVerticalScrollIndicator={false}
-        onScrollEndDrag={() => console.log("hello")}
+        showsVerticalScrollIndicator={false}
         data={[""]}
         renderItem={homeComponents}
         keyExtractor={(item, index) => index.toString()}

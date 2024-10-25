@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, Platform } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../screens/Home';
@@ -25,7 +25,10 @@ const TabBar = () => {
     <Tab.Navigator screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [styles.tabBar, {
+          paddingTop: Platform.OS === "ios" ? 20 : 0,
+          height: Platform.OS === "ios" ? 90 : 60,
+        }],
         tabBarHideOnKeyboard: true
     }}>
         <Tab.Screen options={{tabBarIcon : ({focused}) => <Icon src={home} focuse={focused}/>}} name='home' component={Home}/>
@@ -40,11 +43,10 @@ export default TabBar
 
 const styles = StyleSheet.create({
     icon: {
-        width: 24, height: 24,
+        width: 25, height: 25,
     },
 
-    tabBar: {
-        height: 60,
+    tabBar: { 
         backgroundColor: COLORS.white,
         borderColor: COLORS.white,
         borderTopWidth: .1
