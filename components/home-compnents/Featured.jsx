@@ -78,7 +78,11 @@ const Featured = ({title, navigation}) => {
       <TouchableOpacity key={index} style={[styles.card, {
         marginRight: index === itemsLength - 1 ? 16 : 0
       }]}
-      onPress={() => navigation.navigate("details")}  
+      onPress={() => navigation.navigate("details", {
+        title: item.title,
+        price: item.price,
+        image: item.image
+      })}  
       >
 
         <TouchableOpacity style={styles.heartIcon}>

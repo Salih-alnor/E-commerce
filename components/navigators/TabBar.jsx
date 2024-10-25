@@ -26,8 +26,8 @@ const TabBar = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: [styles.tabBar, {
-          paddingTop: Platform.OS === "ios" ? 20 : 0,
-          height: Platform.OS === "ios" ? 90 : 60,
+          paddingTop: Platform.OS === "ios" ? 5 : 0,
+          height: Platform.OS === "ios" ? 70 : 60,
         }],
         tabBarHideOnKeyboard: true
     }}>

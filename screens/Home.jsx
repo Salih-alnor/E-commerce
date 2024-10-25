@@ -16,7 +16,7 @@ const Home = ({navigation}) => {
         <SearchBox />
         <SliderBox />
         <Featured title="Featured" navigation={navigation}/>
-        <Featured title="Most Popular"/>
+        <Featured title="Most Popular" navigation={navigation}/>
       </View>
     );
   };
