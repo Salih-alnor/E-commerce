@@ -1,20 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { createStackNavigator } from "@react-navigation/stack" ;
-import TabBar from './TabBar';
-import Details from '../../screens/Details';
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import TabBar from "./TabBar";
+import Details from "../../screens/Details";
+import CheckOut from "../../screens/CheckOut";
+import COLORS from "../../assets/colors";
 const StackNav = () => {
-    const Stack = createStackNavigator( ) ;
+  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{
-        headerShown:false
-    }}>
-        <Stack.Screen name='tabBar' component={TabBar}/>
-        <Stack.Screen name='details' component={Details}/>
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="tabBar"
+        component={TabBar}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="details"
+        component={Details}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: false
+           
+          
+        }}
+        name="Check Out"
+        component={CheckOut}
+      />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
-export default StackNav
+export default StackNav;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

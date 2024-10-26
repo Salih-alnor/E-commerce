@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
 
   heartIcon: {
     position: "absolute",
-    top: 10, right: 10,
+    top: 8, right: 8,
     width: 30, height: 30,
     zIndex: 2,
   }

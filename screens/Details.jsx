@@ -156,7 +156,7 @@ const Details = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.buyAndCart}>
-        <TouchableOpacity style={styles.buyBtn}>
+        <TouchableOpacity style={styles.buyBtn} onPress={() => navigation.navigate('Check Out')}>
           <Text style={{
             color: COLORS.white,
             fontSize: 18,
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     paddingHorizontal: 16,
   },
+
   title: {
     fontSize: 25,
     fontWeight: "500",
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  star: {
+  star: {   
     width: 23,
     height: 23,
   },
@@ -282,6 +283,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 30
+    
   },
 
   buyBtn: {
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.mainColor,
     alignItems: 'center',
     justifyContent: "center",
-    borderRadius: 30
+    borderRadius: 30,
   },
 
   cartBtn: {
