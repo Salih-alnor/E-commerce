@@ -18,60 +18,65 @@ import watch from "../assets/images/featured-products/casio-watch.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
 
 const { width, height } = Dimensions.get("screen");
-const Cart = ({navigation}) => {
-
+const Cart = ({ navigation }) => {
   const Product = () => {
     return (
       <View style={styles.product}>
-      <View style={styles.imageAndInfo}>
-        <View style={styles.imageProduct}>
-          <Image
-            resizeMode="contain"
-            style={styles.image}
-            source={watch}
-          />
+        <View style={styles.imageAndInfo}>
+          <View style={styles.imageProduct}>
+            <Image resizeMode="contain" style={styles.image} source={watch} />
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.namePruduct}>Watch</Text>
+            <Text style={styles.brand}>Casio</Text>
+            <Text style={styles.price}>$65</Text>
+          </View>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.namePruduct}>Watch</Text>
-          <Text style={styles.brand}>Casio</Text>
-          <Text style={styles.price}>$65</Text>
+
+        <View style={styles.btnItem}>
+          <TouchableOpacity style={styles.deleteImage}>
+            <Image
+              resizeMode="contain"
+              style={[styles.image, { tintColor: "#F65A5A" }]}
+              source={trash}
+            />
+          </TouchableOpacity>
+
+          <View style={styles.addAndSubBtn}>
+            <TouchableOpacity style={styles.addBtn}>
+              <Image
+                style={{
+                  width: "40%",
+                  height: "40%",
+                  tintColor: COLORS.white,
+                }}
+                source={subtraction}
+              />
+            </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "600",
+                color: COLORS.secondaryColor,
+              }}
+            >
+              3
+            </Text>
+            <TouchableOpacity style={styles.addBtn}>
+              <Image
+                style={{
+                  width: "40%",
+                  height: "40%",
+                  tintColor: COLORS.white,
+                }}
+                source={add}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-
-      <View style={styles.btnItem}>
-        <TouchableOpacity style={styles.deleteImage}>
-          <Image
-            resizeMode="contain"
-            style={[styles.image, { tintColor: "#F65A5A" }]}
-            source={trash}
-          />
-        </TouchableOpacity>
-
-        <View style={styles.addAndSubBtn}>
-          <TouchableOpacity style={styles.addBtn}>
-            <Image style={{
-              width: "40%",
-              height: "40%",
-              tintColor: COLORS.white
-            }} source={add}/>
-          </TouchableOpacity>
-          <Text style={{
-            fontSize: 20,
-            fontWeight: "600",
-            color: COLORS.secondaryColor
-          }}>3</Text>
-          <TouchableOpacity style={styles.addBtn}>
-            <Image style={{
-              width: "40%",
-              height: "40%",
-              tintColor: COLORS.white
-            }} source={subtraction}/>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-    )
-  }
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -102,32 +107,34 @@ const Cart = ({navigation}) => {
           <Image style={{ width: "50%", height: "50%" }} source={menu} />
         </TouchableOpacity>
       </View>
-      <ScrollView 
-      showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.products}>
           <Product />
           <Product />
-          
         </View>
         <OrderSummary />
-        <TouchableOpacity style={{
+        <TouchableOpacity
+          style={{
             width: "100%",
             height: 60,
             backgroundColor: COLORS.mainColor,
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 30,
-           marginTop: 40,
-           marginBottom: 20
-        }}
-        onPress={() => navigation.navigate("Check Out")}
+            marginTop: 40,
+            marginBottom: 20,
+          }}
+          onPress={() => navigation.navigate("Check Out")}
         >
-            <Text style={{
-                color: COLORS.white,
-                fontSize: 18,
-                fontWeight: "500"
-            }}>Check Out</Text>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontSize: 18,
+              fontWeight: "500",
+            }}
+          >
+            Check Out
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -162,13 +169,13 @@ const styles = StyleSheet.create({
 
   products: {
     marginTop: 40,
-    minHeight: height * 0.40
+    minHeight: height * 0.4,
   },
 
   product: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 40
+    marginBottom: 40,
   },
 
   imageAndInfo: {
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
 
   btnItem: {
     alignItems: "flex-end",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
   deleteImage: {
@@ -226,8 +233,7 @@ const styles = StyleSheet.create({
     width: 80,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
-    
+    alignItems: "center",
   },
 
   addBtn: {
@@ -235,7 +241,7 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: COLORS.mainColor,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

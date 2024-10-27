@@ -18,6 +18,7 @@ import back from "../assets/images/icons/back.png";
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
+  const sizes = [45, 44, 43, 42, 41, 40, 39, 38];
   return (
     <ScrollView style={styles.container}>
       <View style={styles.productImage}>
@@ -34,7 +35,7 @@ const Details = ({ route, navigation }) => {
               style={[
                 styles.icon,
                 {
-                  tintColor: COLORS.secondaryColor,
+                  tintColor: "#DDD",
                 },
               ]}
               source={heart}
@@ -131,44 +132,44 @@ const Details = ({ route, navigation }) => {
             showsHorizontalScrollIndicator={false}
             style={styles.sizes}
           >
-            <TouchableOpacity style={styles.size}>
-              <Text>44</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.size}>
-              <Text>43</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.size}>
-              <Text>42</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.size}>
-              <Text>41</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.size}>
-              <Text>40</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.size}>
-              <Text>39</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.size, { marginRight: 16 }]}>
-              <Text>38</Text>
-            </TouchableOpacity>
+            {sizes.map((size, index) => {
+              const lengthSizes = sizes.length;
+              return (
+                <TouchableOpacity style={[styles.size, {
+                  marginRight: index === lengthSizes - 1 ? 16 : 0 
+                }]} key={index}>
+                  <Text style={{
+                    fontSize: 16
+                  }}>{size}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
         </View>
       </View>
       <View style={styles.buyAndCart}>
-        <TouchableOpacity style={styles.buyBtn} onPress={() => navigation.navigate('Check Out')}>
-          <Text style={{
-            color: COLORS.white,
-            fontSize: 18,
-            fontWeight: "500"
-          }}>Buy Now</Text>
+        <TouchableOpacity
+          style={styles.buyBtn}
+          onPress={() => navigation.navigate("Check Out")}
+        >
+          <Text
+            style={{
+              color: COLORS.white,
+              fontSize: 18,
+              fontWeight: "500",
+            }}
+          >
+            Buy Now
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cartBtn}>
-          <Image style={{
-            width: 30,
-            height: 30,
-            
-          }} source={cart} />
+          <Image
+            style={{
+              width: 30,
+              height: 30,
+            }}
+            source={cart}
+          />
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  star: {   
+  star: {
     width: 23,
     height: 23,
   },
@@ -282,15 +283,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 30
-    
+    marginTop: 30,
   },
 
   buyBtn: {
     width: "75%",
     height: 60,
     backgroundColor: COLORS.mainColor,
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,
   },
@@ -300,6 +300,6 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: "flex-end",
     justifyContent: "center",
-    paddingRight: 16
-  }
+    paddingRight: 16,
+  },
 });
