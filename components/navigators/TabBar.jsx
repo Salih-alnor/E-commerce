@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
   tabBar: {
     backgroundColor: COLORS.white,
-    borderColor: COLORS.white,
-    shadowColor: COLORS.white,
+    elevation: 0, 
+    borderTopWidth: 0
   },
 });

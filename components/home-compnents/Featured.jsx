@@ -35,30 +35,35 @@ const Featured = ({title, navigation}) => {
       title: "Adidas",
       price: 129,
       image: adidasShoe,
+      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
     },
 
     {
       title: "Hoodie",
       price: 65.99,
       image: hoodie,
+      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
     },
 
     {
       title: "Hoodie",
       price: 89.99,
       image: hoodie2,
+      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
     },
 
     {
       title: "Adidas",
       price: 250,
       image: adidasShoe2,
+      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
     },
 
     {
       title: "Adidas",
       price: 190,
       image: adidasShoe3,
+      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
     },
 
     {
@@ -75,13 +80,14 @@ const Featured = ({title, navigation}) => {
    
     const itemsLength = items.length;
     return (
-      <TouchableOpacity key={index} style={[styles.card, {
+      <TouchableOpacity style={[styles.card, {
         marginRight: index === itemsLength - 1 ? 16 : 0
       }]}
       onPress={() => navigation.navigate("details", {
         title: item.title,
         price: item.price,
-        image: item.image
+        image: item.image,
+        sizes: item.sizes
       })}  
       >
 
@@ -129,7 +135,7 @@ const Featured = ({title, navigation}) => {
         >
           {title}
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('products')}>
           <Text
             style={{
               fontSize: 16,

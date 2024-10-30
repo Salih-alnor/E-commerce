@@ -5,6 +5,7 @@ import TabBar from "./TabBar";
 import Details from "../../screens/Details";
 import CheckOut from "../../screens/CheckOut";
 import COLORS from "../../assets/colors";
+import Products from "../../screens/Products";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -22,12 +23,18 @@ const StackNav = () => {
 
       <Stack.Screen
         options={{
-          headerShown: false
-           
-          
+          headerShown: false,
         }}
         name="Check Out"
         component={CheckOut}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="products"
+        component={Products}
       />
     </Stack.Navigator>
   );

@@ -18,7 +18,7 @@ import back from "../assets/images/icons/back.png";
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
-  const sizes = [45, 44, 43, 42, 41, 40, 39, 38];
+  const sizes = route.params.sizes;
   return (
     <ScrollView style={styles.container}>
       <View style={styles.productImage}>
@@ -132,7 +132,7 @@ const Details = ({ route, navigation }) => {
             showsHorizontalScrollIndicator={false}
             style={styles.sizes}
           >
-            {sizes.map((size, index) => {
+            { sizes ? sizes.map((size, index) => {
               const lengthSizes = sizes.length;
               return (
                 <TouchableOpacity style={[styles.size, {
@@ -143,14 +143,14 @@ const Details = ({ route, navigation }) => {
                   }}>{size}</Text>
                 </TouchableOpacity>
               );
-            })}
+            }): <Text style={{height: 50}}></Text>}
           </ScrollView>
         </View>
       </View>
       <View style={styles.buyAndCart}>
         <TouchableOpacity
           style={styles.buyBtn}
-          onPress={() => navigation.navigate("Check Out")}
+          onPress={() => navigation.navigate("cart")}
         >
           <Text
             style={{

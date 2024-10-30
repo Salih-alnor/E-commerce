@@ -56,13 +56,13 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    height: 150,
+    height: 130,
     paddingHorizontal: 16,
   },
 
   profile: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     overflow: "hidden",
     borderRadius: 60,
   },

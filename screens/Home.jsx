@@ -12,7 +12,6 @@ const Home = ({navigation}) => {
   const homeComponents = () => {
     return (
       <View>
-        
         <SearchBox />
         <SliderBox />
         <Featured title="Featured" navigation={navigation}/>

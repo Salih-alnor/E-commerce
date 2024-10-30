@@ -29,7 +29,7 @@ const sections = [
 
   {
     image: setting,
-    title: "Setting",
+    title: "Settings",
   },
 
   {
