@@ -6,10 +6,17 @@ import Details from "../../screens/Details";
 import CheckOut from "../../screens/CheckOut";
 import COLORS from "../../assets/colors";
 import Products from "../../screens/Products";
+import Onboarding from "../../screens/Onboarding";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="onboarding"
+        component={Onboarding}
+      />
+
       <Stack.Screen
         options={{ headerShown: false }}
         name="tabBar"
