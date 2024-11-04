@@ -8,6 +8,7 @@ import COLORS from "../../assets/colors";
 import Products from "../../screens/Products";
 import Onboarding from "../../screens/Onboarding";
 import Login from "../../screens/Login";
+import SignUp from "../../screens/SignUp";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -22,6 +23,12 @@ const StackNav = () => {
         options={{ headerShown: false }}
         name="login"
         component={Login}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="sign-up"
+        component={SignUp}
       />
 
       <Stack.Screen
