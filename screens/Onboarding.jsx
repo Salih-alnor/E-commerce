@@ -1,10 +1,11 @@
 import { Image, StyleSheet, Text, View, Dimensions } from 'react-native'
 import React from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
-import onboarding1 from "../assets/images/login-signUp/onboarding1.png"
-import onboarding2 from "../assets/images/login-signUp/onboarding2.png"
-import onboarding3 from "../assets/images/login-signUp/onboarding3.png"
-import next from "../assets/images/login-signUp/next.png"
+import onboarding1 from "../assets/images/onboarding/onboarding1.png"
+import onboarding2 from "../assets/images/onboarding/onboarding2.png"
+import onboarding3 from "../assets/images/onboarding/onboarding3.png"
+import onboarding4 from "../assets/images/onboarding/onboarding4.png"
+import next from "../assets/images/onboarding/next.png"
 import COLORS from '../assets/colors'
 
 const {width, height} = Dimensions.get('screen')
@@ -28,10 +29,15 @@ const Onboarding = ({navigation}) => {
             subTitle: "Take advantage of renewed offers and discounts on your favorite products.",
             image: onboarding3,
         },
+
+        {
+          title: "A shopping experience tailored to you",
+          subTitle: "Use personalized preference lists and suggestions that match your interests, for a convenient and personalized shopping experience.",
+          image: onboarding4,
+      },
     ]
 
    
-
     const Items = ({item, index}) => {
        return(
         <View key={index} style={styles.container}>
@@ -88,7 +94,7 @@ const Onboarding = ({navigation}) => {
        showDoneButton={true}
        dotStyle={styles.dot}
        activeDotStyle={styles.activeDot}
-       onDone={() => navigation.navigate("tabBar")}
+       onDone={() => navigation.navigate("login")}
       />
   
   )
@@ -133,9 +139,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 20,
-        paddingVertical: 12,
-        borderRadius: 20,
-        bottom: 12,
+        paddingVertical: 14,
+        borderRadius: 30,
+        bottom: 14,
 
     },
 

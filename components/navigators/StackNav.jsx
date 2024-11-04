@@ -7,6 +7,7 @@ import CheckOut from "../../screens/CheckOut";
 import COLORS from "../../assets/colors";
 import Products from "../../screens/Products";
 import Onboarding from "../../screens/Onboarding";
+import Login from "../../screens/Login";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -15,6 +16,12 @@ const StackNav = () => {
         options={{ headerShown: false }}
         name="onboarding"
         component={Onboarding}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="login"
+        component={Login}
       />
 
       <Stack.Screen

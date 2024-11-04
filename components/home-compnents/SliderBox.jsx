@@ -52,7 +52,7 @@ const SliderBox = () => {
           borderRadius: 10
         }}
         activeDotStyle={{
-          width: 20,
+          width: 30,
           height: 9,
           borderRadius: 10
         }}
