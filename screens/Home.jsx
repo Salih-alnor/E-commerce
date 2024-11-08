@@ -5,6 +5,7 @@ import COLORS from "../assets/colors";
 import SearchBox from "../components/home-compnents/SearchBox";
 import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
+import Categories from "../components/home-compnents/Categories";
 
 
 
@@ -14,6 +15,7 @@ const Home = ({navigation}) => {
       <View>
         <SearchBox />
         <SliderBox />
+        <Categories />
         <Featured title="Featured" navigation={navigation}/>
         <Featured title="Most Popular" navigation={navigation}/>
       </View>

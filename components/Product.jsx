@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#DDD",
+        backgroundColor: "#EEE",
         borderRadius: 8,
       },
     

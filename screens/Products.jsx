@@ -58,9 +58,9 @@ export default Products;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 16,
-    // paddingBottom: 100
+    backgroundColor: COLORS.white,
+    flex: 1,
   },
 
   header: {

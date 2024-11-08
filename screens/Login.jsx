@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.secondaryColor,
     borderWidth: Platform.OS == "ios" ? 0.3 : 0.4,
     borderRadius: 10,
-    paddingHorizontal: 30,
+    paddingHorizontal: 80,
     marginBottom: 20,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   accountLogo: {
     width: 30,
     height: 30,
-    marginRight: 40,
+    marginRight: 20,
   },
 
   accountImage: {
