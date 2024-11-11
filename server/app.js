@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 const dotenv = require("dotenv");
 const dbConnected = require("./config/database")
 const categoryApi = require("./api/categoryApi")
@@ -6,12 +7,13 @@ const subCategoryApi = require("./api/subCategoryApi")
 const brandApi = require("./api/brandApi")
 const productApi = require("./api/productApi")
 dotenv.config({ path: "config.env" });
-
 dbConnected()
-
-
-const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
+
+
+
+
 
 // apis
 app.use('/api/category', categoryApi);

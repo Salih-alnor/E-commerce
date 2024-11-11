@@ -7,11 +7,36 @@ const slugify = require("slugify");
   @access Private
   */
 const createProduct = async (req, res) => {
-  const { name, price, quantity, description, mainCategory, subCategory, brand } = req.body;
+  const {
+    name,
+    price,
+    quantity,
+    description,
+    mainCategory,
+    subCategory,
+    brand,
+    sizes
+  } = req.body;
+
+  const sizesArray = JSON.parse(sizes);
+ 
 
   try {
+    
+    const productImages = req.files.map((file) => file.filename);
+
+    if (!sizesArray.length) {
+      return res.status(400).json({ message: "Please provide at least one size" });
+    }
+
+    if (!productImages.length) {
+      return res.status(400).json({ message: "Please upload at least one image" });
+    }
+
+    
+   
     const product = await Product.create({
-      name, 
+      name,
       slug: slugify(name),
       price,
       quantity,
@@ -19,11 +44,13 @@ const createProduct = async (req, res) => {
       mainCategory,
       subCategory,
       brand,
+      sizes: sizesArray,
+      images: productImages,
     });
 
     res.json({ data: product });
   } catch (error) {
-    res.json({ message: error });
+    res.status(400).json({ message: error });
   }
 };
 

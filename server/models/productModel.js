@@ -31,9 +31,20 @@ const productSchema = new Schema({
 
     images:[String],
 
-    colors: [String],
+    colors: [
+        {
+            color: { type: String }, // اللون
+            stock: { type: Number }, // عدد القطع المتاحة لهذا اللون
+        },
+      ],
+    
 
-    sizes: [String],
+    sizes: [
+        {
+          size: { type: String }, // الحجم
+          stock: { type: Number }, // عدد القطع المتاحة لهذا الحجم
+        },
+      ],
 
     description: {
         type: String,
