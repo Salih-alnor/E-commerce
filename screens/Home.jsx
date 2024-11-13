@@ -10,6 +10,7 @@ import axios from "axios";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
+  
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,7 +30,16 @@ const Home = ({ navigation }) => {
       <View>
         <SearchBox />
         <SliderBox />
-        <Categories categories={categories} navigation={navigation} page={"home"} />
+        <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "600",
+          marginLeft: 16,
+        }}
+      >
+        Categories
+      </Text>
+        <Categories categories={categories} navigation={navigation} navigateTo={"subcategories"} page={"home"}/>
         <Featured title="Featured" navigation={navigation} />
         <Featured title="Most Popular" navigation={navigation} />
       </View>

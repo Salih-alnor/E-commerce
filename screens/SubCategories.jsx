@@ -12,7 +12,7 @@ import back from "../assets/images/icons/back.png";
 import axios from "axios";
 import Category from "../components/home-compnents/Categories";
 const { width, height } = Dimensions.get("screen");
-const Categories = ({route, navigation}) => {
+const SubCategories = ({route, navigation}) => {
   const [subCategories, setSubCategories] = useState([]);
     useEffect(() => {
       const getSubCategories = async (id) => {
@@ -55,12 +55,12 @@ const Categories = ({route, navigation}) => {
         ></View>
       </View>
 
-      <Category categories={subCategories} navigation={navigation} page={"categories"}/>
+      <Category categories={subCategories} navigation={navigation} navigateTo={"brands"}/>
     </View>
   );
 };
 
-export default Categories;
+export default SubCategories;
 
 const styles = StyleSheet.create({
   container: {

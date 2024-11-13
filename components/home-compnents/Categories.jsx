@@ -10,7 +10,7 @@ import React, {useEffect, useState} from "react";
 import COLORS from "../../assets/colors";
 
 
-const Categories = ({categories, navigation, page}) => {
+const Categories = ({categories, navigation, navigateTo, page}) => {
  const [data, setData] = useState();
 useEffect(() => {
   setData(categories);
@@ -20,12 +20,11 @@ useEffect(() => {
   
     return (
       <TouchableOpacity
-      onPress={() => navigation.navigate('categories', {
+      onPress={() => navigation.navigate(navigateTo, {
         name: item.name,
         slug: item.slug,
         image: item.image,
         id: item._id,
-        page: page
       })}
 
         style={[
@@ -62,15 +61,7 @@ useEffect(() => {
   };
   return (
     <View>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: "600",
-          marginLeft: 16,
-        }}
-      >
-        Categories
-      </Text>
+
 
       <FlatList
         data={data}

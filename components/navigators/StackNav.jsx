@@ -9,7 +9,8 @@ import Products from "../../screens/Products";
 import Onboarding from "../../screens/Onboarding";
 import Login from "../../screens/Login";
 import SignUp from "../../screens/SignUp";
-import Categories from "../../screens/Categories";
+import SubCategories from "../../screens/SubCategories";
+import Brands from "../../screens/Brands";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -63,8 +64,16 @@ const StackNav = () => {
         options={{
           headerShown: false,
         }}
-        name="categories"
-        component={Categories}
+        name="subcategories"
+        component={SubCategories}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: true,
+        }}
+        name="brands"
+        component={Brands}
       />
     </Stack.Navigator>
   );
