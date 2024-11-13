@@ -13,6 +13,7 @@ const subCategorySchema = new Schema({
 
     slug: {
         type: String,
+        unique: [true, "SubCategory slug must be unique"],
         lowercase: true
     },
 
@@ -23,7 +24,8 @@ const subCategorySchema = new Schema({
     },
 
     image: {
-        type: String
+        type: String,
+        required: [true, "SubCategory must have an image"]
     }
 }, {timestamps: true})
 

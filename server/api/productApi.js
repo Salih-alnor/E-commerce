@@ -2,6 +2,18 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+
+
+const {
+    createProduct,
+    getProducts,
+    getProduct,
+    updateProduct,
+    deleteProduct,
+} = require("../controllers/productController");
+
+
+
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, path.join(__dirname , "../Uploads/ProductsImages"), (err, path) => {
@@ -19,13 +31,6 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage });
-const {
-    createProduct,
-    getProducts,
-    getProduct,
-    updateProduct,
-    deleteProduct,
-} = require("../controllers/productController");
 
 
 router.route("/").post(upload.array("images"),createProduct).get(getProducts);

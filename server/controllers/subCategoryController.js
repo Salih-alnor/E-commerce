@@ -1,6 +1,7 @@
 const slugify = require("slugify");
 const SubCategory = require("../models/subCategoryModel");
 
+
 /*
   @desc create subCategory
   @route POST /api/subcategory
@@ -8,15 +9,22 @@ const SubCategory = require("../models/subCategoryModel");
   */
 const createSubCategory = async (req, res) => {
   try {
+    const imageSubCategory = req.file.filename;
+
+    if(!imageSubCategory) return res.status(400).json({ message: "Image is required" });
+
     if (!req.body.mainCategory) req.body.mainCategory = req.params.categoryId;
+
     const { name, mainCategory } = req.body;
+
     const subCategory = await SubCategory.create({
       name,
       slug: slugify(name),
       mainCategory,
+      image: imageSubCategory,
     });
 
-    res.json({ data: subCategory });
+    res.json({ subCategory });
   } catch (error) {
     res.json({ message: error });
   }
@@ -33,13 +41,13 @@ const getSubCategories = async (req, res) => {
   // const skip = (page - 1) * limit;
 
   let filterObject = {};
-  if (req.params.categoryId)
-    filterObject = { mainCategory: req.params.categoryId };
+  if (req.params.id)
+    filterObject = { mainCategory: req.params.id };
   try {
     const subCategories = await SubCategory.find(
       filterObject
     ); /*.skip(skip).limit(limit);*/
-    res.json({ results: subCategories.length, data: subCategories });
+    res.json({ subCategories });
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -54,7 +62,7 @@ const getSubCategory = async (req, res) => {
   const { id } = req.params;
   try {
     const subCategory = await SubCategory.findById(id);
-    res.json({ results: subCategory.length, data: subCategory });
+    res.json({ subCategory });
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -76,7 +84,7 @@ const updateSubCategory = async (req, res) => {
       { new: true }
     );
 
-    res.json({ data: subCategory });
+    res.json({ subCategory });
   } catch (error) {
     res.json({ message: error });
   }

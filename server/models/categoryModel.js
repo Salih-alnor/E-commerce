@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const { Schema} = mongoose;
+const { Schema } = mongoose;
 
 const categorySchema = new Schema({
     name: {
@@ -14,6 +14,7 @@ const categorySchema = new Schema({
 
     slug: {
         type: String,
+        unique: [true, "Category slug must be unique"],
         lowercase: true,
     },
 

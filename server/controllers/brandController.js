@@ -15,6 +15,7 @@ const createBrand = async (req, res) => {
       slug: slugify(name),
       mainCategory,
       subCategory,
+      image: req.file.filename
     });
 
     res.json({ data: brand });

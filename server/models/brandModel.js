@@ -13,6 +13,7 @@ const brandSchema = new Schema({
 
     slug: {
         type: String,
+        unique: [true, "Brand slug must be unique"],
         lowercase: true
     },
 
@@ -29,7 +30,8 @@ const brandSchema = new Schema({
     },
 
     image: {
-        type: String
+        type: String,
+        required: [true, "Brand must have image"]
     }
 }, {timestamps: true})
 

@@ -17,7 +17,6 @@ import share from "../assets/images/icons/share.png";
 import help from "../assets/images/icons/help.png";
 import next from "../assets/images/icons/next.png";
 
-import userProfile from "../assets/images/profile.jpg";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -59,7 +58,7 @@ const Profile = () => {
               width: "100%",
               height: "100%",
             }}
-            source={userProfile}
+            source={{uri: "http://172.20.10.4:4000/ProfileImage/profile.png"}}
           />
         </TouchableOpacity>
         <Text style={styles.userName}>Salih alnor</Text>

@@ -6,14 +6,17 @@ const categoryApi = require("./api/categoryApi")
 const subCategoryApi = require("./api/subCategoryApi")
 const brandApi = require("./api/brandApi")
 const productApi = require("./api/productApi")
+const path = require("path");
 dotenv.config({ path: "config.env" });
 dbConnected()
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
 
 
-
+app.use(express.static(path.join(__dirname, 'Uploads')))
 
 // apis
 app.use('/api/category', categoryApi);

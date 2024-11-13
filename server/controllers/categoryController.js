@@ -9,14 +9,17 @@ const slugify = require("slugify");
 const createCategory = async (req, res) => {
   const { name } = req.body;
 
-  try {
-    const category = await Category.create({ name, slug: slugify(name) });
 
-    res.json({ data: category });
+  try {
+    const category = await Category.create({ name, slug: slugify(name), image: req.file.filename });
+
+    res.json({ category });
   } catch (error) {
     res.json({ message: error });
   }
 };
+
+ 
 
 /*
   @desc get categories
@@ -30,7 +33,7 @@ const getCategories = async (req, res) => {
 
   try {
     const categories = await Category.find({}); /*.skip(skip).limit(limit);*/
-    res.json({ results: categories.length, data: categories });
+    res.json({ categories });
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -45,7 +48,7 @@ const getCategory = async (req, res) => {
   const { id } = req.params;
   try {
     const category = await Category.findById(id);
-    res.json({ results: category.length, data: category });
+    res.json({ category });
   } catch (error) {
     res.status(500).json({ message: error });
   }
@@ -66,7 +69,7 @@ const updateCategory = async (req, res) => {
       { name, slug: slugify(name) },
       { new: true }
     );
-    res.json({ data: category });
+    res.json({ category });
   } catch (error) {
     res.json({ message: error });
   }

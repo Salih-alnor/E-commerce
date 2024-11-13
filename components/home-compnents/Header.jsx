@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import COLORS from "../../assets/colors";
-import profile from "../../assets/images/profile.jpg";
 import notification from "../../assets/images/icons/notification.png";
 
 const Header = () => {
@@ -23,7 +22,7 @@ const Header = () => {
           }}
         >
           <TouchableOpacity style={styles.profile}>
-            <Image style={styles.profileImage} source={profile} />
+            <Image style={styles.profileImage} source={{uri: "http://172.20.10.4:4000/ProfileImage/profile.png"}} />
           </TouchableOpacity>
           <View style={styles.userInfo}>
             <Text>Hello!</Text>
@@ -65,6 +64,8 @@ const styles = StyleSheet.create({
     height: 50,
     overflow: "hidden",
     borderRadius: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   profileImage: {
