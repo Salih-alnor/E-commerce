@@ -29,6 +29,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
+router.use('/:categoryId/:subCategoryId/brands', getBrands)
+
 router.route("/").post(upload.single('image'), createBrand).get(getBrands);
 router.route("/:id").get(getBrand).put(updateBrand).delete(deleteBrand);
 

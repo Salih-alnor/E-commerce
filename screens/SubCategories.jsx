@@ -14,17 +14,27 @@ import Category from "../components/home-compnents/Categories";
 const { width, height } = Dimensions.get("screen");
 const SubCategories = ({route, navigation}) => {
   const [subCategories, setSubCategories] = useState([]);
+  const [subCategoryId, setSubCategoryId] = useState(null);
+  
     useEffect(() => {
       const getSubCategories = async (id) => {
         try {
+          
             const response = await axios.get(`http://172.20.10.4:4000/api/category/${id}/subcategories`);
-             setSubCategories(response.data.subCategories || []);
+            const fetchedSubCategories = response.data.subCategories || [];
+             setSubCategories(fetchedSubCategories || []);
+             for (let index = 0; index < fetchedSubCategories.length; index++) {
+              if(id === fetchedSubCategories[index].mainCategory) {
+                 setSubCategoryId(fetchedSubCategories[index].mainCategory);
+             }
+              
+             }
         } catch (error) {
             console.log(error);
         }
       }
-      getSubCategories(route.params.id);
-    }, [route.params.id]);
+      getSubCategories(route.params.subCategoryId);
+    }, [route.params.categoryId, navigation]);
     
   return (
     <View style={styles.container}>
@@ -55,7 +65,7 @@ const SubCategories = ({route, navigation}) => {
         ></View>
       </View>
 
-      <Category categories={subCategories} navigation={navigation} navigateTo={"brands"}/>
+      <Category categories={subCategories} subCategoryId={subCategoryId}  navigation={navigation} navigateTo={"brands"}/>
     </View>
   );
 };

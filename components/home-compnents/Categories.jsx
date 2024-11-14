@@ -12,9 +12,14 @@ import COLORS from "../../assets/colors";
 
 const Categories = ({categories, navigation, navigateTo, page}) => {
  const [data, setData] = useState();
+
+
 useEffect(() => {
   setData(categories);
-}, [categories])
+  // setSubCategoryId
+}, [categories, navigation])
+
+
   const Category = ({ item, index }) => {
     const dataLength = data.length;
   
@@ -24,7 +29,8 @@ useEffect(() => {
         name: item.name,
         slug: item.slug,
         image: item.image,
-        id: item._id,
+        categoryId: item.mainCategory || null,
+        subCategoryId:  item._id,
       })}
 
         style={[
