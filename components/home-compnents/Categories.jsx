@@ -55,13 +55,13 @@ useEffect(() => {
             height: "70%",
             resizeMode: "contain",
       
-          }} source={{uri: `http://172.20.10.4:4000/${page === "home" ? "CategoriesImages" : "SubCategoriesImages"}/${item.image}`}}/>
+          }} source={{uri: `http://172.20.10.4:4000/${page === "home" ? "CategoriesImages" : page === "brand"? "BrandsImages": "SubCategoriesImages"}/${item.image}`}}/>
         </View>
-        <Text style={{
+        {page !== "brand" ? <Text style={{
           fontSize: 14,
           fontWeight: "500",
         color: COLORS.secondaryColor
-        }}>{item.name}</Text>
+        }}>{item.name}</Text>: <View></View>}
       </TouchableOpacity>
     );
   };

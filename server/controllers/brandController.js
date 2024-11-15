@@ -34,12 +34,13 @@ const getBrands = async (req, res) => {
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
     const {categoryId, subCategoryId} = req.params;
+    console.log(req.params);
     let filterObject = {};
-    if (categoryId && subCategortId)
-      filterObject = { mainCategory, subCategory };
+    if (categoryId && subCategoryId)
+      filterObject = { mainCategory: categoryId, subCategory:  subCategoryId};
   try {
     const brands = await Brand.find(filterObject); /*.skip(skip).limit(limit);*/
-    res.json({ results: brands.length, brands });
+    res.json({ brands });
   } catch (error) {
     res.status(500).json({ message: error });
   }
