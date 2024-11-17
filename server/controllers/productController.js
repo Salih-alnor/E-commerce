@@ -15,26 +15,24 @@ const createProduct = async (req, res) => {
     mainCategory,
     subCategory,
     brand,
-    sizes
+    // sizes
   } = req.body;
 
-  const sizesArray = JSON.parse(sizes);
+  // const sizesArray = JSON.parse(sizes);
  
 
   try {
     
     const productImages = req.files.map((file) => file.filename);
 
-    if (!sizesArray.length) {
-      return res.status(400).json({ message: "Please provide at least one size" });
-    }
+    // if (!sizesArray.length) {
+    //   return res.status(400).json({ message: "Please provide at least one size" });
+    // }
 
     if (!productImages.length) {
       return res.status(400).json({ message: "Please upload at least one image" });
     }
 
-    
-   
     const product = await Product.create({
       name,
       slug: slugify(name),
@@ -44,11 +42,11 @@ const createProduct = async (req, res) => {
       mainCategory,
       subCategory,
       brand,
-      sizes: sizesArray,
+      // sizes: sizesArray,
       images: productImages,
     });
 
-    res.json({ data: product });
+    res.json({ product });
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -66,7 +64,7 @@ const getProducts = async (req, res) => {
 
   try {
     const products = await Product.find({}); /*.skip(skip).limit(limit);*/
-    res.json({ results: products.length, data: products });
+    res.json({ products });
   } catch (error) {
     res.status(500).json({ message: error });
   }

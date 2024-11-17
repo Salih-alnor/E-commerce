@@ -10,6 +10,7 @@ import axios from "axios";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   
 
   useEffect(() => {
@@ -22,7 +23,17 @@ const Home = ({ navigation }) => {
       }
     };
 
+    const getProducts = async () => {
+      try {
+        const response = await axios.get("http://172.20.10.4:4000/api/product");
+      setProducts(response.data.products);
+      } catch (error) {
+        
+      }
+    }
+
     fetchCategories();
+    getProducts();
   }, [navigation]);
 
   const homeComponents = () => {
@@ -40,8 +51,8 @@ const Home = ({ navigation }) => {
         Categories
       </Text>
         <Categories categories={categories} navigation={navigation} navigateTo={"subcategories"} page={"home"}/>
-        <Featured title="Featured" navigation={navigation} />
-        <Featured title="Most Popular" navigation={navigation} />
+        <Featured title="Featured" navigation={navigation} products={products} />
+        <Featured title="Most Popular" navigation={navigation} products={products}/>
       </View>
     );
   };

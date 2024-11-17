@@ -6,8 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
 
 import heart from "../assets/images/icons/heart.png";
@@ -18,9 +19,11 @@ import back from "../assets/images/icons/back.png";
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
-  const sizes = route.params.sizes;
+  const item = route.params;
+  const images = item.images;
+
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.productImage}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -42,19 +45,34 @@ const Details = ({ route, navigation }) => {
             />
           </TouchableOpacity>
         </View>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: "80%",
-            height: "80%",
-          }}
-          source={route.params.image}
-        />
+        <ScrollView
+          horizontal
+          snapToInterval={width - 16}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={true}
+        >
+          {images.map((image, index) => {
+            return (
+              <Image
+                key={index}
+                resizeMode="contain"
+                style={{
+                  width,
+                  height: height * 0.35,
+                  marginTop: 50,
+                }}
+                source={{
+                  uri: `http://172.20.10.4:4000/ProductsImages/${image}`,
+                }}
+              />
+            );
+          })}
+        </ScrollView>
       </View>
-      <View style={styles.info}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.info}>
         <View style={styles.titleAndPrice}>
-          <Text style={styles.title}>{route.params.title}</Text>
-          <Text style={styles.price}>${route.params.price}</Text>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.price}>${item.price}</Text>
         </View>
 
         <View style={styles.rateWrapper}>
@@ -101,52 +119,71 @@ const Details = ({ route, navigation }) => {
           >
             Description
           </Text>
-          <Text
-            style={{
-              color: COLORS.secondaryColor,
-              marginTop: 10,
-              lineHeight: 20,
-            }}
-          >
-            Culpa aliquam consequuntur veritatis at consequuntur praesentium
-            beatae temporibus nobis. Velit dolorem facilis neque autem. Itaque
-            voluptatem expedita qui eveniet id veritatis eaque. Blanditiis quia
-            placeat nemo. Nobis laudantium nesciunt perspiciatis sit eligendi.
-          </Text>
+          <TouchableOpacity>
+            <Text
+              style={{
+                color: COLORS.secondaryColor,
+                marginTop: 10,
+                lineHeight: 20,
+              }}
+              numberOfLines={4}
+            >
+              {item.description}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.sizeWrapper}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "500",
-              marginVertical: 16,
-              marginLeft: 16,
-            }}
-          >
-            Size
-          </Text>
+          {item.sizes.length > 0 ? (
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "500",
+                marginVertical: 16,
+                marginLeft: 16,
+              }}
+            >
+              Size
+            </Text>
+          ) : (
+            <View></View>
+          )}
 
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.sizes}
           >
-            { sizes ? sizes.map((size, index) => {
-              const lengthSizes = sizes.length;
-              return (
-                <TouchableOpacity style={[styles.size, {
-                  marginRight: index === lengthSizes - 1 ? 16 : 0 
-                }]} key={index}>
-                  <Text style={{
-                    fontSize: 16
-                  }}>{size}</Text>
-                </TouchableOpacity>
-              );
-            }): <Text style={{height: 50}}></Text>}
+            {item.sizes.length > 0 ? (
+              item.sizes.map((size, index) => {
+                const lengthSizes = item.sizes.length;
+                return (
+                  <TouchableOpacity
+                    style={[
+                      styles.size,
+                      {
+                        marginRight: index === lengthSizes - 1 ? 16 : 0,
+                      },
+                    ]}
+                    key={index}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                      }}
+                    >
+                      {size}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })
+            ) : (
+              <Text style={{ height: 50 }}></Text>
+            )}
           </ScrollView>
         </View>
-      </View>
+      </ScrollView>
+
       <View style={styles.buyAndCart}>
         <TouchableOpacity
           style={styles.buyBtn}
@@ -172,7 +209,7 @@ const Details = ({ route, navigation }) => {
           />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -283,7 +320,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 30,
+    marginBottom: 20,
   },
 
   buyBtn: {

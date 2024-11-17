@@ -34,7 +34,6 @@ const getBrands = async (req, res) => {
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
     const {categoryId, subCategoryId} = req.params;
-    console.log(req.params);
     let filterObject = {};
     if (categoryId && subCategoryId)
       filterObject = { mainCategory: categoryId, subCategory:  subCategoryId};

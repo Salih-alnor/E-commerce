@@ -7,87 +7,46 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import COLORS from "../../assets/colors";
-import casioWatch from "../../assets/images/featured-products/casio-watch.png";
-import adidasShoe from "../../assets/images/featured-products/adidas-shoe.png";
-import adidasShoe2 from "../../assets/images/featured-products/adidas-shoe-2.png";
-import adidasShoe3 from "../../assets/images/featured-products/adidas-shoe-3.png";
-import hoodie from "../../assets/images/featured-products/hoodie.png";
-import hoodie2 from "../../assets/images/featured-products/hoodie-2.png";
-import smartWatch from "../../assets/images/featured-products/smart-watch.png";
-
 import heart from "../../assets/images/icons/heart.png"
 
 
 
 const { width, height } = Dimensions.get("screen");
 
-const Featured = ({title, navigation}) => {
-  const items = [
-    {
-      title: "Casio",
-      price: 99.99,
-      image: casioWatch,
-    },
+const Featured = ({title, navigation, products}) => {
 
-    {
-      title: "Adidas",
-      price: 129,
-      image: adidasShoe,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
+  const [data, setData] = useState([]);
 
-    {
-      title: "Hoodie",
-      price: 65.99,
-      image: hoodie,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Hoodie",
-      price: 89.99,
-      image: hoodie2,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Adidas",
-      price: 250,
-      image: adidasShoe2,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Adidas",
-      price: 190,
-      image: adidasShoe3,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Smart Watch",
-      price: 300,
-      image: smartWatch,
-    },
-  ];
+  useEffect(() => {
+      setData(products);
+    
+  }, [navigation, products]);
+ 
 
  
 
 
   const product = ({item, index}) => {
    
-    const itemsLength = items.length;
+    const itemsLength = item.length;
     return (
       <TouchableOpacity style={[styles.card, {
         marginRight: index === itemsLength - 1 ? 16 : 0
       }]}
       onPress={() => navigation.navigate("details", {
-        title: item.title,
+        name: item.name,
         price: item.price,
-        image: item.image,
-        sizes: item.sizes
+        images: item.images,
+        sizes: item.sizes,
+        colors: item.colors,
+        categoryId: item.mainCategory,
+        subCategoryId:  item.subCategory,
+        brandId: item.brand,
+        description: item.description,
+        quantity: item.quantity,
+
       })}  
       >
 
@@ -95,7 +54,7 @@ const Featured = ({title, navigation}) => {
           <Image style={{
             width: "100%",
             height: "100%",
-            tintColor: COLORS.white
+            tintColor: COLORS.white,
           }} source={heart}/>
         </TouchableOpacity>
         <View style={styles.image}>
@@ -103,17 +62,18 @@ const Featured = ({title, navigation}) => {
             resizeMode="contain"
             style={{
               width: "80%",
-              height: "90%",
+              height: "80%",
             }}
-            source={item.image}
+            source={{uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`}}
           />
+        
         </View>
         <View style={styles.infoCard}>
           <Text style={{
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: "500",
             marginVertical: 5
-          }}>{item.title}</Text>
+          }}>{item.name}</Text>
           <Text style={{
             color: COLORS.mainColor,
             fontSize: 15,
@@ -133,7 +93,7 @@ const Featured = ({title, navigation}) => {
             fontWeight: "600",
           }}
         >
-          {title}
+        {title}
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('products')}>
           <Text
@@ -151,7 +111,7 @@ const Featured = ({title, navigation}) => {
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         horizontal
-        data={items}
+        data={data}
         renderItem={product}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -176,20 +136,22 @@ const styles = StyleSheet.create({
 
   card: {
     width: width / 2.99,
-    height: 180,
+    height: 160,
     marginLeft: 16,
     marginTop: 20,
     borderRadius: 8,
     overflow: "hidden",
+  
+
   },
 
   image: {
-    height: "60%",
+    height: "65%",
     width: "100%",
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#eee",
+    backgroundColor: "#EEE",
     borderRadius: 8
   },
 
