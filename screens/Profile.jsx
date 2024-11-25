@@ -18,36 +18,42 @@ import help from "../assets/images/icons/help.png";
 import next from "../assets/images/icons/next.png";
 
 
+
 const { width, height } = Dimensions.get("screen");
 
 const sections = [
   {
     image: profile,
     title: "Profile",
+    page: "userInformation",
   },
 
   {
     image: setting,
     title: "Settings",
+    page: "settings",
   },
 
   {
     image: mail,
     title: "Contact",
+    page: "contact",
   },
 
   {
     image: share,
     title: "Share App",
+    page: "shareApp",
   },
 
   {
     image: help,
     title: "Help",
+    page: "help",
   },
 ];
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
@@ -69,14 +75,14 @@ const Profile = () => {
         <View style={styles.sections}>
           {sections.map((item, index) => {
             return (
-              <TouchableOpacity style={styles.section} key={index}>
+              <TouchableOpacity style={styles.section} key={index} onPress={() => navigation.navigate(item.page)}>
                 <View style={styles.iconSection}>
                   <View style={styles.iconWrapper}>
                     <Image style={styles.image} source={item.image} />
                   </View>
                   <Text
                     style={{
-                      color: "#444",
+                      color: "#999",
                       fontSize: 16,
                       fontWeight: "500",
                       marginLeft: 10,
@@ -172,11 +178,11 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    tintColor: "#444",
+    tintColor: "#999",
   },
 
   signOut: {
     alignItems: "center",
-    marginTop: 100,
+    marginTop: 50,
   },
 });

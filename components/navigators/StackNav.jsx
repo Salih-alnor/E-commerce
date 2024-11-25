@@ -11,6 +11,7 @@ import Login from "../../screens/Login";
 import SignUp from "../../screens/SignUp";
 import SubCategories from "../../screens/SubCategories";
 import Brands from "../../screens/Brands";
+import Favorites from "../../screens/Favorites";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -74,6 +75,16 @@ const StackNav = () => {
         }}
         name="brands"
         component={Brands}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerTitleAlign: "center",
+          
+        }}
+        name="favorites"
+        component={Favorites}
       />
     </Stack.Navigator>
   );

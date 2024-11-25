@@ -1,0 +1,48 @@
+[
+	{
+		"_id": "673a7176720175bda46c89ae",
+		"productId": {
+			"_id": "6737c4a25406a71b75199a35",
+			"name": "HUAWEI P10",
+			"slug": "huawei-p10",
+			"price": 499,
+			"quantity": 20,
+			"images": [
+				"product-1731708066723.png"
+			],
+			"description": "The iPhone X a high-end smartphone from Apple, featuring a sleek design with a premium titanium frame. It boasts a Super Retina XDR display that delivers vibrant colors and high resolution, powered by the new A17 Pro chip for exceptional speed and improved efficiency. The device includes a triple-camera system with advanced photography features, such as high-quality video recording and enhanced night modes. It supports security features like Face ID and runs on the latest iOS version, with support for 5G connectivity and fast charging capabilities.",
+			"mainCategory": "6732861508cb4a651a29f105",
+			"subCategory": "6733f0e36bd561d6898b32c2",
+			"brand": "6734952982191121ca183358",
+			"colors": [],
+			"sizes": [],
+			"createdAt": "2024-11-15T22:01:06.727Z",
+			"updatedAt": "2024-11-15T22:01:06.727Z",
+			"__v": 0
+		},
+		"__v": 0
+	},
+	{
+		"_id": "673a7184720175bda46c89b2",
+		"productId": {
+			"_id": "6737c4795406a71b75199a33",
+			"name": "HUAWEI Y5",
+			"slug": "huawei-y5",
+			"price": 399,
+			"quantity": 20,
+			"images": [
+				"product-1731708025238.png"
+			],
+			"description": "The iPhone X a high-end smartphone from Apple, featuring a sleek design with a premium titanium frame. It boasts a Super Retina XDR display that delivers vibrant colors and high resolution, powered by the new A17 Pro chip for exceptional speed and improved efficiency. The device includes a triple-camera system with advanced photography features, such as high-quality video recording and enhanced night modes. It supports security features like Face ID and runs on the latest iOS version, with support for 5G connectivity and fast charging capabilities.",
+			"mainCategory": "6732861508cb4a651a29f105",
+			"subCategory": "6733f0e36bd561d6898b32c2",
+			"brand": "6734952982191121ca183358",
+			"colors": [],
+			"sizes": [],
+			"createdAt": "2024-11-15T22:00:25.241Z",
+			"updatedAt": "2024-11-15T22:00:25.241Z",
+			"__v": 0
+		},
+		"__v": 0
+	}
+]

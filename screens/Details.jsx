@@ -15,12 +15,15 @@ import heart from "../assets/images/icons/heart.png";
 import cart from "../assets/images/tabBarIcons/bag.png";
 import halfStar from "../assets/images/icons/half-star.png";
 import back from "../assets/images/icons/back.png";
+import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
   const item = route.params;
   const images = item.images;
+
+  
 
   return (
     <View style={styles.container}>
@@ -33,17 +36,26 @@ const Details = ({ route, navigation }) => {
             <Image style={styles.icon} source={back} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.backBtnAndFavIcon}>
-            <Image
-              style={[
-                styles.icon,
-                {
-                  tintColor: "#DDD",
-                },
-              ]}
-              source={heart}
-            />
+
+          <TouchableOpacity
+            style={styles.backBtnAndFavIcon}
+          
+          >
+            <FavoriteIcon style={{
+              tintColor: "#DDD",
+              width: "60%",
+              height: "60%",
+            }} heartIcon={{
+              width: 50,
+              height: 50,
+              borderRadius: 50,
+              backgroundColor: COLORS.white,
+              justifyContent: "center",
+              alignItems: "center",
+            }} productId={item.id}/>
           </TouchableOpacity>
+
+          
         </View>
         <ScrollView
           horizontal

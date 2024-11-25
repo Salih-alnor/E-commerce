@@ -7,17 +7,23 @@ import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
 import Categories from "../components/home-compnents/Categories";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+
+
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  
-
+  const dispatch = useDispatch();
+  const favorite =  useSelector((state) => state.reducer.favoritesList)
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        
         const response = await axios.get("http://172.20.10.4:4000/api/category");
         setCategories(response.data.categories);
+        
+    
       } catch (error) {
         console.log(error);
       }
@@ -26,15 +32,44 @@ const Home = ({ navigation }) => {
     const getProducts = async () => {
       try {
         const response = await axios.get("http://172.20.10.4:4000/api/product");
-      setProducts(response.data.products);
+         setProducts(response.data.products);
       } catch (error) {
         
       }
     }
 
+    const getFavoritesList = async () => {
+      try {
+        const response = await axios.get(
+          "http://172.20.10.4:4000/api/favorite"
+        );
+
+       
+        dispatch({ type: "setFavorites",payload: response.data });
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getCartItems = async () => {
+      try {
+        const response = await axios.get(
+          `http://172.20.10.4:4000/api/cart/6741898a4eb5cfdaf31b7d3e`
+        );
+        dispatch({ type: "getCartItems",payload: response.data });
+       
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
+    getCartItems();
+    getFavoritesList();
     fetchCategories();
     getProducts();
-  }, [navigation]);
+  }, [navigation, ]);
 
   const homeComponents = () => {
     return (
@@ -58,7 +93,7 @@ const Home = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <Header />
+      <Header navigation={navigation} favoritesList={favorite}/>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={[""]}

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import COLORS from '../../assets/colors'
 
-const OrderSummary = () => {
+const OrderSummary = ({data}) => {
   return (
     <View style={styles.orderSummary}>
     <Text style={styles.title}>Order Summary</Text>
@@ -40,7 +40,7 @@ const OrderSummary = () => {
 
     <View style={styles.totalPrice}>
       <Text style={{ fontSize: 18, fontWeight: "500" }}>Total</Text>
-      <Text style={{ fontSize: 18, fontWeight: "500" }}>$413</Text>
+      <Text style={{ fontSize: 18, fontWeight: "500" }}>${data.totalPrice}</Text>
     </View>
   </View>
   )

@@ -7,56 +7,64 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
-import heart from "../../assets/images/icons/heart.png"
-
+import FavoriteIcon from "../iconsComponents/FavoriteIcon";
 
 
 const { width, height } = Dimensions.get("screen");
 
-const Featured = ({title, navigation, products}) => {
-
+const Featured = ({ title, navigation, products }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-      setData(products);
-    
+    setData(products);
   }, [navigation, products]);
- 
-
- 
 
 
-  const product = ({item, index}) => {
-   
-    const itemsLength = item.length;
+
+  const product = ({ item, index }) => {
+    const itemsLength = products.length;
     return (
-      <TouchableOpacity style={[styles.card, {
-        marginRight: index === itemsLength - 1 ? 16 : 0
-      }]}
-      onPress={() => navigation.navigate("details", {
-        name: item.name,
-        price: item.price,
-        images: item.images,
-        sizes: item.sizes,
-        colors: item.colors,
-        categoryId: item.mainCategory,
-        subCategoryId:  item.subCategory,
-        brandId: item.brand,
-        description: item.description,
-        quantity: item.quantity,
-
-      })}  
+      <TouchableOpacity
+        style={[
+          styles.card,
+          {
+            marginRight: index === itemsLength - 1 ? 16 : 0,
+          },
+        ]}
+        onPress={() =>
+          navigation.navigate("details", {
+            name: item.name,
+            price: item.price,
+            images: item.images,
+            sizes: item.sizes,
+            colors: item.colors,
+            categoryId: item.mainCategory,
+            subCategoryId: item.subCategory,
+            brandId: item.brand,
+            description: item.description,
+            quantity: item.quantity,
+            id: item._id,
+          })
+        }
       >
 
-        <TouchableOpacity style={styles.heartIcon}>
-          <Image style={{
-            width: "100%",
-            height: "100%",
-            tintColor: COLORS.white,
-          }} source={heart}/>
-        </TouchableOpacity>
+   
+        <FavoriteIcon productId={item._id} style={{
+              tintColor: "white",
+              width: "100%",
+              height: "100%",
+            }} heartIcon={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              width: 30,
+              height: 30,
+              zIndex: 2,
+            }}/>
+      
+        
         <View style={styles.image}>
           <Image
             resizeMode="contain"
@@ -64,22 +72,30 @@ const Featured = ({title, navigation, products}) => {
               width: "80%",
               height: "80%",
             }}
-            source={{uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`}}
+            source={{
+              uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`,
+            }}
           />
-        
         </View>
         <View style={styles.infoCard}>
-          <Text style={{
-            fontSize: 16,
-            fontWeight: "500",
-            marginVertical: 5
-          }}>{item.name}</Text>
-          <Text style={{
-            color: COLORS.mainColor,
-            fontSize: 15,
-            fontWeight: "500"
-          }}>${item.price}</Text>
-          
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "500",
+              marginVertical: 5,
+            }}
+          >
+            {item.name}
+          </Text>
+          <Text
+            style={{
+              color: COLORS.mainColor,
+              fontSize: 15,
+              fontWeight: "500",
+            }}
+          >
+            ${item.price}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -93,9 +109,9 @@ const Featured = ({title, navigation, products}) => {
             fontWeight: "600",
           }}
         >
-        {title}
+          {title}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('products')}>
+        <TouchableOpacity onPress={() => navigation.navigate("products")}>
           <Text
             style={{
               fontSize: 16,
@@ -115,7 +131,6 @@ const Featured = ({title, navigation, products}) => {
         renderItem={product}
         keyExtractor={(item, index) => index.toString()}
       />
-      
     </View>
   );
 };
@@ -124,7 +139,7 @@ export default Featured;
 
 const styles = StyleSheet.create({
   container: {
-   marginVertical: 10
+    marginTop: 35,
   },
 
   header: {
@@ -141,8 +156,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 8,
     overflow: "hidden",
-  
-
   },
 
   image: {
@@ -152,17 +165,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#EEE",
-    borderRadius: 8
+    borderRadius: 8,
   },
 
   infoCard: {
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
-  heartIcon: {
-    position: "absolute",
-    top: 8, right: 8,
-    width: 30, height: 30,
-    zIndex: 2,
-  }
+
 });

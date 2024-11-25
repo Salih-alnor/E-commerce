@@ -10,7 +10,8 @@ const favoriteSchema = new Schema({
         ref: "Product",
         required: [true, "Product ID is required"],
     }
-})
+    
+}, { timestamps: true })
 
 
 module.exports = Favorite = mongoose.model("Favorite", favoriteSchema);

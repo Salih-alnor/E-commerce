@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, Platform } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../../screens/Home";
 import Search from "../../screens/Search";
@@ -11,21 +11,63 @@ import home from "../../assets/images/tabBarIcons/home.png";
 import search from "../../assets/images/tabBarIcons/search.png";
 import cart from "../../assets/images/tabBarIcons/bag.png";
 import profile from "../../assets/images/tabBarIcons/user.png";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-const TabBar = () => {
+const TabBar = ({ navigation }) => {
+  const [cartCount, setCartCount] = useState(0);
+
+
+  const cartItems =  useSelector((state) => state.cartReducer.cartItems)
+  useEffect(() => {
+    setCartCount(cartItems.items.length);
+  }, [cartItems]);
+
   const Tab = createBottomTabNavigator();
 
-  const Icon = ({ src, focuse }) => {
+  const Icon = ({ src, focuse, iconName }) => {
     return (
-      <Image
-        style={[
-          styles.icon,
-          {
-            tintColor: focuse ? COLORS.mainColor : COLORS.secondaryColor,
-          },
-        ]}
-        source={src}
-      />
+      <View>
+        {iconName === "cart" && cartCount > 0 ? (
+          <View
+            style={{
+              position: "absolute",
+              top: -16,
+              right: -10,
+              height: 20,
+              minWidth: 20,
+              backgroundColor: COLORS.mainColor,
+              borderRadius: 10,
+              paddingHorizontal: 5,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  width: "100%",
+                  fontSize: 14,
+                  fontWeight: "600",
+                }}
+              >
+                {cartCount}
+              </Text>
+            </View>
+          </View>
+        ) : null}
+
+        <Image
+          style={[
+            styles.icon,
+            {
+              tintColor: focuse ? COLORS.mainColor : COLORS.secondaryColor,
+            },
+          ]}
+          source={src}
+        />
+      </View>
     );
   };
   return (
@@ -59,13 +101,30 @@ const TabBar = () => {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: ({ focused }) => <Icon src={cart} focuse={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              src={cart}
+              focuse={focused}
+              iconName="cart"
+              cartCount={cartItems}
+            />
+          ),
           tabBarStyle: {
-            display: "none"
-          }
+            display: "none",
+          },
         }}
         name="cart"
-        component={Cart}
+        // component={Cart}
+        children={() => (
+          <Cart
+            route={{
+              params: {
+                items: cartItems,
+              },
+            }}
+            navigation={navigation}
+          />
+        )}
       />
       <Tab.Screen
         options={{
@@ -88,7 +147,7 @@ const styles = StyleSheet.create({
 
   tabBar: {
     backgroundColor: COLORS.white,
-    elevation: 0, 
-    borderTopWidth: 0
+    elevation: 0,
+    borderTopWidth: 0,
   },
 });

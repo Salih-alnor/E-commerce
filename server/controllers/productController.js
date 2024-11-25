@@ -63,7 +63,7 @@ const getProducts = async (req, res) => {
   // const skip = (page - 1) * limit;
 
   try {
-    const products = await Product.find({}); /*.skip(skip).limit(limit);*/
+    const products = await Product.find({}).populate( "mainCategory").populate("subCategory").populate("brand"); /*.skip(skip).limit(limit);*/
     res.json({ products });
   } catch (error) {
     res.status(500).json({ message: error });

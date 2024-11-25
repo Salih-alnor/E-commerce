@@ -6,8 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  FlatList,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
 import menu from "../assets/images/icons/menu.png";
@@ -16,25 +17,44 @@ import add from "../assets/images/icons/add.png";
 import subtraction from "../assets/images/icons/subtraction.png";
 import watch from "../assets/images/featured-products/casio-watch.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
+import { useSelector, useDispatch } from "react-redux";
 
 const { width, height } = Dimensions.get("screen");
-const Cart = ({ navigation }) => {
-  const Product = () => {
+const Cart = ({ route, navigation }) => {
+  const [data, setData] = useState([]);
+  const [items, setItems] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (route.params && route.params.items) {
+      setData(route.params.items);
+      setItems(route.params.items.items);
+    }
+  }, [route.params]);
+
+  // console.log(items[0].productId)
+  const Product = ({item}) => {
     return (
       <View style={styles.product}>
         <View style={styles.imageAndInfo}>
           <View style={styles.imageProduct}>
-            <Image resizeMode="contain" style={styles.image} source={watch} />
+            <Image
+              resizeMode="contain"
+              style={styles.image}
+              source={{
+                uri: `http://172.20.10.4:4000/ProductsImages/${item.productId.images[0]}`,
+              }}
+            />
           </View>
           <View style={styles.info}>
-            <Text style={styles.namePruduct}>Watch</Text>
-            <Text style={styles.brand}>Casio</Text>
-            <Text style={styles.price}>$65</Text>
+            <Text style={styles.namePruduct}>{item.productId.name}</Text>
+            <Text style={styles.brand}>{item.productId.brand.name}</Text>
+            <Text style={styles.price}>${item.productId.price}</Text>
           </View>
         </View>
 
         <View style={styles.btnItem}>
-          <TouchableOpacity style={styles.deleteImage}>
+          <TouchableOpacity style={styles.deleteImage}
+          onPress={() => dispatch({ type: "getCartItems",payload: [] })}>
             <Image
               resizeMode="contain"
               style={[styles.image, { tintColor: "#F65A5A" }]}
@@ -55,12 +75,12 @@ const Cart = ({ navigation }) => {
             </TouchableOpacity>
             <Text
               style={{
-                fontSize: 20,
-                fontWeight: "600",
-                color: COLORS.secondaryColor,
+                fontSize: 16,
+                fontWeight: "400",
+                color: "#9999",
               }}
             >
-              3
+              {item.quantity}
             </Text>
             <TouchableOpacity style={styles.addBtn}>
               <Image
@@ -77,14 +97,15 @@ const Cart = ({ navigation }) => {
       </View>
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backBtn}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("home")}
         >
-          <Image style={{ width: "50%", height: "50%" }} source={back} />
+          <Image style={{ width: "25%", height: "50%" }} source={back} />
         </TouchableOpacity>
 
         <Text
@@ -98,44 +119,59 @@ const Cart = ({ navigation }) => {
 
         <TouchableOpacity
           style={{
-            width: 50,
+            width: 100,
             height: 50,
             alignItems: "flex-end",
             justifyContent: "center",
+           
           }}
         >
-          <Image style={{ width: "50%", height: "50%" }} source={menu} />
+          <Text style={{
+            width: "100%",
+            textAlign: "right",
+            color: "#F65A5A",
+            fontSize: 16,
+            fontWeight: "500",
+          }}>Delete all</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.products}>
-          <Product />
-          <Product />
-        </View>
-        <OrderSummary />
-        <TouchableOpacity
+
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      >
+      <View style={styles.products}>
+        {items.length > 0
+          ? items.map((item, index) => {
+              return <Product item={item} key={index} />;
+            })
+          : null}
+      </View>
+
+      <OrderSummary data={data}/>
+
+      <TouchableOpacity
+        style={{
+          width: "100%",
+          height: 60,
+          backgroundColor: COLORS.mainColor,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 30,
+          marginTop: 40,
+          marginBottom: 20,
+        }}
+        onPress={() => navigation.navigate("Check Out")}
+      >
+        <Text
           style={{
-            width: "100%",
-            height: 60,
-            backgroundColor: COLORS.mainColor,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 30,
-            marginTop: 40,
-            marginBottom: 20,
+            color: COLORS.white,
+            fontSize: 18,
+            fontWeight: "500",
           }}
-          onPress={() => navigation.navigate("Check Out")}
         >
-          <Text
-            style={{
-              color: COLORS.white,
-              fontSize: 18,
-              fontWeight: "500",
-            }}
-          >
-            Check Out
-          </Text>
-        </TouchableOpacity>
+          Check Out
+        </Text>
+      </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -161,7 +197,7 @@ const styles = StyleSheet.create({
   },
 
   backBtn: {
-    width: 50,
+    width: 100,
     height: 50,
     justifyContent: "center",
     alignItems: "flex-start",

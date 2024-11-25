@@ -1,9 +1,23 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
-import notification from "../../assets/images/icons/notification.png";
+import favorites from "../../assets/images/icons/heart.png";
+import { useSelector } from "react-redux";
 
-const Header = () => {
+const Header = ({navigation, favoritesList}) => {
+
+  // const [favoritesCount, setFavoritesCount] = useState([]);
+  const products = favoritesList;
+
+  // useEffect(() => {
+  //  const getFavoritesList = async () => {
+      
+  //     setFavoritesCount(products)
+  //   }
+
+  //   getFavoritesList()
+  // }, [favoritesList])
+ 
   return (
     <View style={styles.container}>
       <View
@@ -36,7 +50,30 @@ const Header = () => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.notificationIcon}>
+        <TouchableOpacity style={styles.favorites} onPress={() => navigation.navigate("favorites")}>
+          {products.length > 0 ? (
+            <View style={{
+              position: "absolute",
+              top: -16,
+              right: -10,
+              height: 20,
+              minWidth: 20,
+              backgroundColor: COLORS.mainColor,
+              borderRadius: 10,
+              paddingHorizontal: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+              <View>
+                <Text style={{
+                color: COLORS.white,
+                width: "100%",
+                fontSize: 14,
+                fontWeight: "600",
+              }}>{products.length}</Text>
+              </View>
+            </View>
+          ) : null}
           <Image
             style={[
               styles.profileImage,
@@ -44,7 +81,7 @@ const Header = () => {
                 tintColor: COLORS.secondaryColor,
               },
             ]}
-            source={notification}
+            source={favorites}
           />
         </TouchableOpacity>
       </View>
@@ -77,8 +114,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  notificationIcon: {
-    width: 24,
-    height: 24,
+  favorites: {
+    width: 35,
+    height: 35,
+    borderWidth: .9,
+    borderColor: "#ddd",
+    padding: 4,
+    borderRadius: 6
   },
 });
