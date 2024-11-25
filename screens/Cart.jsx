@@ -23,9 +23,9 @@ const { width, height } = Dimensions.get("screen");
 const Cart = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [items, setItems] = useState([]);
-  const dispatch = useDispatch();
+ 
   useEffect(() => {
-    if (route.params && route.params.items) {
+    if (route.params && route.params.items.items) {
       setData(route.params.items);
       setItems(route.params.items.items);
     }
@@ -54,7 +54,7 @@ const Cart = ({ route, navigation }) => {
 
         <View style={styles.btnItem}>
           <TouchableOpacity style={styles.deleteImage}
-          onPress={() => dispatch({ type: "getCartItems",payload: [] })}>
+          >
             <Image
               resizeMode="contain"
               style={[styles.image, { tintColor: "#F65A5A" }]}

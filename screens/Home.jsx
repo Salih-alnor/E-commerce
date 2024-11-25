@@ -57,7 +57,13 @@ const Home = ({ navigation }) => {
         const response = await axios.get(
           `http://172.20.10.4:4000/api/cart/6741898a4eb5cfdaf31b7d3e`
         );
-        dispatch({ type: "getCartItems",payload: response.data });
+        // console.log(response.data.items);
+        const data = {
+          items: response.data.items,
+          totalPrice: response.data.totalPrice,
+        
+        }
+        dispatch({ type: "getCartItems", payload: data });
        
       } catch (error) {
         console.log(error);
@@ -69,7 +75,7 @@ const Home = ({ navigation }) => {
     getFavoritesList();
     fetchCategories();
     getProducts();
-  }, [navigation, ]);
+  }, [navigation ]);
 
   const homeComponents = () => {
     return (

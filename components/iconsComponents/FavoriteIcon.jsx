@@ -3,7 +3,7 @@ import React from "react";
 import heart from "../../assets/images/icons/heart.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import COLORS from "../../assets/colors";
+// import COLORS from "../../assets/colors";
 
 const FavoriteIcon = ({ productId, style, heartIcon }) => {
   const dispatch = useDispatch();

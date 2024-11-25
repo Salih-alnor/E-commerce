@@ -1,13 +1,25 @@
 const initState = {
-    cartItems: []
+    cartItems: {
+        items: [],
+        totalPrice: 0,
+       
+    }
 }
 
 const cartReducer = (state = initState, action) => {
- 
+//  console.log(action.payload);
     if (action.type === 'getCartItems') {
-        return {cartItems: action.payload }
+        return {cartItems: {
+            items: action.payload.items,
+            totalPrice: action.payload.totalPrice,
+           
+        } }
     } else if(action.type === "clearCartItems") {
-        return {cartItems: []}
+        return {cartItems: {
+            items: [],
+            totalPrice: 0,
+           
+        }}
     } else {
         return state
     }
