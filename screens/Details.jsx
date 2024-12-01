@@ -10,20 +10,53 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
-
-import heart from "../assets/images/icons/heart.png";
+import axios from "axios";
 import cart from "../assets/images/tabBarIcons/bag.png";
 import halfStar from "../assets/images/icons/half-star.png";
 import back from "../assets/images/icons/back.png";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
-
+import { useDispatch, useSelector } from "react-redux";
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
   const item = route.params;
   const images = item.images;
 
-  
+const dispatch = useDispatch()
+const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
+
+  const addProductToCart = async (id) => {
+    data = {
+      productId: id,
+      quantity: 1,
+      price: item.price
+  }
+ 
+      try {
+          const response = await axios.post(`http://172.20.10.4:4000/api/cart`, data,
+          
+          
+          {
+              headers: {
+                'Content-Type': 'application/json', 
+              },
+            }
+          
+          )
+          console.log(response.data.message)
+          const payload = {
+            items: response.data.newCart.items,
+            totalPrice: response.data.newCart.totalPrice,
+          
+          }
+
+          dispatch({ type: "getCartItems",payload });
+
+        
+      } catch (error) {
+          console.log(error);
+      }
+  }
 
   return (
     <View style={styles.container}>
@@ -211,7 +244,29 @@ const Details = ({ route, navigation }) => {
             Buy Now
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cartBtn}>
+        <TouchableOpacity style={styles.cartBtn} onPress={() => addProductToCart(item.id) }>
+       {cartItems.length > 0 ? 
+       ( <View style={{
+        position: "absolute",
+        top: -5,
+        right: 5,
+        height: 20,
+        minWidth: 20,
+        backgroundColor: COLORS.mainColor,
+        borderRadius: 10,
+        paddingHorizontal: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <View>
+          <Text style={{
+          color: COLORS.white,
+          width: "100%",
+          fontSize: 14,
+          fontWeight: "600",
+        }}>{cartItems.length}</Text>
+        </View>
+      </View>) : (<View></View>)}
           <Image
             style={{
               width: 30,

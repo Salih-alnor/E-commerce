@@ -20,11 +20,11 @@ const TabBar = ({ navigation }) => {
 
   const cartItems =  useSelector((state) => state.cartReducer.cartItems)
   useEffect(() => {
-    // console.log(.length);
+   
     setCartCount(cartItems.items.length);
   }, [cartItems]);
 
-  // console.log(cartCount)
+
   const Tab = createBottomTabNavigator();
 
   const Icon = ({ src, focuse, iconName }) => {

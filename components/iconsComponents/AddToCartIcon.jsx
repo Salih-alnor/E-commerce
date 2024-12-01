@@ -25,7 +25,7 @@ const dispatch = useDispatch();
               }
             
             )
-
+            console.log(response.data.message)
             const payload = {
               items: response.data.newCart.items,
               totalPrice: response.data.newCart.totalPrice,
@@ -34,7 +34,7 @@ const dispatch = useDispatch();
 
             dispatch({ type: "getCartItems",payload });
 
-            // console.log(response.data.newCart.totalPrice);
+          
         } catch (error) {
             console.log(error);
         }

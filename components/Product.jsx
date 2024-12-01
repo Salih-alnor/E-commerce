@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import casioWatch from "../assets/images/featured-products/casio-watch.png";
 import adidasShoe from "../assets/images/featured-products/adidas-shoe.png";
@@ -11,128 +11,23 @@ import smartWatch from "../assets/images/featured-products/smart-watch.png";
 import heart from "../assets/images/icons/heart.png";
 import add from "../assets/images/icons/add.png";
 import COLORS from "../assets/colors";
+import { useSelector } from 'react-redux';
+import FavoriteIcon from './iconsComponents/FavoriteIcon';
+import AddToCartIcon from './iconsComponents/AddToCartIcon';
 
 const { width, height } = Dimensions.get("screen");
 
-const items = [
-    {
-      title: "Casio",
-      price: 99.99,
-      image: casioWatch,
-    },
 
-    {
-      title: "Adidas",
-      price: 129,
-      image: adidasShoe,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Hoodie",
-      price: 65.99,
-      image: hoodie,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Hoodie",
-      price: 89.99,
-      image: hoodie2,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Adidas",
-      price: 250,
-      image: adidasShoe2,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Adidas",
-      price: 190,
-      image: adidasShoe3,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Smart Watch",
-      price: 300,
-      image: smartWatch,
-    },
-
-    {
-      title: "Hoodie",
-      price: 65.99,
-      image: hoodie,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Hoodie",
-      price: 89.99,
-      image: hoodie2,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Adidas",
-      price: 250,
-      image: adidasShoe2,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Adidas",
-      price: 190,
-      image: adidasShoe3,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Smart Watch",
-      price: 300,
-      image: smartWatch,
-    },
-
-    {
-      title: "Hoodie",
-      price: 65.99,
-      image: hoodie,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Hoodie",
-      price: 89.99,
-      image: hoodie2,
-      sizes: ['4XL', '3XL', 'XXL', 'XL', 'L', 'M', 'S', 'XS']
-    },
-
-    {
-      title: "Adidas",
-      price: 250,
-      image: adidasShoe2,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Adidas",
-      price: 190,
-      image: adidasShoe3,
-      sizes: [45, 44, 43, 42, 41, 40, 39, 38]
-    },
-
-    {
-      title: "Smart Watch",
-      price: 300,
-      image: smartWatch,
-    },
-  ];
 
 const Product = ({navigation}) => {
+  const [items, setItems] = useState([])
+  const productsList = useSelector((state) => state.productsReducer.productsList)
+  useEffect(() => {
+  setItems(productsList)
+  })
     const products = ({ item, index }) => {
+
+   
         return (
           <TouchableOpacity
             style={[
@@ -146,21 +41,26 @@ const Product = ({navigation}) => {
               navigation.navigate("details", {
                 title: item.title,
                 price: item.price,
-                image: item.image,
+                description: item.description,
+                images: item.images,
                 sizes: item.sizes
               })
             }
           >
-            <TouchableOpacity style={styles.heartIcon}>
-              <Image
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  tintColor: COLORS.white,
-                }}
-                source={heart}
-              />
-            </TouchableOpacity>
+          
+
+            <FavoriteIcon productId={item._id} style={{
+              tintColor: "#FFF",
+              width: "100%",
+              height: "100%",
+            }} heartIcon={{
+        position: "absolute",
+        top: 8,
+        right: 8,
+        width: 35,
+        height: 35,
+        zIndex: 2,
+      }}/>
             <View style={styles.image}>
               <Image
                 resizeMode="contain"
@@ -168,7 +68,7 @@ const Product = ({navigation}) => {
                   width: "80%",
                   height: "90%",
                 }}
-                source={item.image}
+                source={{uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`}}
               />
             </View>
             <View style={styles.infoCard}>
@@ -185,7 +85,7 @@ const Product = ({navigation}) => {
                 <Text
                   style={{
                     color: COLORS.mainColor,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: "500",
                   }}
                 >
@@ -193,20 +93,8 @@ const Product = ({navigation}) => {
                 </Text>
               </View>
     
-              <TouchableOpacity onPress={() => navigation.navigate("cart")} style={{
-                width: 24,
-                height: 24,
-                borderRadius: 12,
-                backgroundColor: COLORS.mainColor,
-                justifyContent: 'center',
-                  alignItems: 'center',
-              }}>
-                <Image style={{
-                  width: "40%",
-                  height: "40%",
-                  tintColor: COLORS.white,
-                }} source={add}/>
-              </TouchableOpacity>
+             
+            <AddToCartIcon item={{productId: item}}/>
             </View>
           </TouchableOpacity>
         );
@@ -257,12 +145,5 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
       },
     
-      heartIcon: {
-        position: "absolute",
-        top: 8,
-        right: 8,
-        width: 30,
-        height: 30,
-        zIndex: 2,
-      },
+      
 })

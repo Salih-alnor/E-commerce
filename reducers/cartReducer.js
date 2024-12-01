@@ -7,7 +7,7 @@ const initState = {
 }
 
 const cartReducer = (state = initState, action) => {
-//  console.log(action.payload);
+
     if (action.type === 'getCartItems') {
         return {cartItems: {
             items: action.payload.items,

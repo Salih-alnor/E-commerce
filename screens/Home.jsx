@@ -9,21 +9,18 @@ import Categories from "../components/home-compnents/Categories";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
-
-
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
-  const favorite =  useSelector((state) => state.reducer.favoritesList)
+  const favorite = useSelector((state) => state.reducer.favoritesList);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        
-        const response = await axios.get("http://172.20.10.4:4000/api/category");
+        const response = await axios.get(
+          "http://172.20.10.4:4000/api/category"
+        );
         setCategories(response.data.categories);
-        
-    
       } catch (error) {
         console.log(error);
       }
@@ -32,11 +29,12 @@ const Home = ({ navigation }) => {
     const getProducts = async () => {
       try {
         const response = await axios.get("http://172.20.10.4:4000/api/product");
-         setProducts(response.data.products);
+        setProducts(response.data.products);
+        dispatch({ type: "getProducts", payload: response.data.products });
       } catch (error) {
-        
+        console.log(error)
       }
-    }
+    };
 
     const getFavoritesList = async () => {
       try {
@@ -44,9 +42,7 @@ const Home = ({ navigation }) => {
           "http://172.20.10.4:4000/api/favorite"
         );
 
-       
-        dispatch({ type: "setFavorites",payload: response.data });
-        
+        dispatch({ type: "setFavorites", payload: response.data });
       } catch (error) {
         console.log(error);
       }
@@ -61,21 +57,18 @@ const Home = ({ navigation }) => {
         const data = {
           items: response.data.items,
           totalPrice: response.data.totalPrice,
-        
-        }
+        };
         dispatch({ type: "getCartItems", payload: data });
-       
       } catch (error) {
         console.log(error);
       }
     };
 
-
     getCartItems();
     getFavoritesList();
     fetchCategories();
     getProducts();
-  }, [navigation ]);
+  }, [navigation]);
 
   const homeComponents = () => {
     return (
@@ -83,23 +76,36 @@ const Home = ({ navigation }) => {
         <SearchBox />
         <SliderBox />
         <Text
-        style={{
-          fontSize: 20,
-          fontWeight: "600",
-          marginLeft: 16,
-        }}
-      >
-        Categories
-      </Text>
-        <Categories categories={categories} navigation={navigation} navigateTo={"subcategories"} page={"home"}/>
-        <Featured title="Featured" navigation={navigation} products={products} />
-        <Featured title="Most Popular" navigation={navigation} products={products}/>
+          style={{
+            fontSize: 20,
+            fontWeight: "600",
+            marginLeft: 16,
+          }}
+        >
+          Categories
+        </Text>
+        <Categories
+          categories={categories}
+          navigation={navigation}
+          navigateTo={"subcategories"}
+          page={"home"}
+        />
+        <Featured
+          title="Featured"
+          navigation={navigation}
+          products={products}
+        />
+        <Featured
+          title="Most Popular"
+          navigation={navigation}
+          products={products}
+        />
       </View>
     );
   };
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} favoritesList={favorite}/>
+      <Header navigation={navigation} favoritesList={favorite} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={[""]}

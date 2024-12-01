@@ -1,8 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import COLORS from '../../assets/colors'
 
-const OrderSummary = ({data}) => {
+const OrderSummary = ({items}) => {
+  const [data, setData] = useState([])
+  useEffect(() => {
+  setData(items)
+  
+  },[items])
+  
   return (
     <View style={styles.orderSummary}>
     <Text style={styles.title}>Order Summary</Text>
@@ -10,22 +16,22 @@ const OrderSummary = ({data}) => {
     <View>
       <View style={styles.prices}>
         <Text>Items</Text>
-        <Text>3</Text>
+        <Text>{!data.items ?  0 : data.items.length}</Text>
       </View>
 
       <View style={styles.prices}>
         <Text>Subtotal</Text>
-        <Text>$423</Text>
+        <Text>${data.totalPrice}</Text>
       </View>
 
       <View style={styles.prices}>
         <Text>Discount</Text>
-        <Text>$12</Text>
+        <Text>${0}</Text>
       </View>
 
       <View style={styles.prices}>
         <Text>Delivery Charges</Text>
-        <Text>$2</Text>
+        <Text>${0}</Text>
       </View>
 
       <View
@@ -40,7 +46,7 @@ const OrderSummary = ({data}) => {
 
     <View style={styles.totalPrice}>
       <Text style={{ fontSize: 18, fontWeight: "500" }}>Total</Text>
-      <Text style={{ fontSize: 18, fontWeight: "500" }}>${data.totalPrice}</Text>
+      <Text style={{ fontSize: 18, fontWeight: "500" }}>${data.totalPrice || 0}</Text>
     </View>
   </View>
   )

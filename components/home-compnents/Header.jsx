@@ -6,17 +6,10 @@ import { useSelector } from "react-redux";
 
 const Header = ({navigation, favoritesList}) => {
 
-  // const [favoritesCount, setFavoritesCount] = useState([]);
+
   const products = favoritesList;
 
-  // useEffect(() => {
-  //  const getFavoritesList = async () => {
-      
-  //     setFavoritesCount(products)
-  //   }
-
-  //   getFavoritesList()
-  // }, [favoritesList])
+ 
  
   return (
     <View style={styles.container}>

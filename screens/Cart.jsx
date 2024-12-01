@@ -18,12 +18,13 @@ import subtraction from "../assets/images/icons/subtraction.png";
 import watch from "../assets/images/featured-products/casio-watch.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("screen");
 const Cart = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [items, setItems] = useState([]);
- 
+  const dispatch = useDispatch();
   useEffect(() => {
     if (route.params && route.params.items.items) {
       setData(route.params.items);
@@ -31,10 +32,53 @@ const Cart = ({ route, navigation }) => {
     }
   }, [route.params]);
 
-  // console.log(items[0].productId)
-  const Product = ({item}) => {
+  const deleteProductFromCart = async (item) => {
+    const data = {
+      productId: item._id,
+    };
+
+    // وفقًا لـ axios، يتم تمرير البيانات في طلب DELETE كجزء من config (وليس كمعامل مستقل مثل في طلبات POST أو PUT).
+    // الكود الحالي يحاول تمرير data كمعامل ثانٍ في طلب axios.delete، مما يؤدي إلى تجاهل البيانات.
+
+    try {
+      const response = await axios.delete("http://172.20.10.4:4000/api/cart", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      });
+
+      const payload = {
+        items: response.data.newCart.items,
+        totalPrice: response.data.newCart.totalPrice,
+      };
+
+      dispatch({ type: "getCartItems", payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const Product = ({ item }) => {
+    // console.log(item)
     return (
-      <View style={styles.product}>
+      <TouchableOpacity style={styles.product}
+      onPress={() =>
+        navigation.navigate("details", {
+          name: item.productId.name,
+          price: item.productId.price,
+          images: item.productId.images,
+          sizes: item.productId.sizes,
+          colors: item.productId.colors,
+          categoryId: item.productId.mainCategory,
+          subCategoryId: item.productId.subCategory,
+          brandId: item.productId.brand,
+          description: item.productId.description,
+          quantity: item.productId.quantity,
+          id: item.productId._id,
+        })
+      }
+      >
         <View style={styles.imageAndInfo}>
           <View style={styles.imageProduct}>
             <Image
@@ -53,7 +97,9 @@ const Cart = ({ route, navigation }) => {
         </View>
 
         <View style={styles.btnItem}>
-          <TouchableOpacity style={styles.deleteImage}
+          <TouchableOpacity
+            style={styles.deleteImage}
+            onPress={() => deleteProductFromCart(item.productId)}
           >
             <Image
               resizeMode="contain"
@@ -94,7 +140,7 @@ const Cart = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -123,55 +169,66 @@ const Cart = ({ route, navigation }) => {
             height: 50,
             alignItems: "flex-end",
             justifyContent: "center",
-           
           }}
         >
-          <Text style={{
-            width: "100%",
-            textAlign: "right",
-            color: "#F65A5A",
-            fontSize: 16,
-            fontWeight: "500",
-          }}>Delete all</Text>
+          <Text
+            style={{
+              width: "100%",
+              textAlign: "right",
+              color: "#F65A5A",
+              fontSize: 16,
+              fontWeight: "500",
+            }}
+          >
+            Delete all
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-      showsVerticalScrollIndicator={false}
-      >
-      <View style={styles.products}>
-        {items.length > 0
-          ? items.map((item, index) => {
-              return <Product item={item} key={index} />;
-            })
-          : null}
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.products}>
+          {items.length > 0
+            ? items.map((item, index) => {
+                return <Product item={item} key={index} />;
+              })
+            : null}
+        </View>
 
-      <OrderSummary data={data}/>
+        <View style={{
+          flex: 1,
+          minHeight: height / 2 - 100,
+          justifyContent: "flex-end",
+        }}>
+          <OrderSummary items={data} />
 
-      <TouchableOpacity
-        style={{
-          width: "100%",
-          height: 60,
-          backgroundColor: COLORS.mainColor,
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 30,
-          marginTop: 40,
-          marginBottom: 20,
-        }}
-        onPress={() => navigation.navigate("Check Out")}
-      >
-        <Text
-          style={{
-            color: COLORS.white,
-            fontSize: 18,
-            fontWeight: "500",
-          }}
-        >
-          Check Out
-        </Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              height: 60,
+              backgroundColor: COLORS.mainColor,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 30,
+              marginTop: 40,
+              marginBottom: 20,
+            }}
+            onPress={() =>
+              navigation.navigate("Check Out", {
+                data: data,
+              })
+            }
+          >
+            <Text
+              style={{
+                color: COLORS.white,
+                fontSize: 18,
+                fontWeight: "500",
+              }}
+            >
+              Check Out
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -205,7 +262,7 @@ const styles = StyleSheet.create({
 
   products: {
     marginTop: 40,
-    minHeight: height * 0.4,
+    minHeight: height / 2 - 100,
   },
 
   product: {

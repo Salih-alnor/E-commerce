@@ -10,20 +10,21 @@ import {
 import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import FavoriteIcon from "../iconsComponents/FavoriteIcon";
-
+import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("screen");
 
 const Featured = ({ title, navigation, products }) => {
   const [data, setData] = useState([]);
-
+ 
   useEffect(() => {
     setData(products);
   }, [navigation, products]);
 
-
+  
 
   const product = ({ item, index }) => {
+
     const itemsLength = products.length;
     return (
       <TouchableOpacity
@@ -49,22 +50,23 @@ const Featured = ({ title, navigation, products }) => {
           })
         }
       >
+        <FavoriteIcon
+          productId={item._id}
+          style={{
+            tintColor: "white",
+            width: "100%",
+            height: "100%",
+          }}
+          heartIcon={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            width: 30,
+            height: 30,
+            zIndex: 2,
+          }}
+        />
 
-   
-        <FavoriteIcon productId={item._id} style={{
-              tintColor: "white",
-              width: "100%",
-              height: "100%",
-            }} heartIcon={{
-              position: "absolute",
-              top: 8,
-              right: 8,
-              width: 30,
-              height: 30,
-              zIndex: 2,
-            }}/>
-      
-        
         <View style={styles.image}>
           <Image
             resizeMode="contain"
@@ -171,6 +173,4 @@ const styles = StyleSheet.create({
   infoCard: {
     paddingHorizontal: 10,
   },
-
-
 });

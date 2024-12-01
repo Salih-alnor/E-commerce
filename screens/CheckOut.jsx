@@ -7,7 +7,7 @@ import {
   Dimensions,
   ScrollView
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import COLORS from "../assets/colors";
 
 import location from "../assets/images/icons/location.png";
@@ -22,7 +22,12 @@ import OrderSummary from "../components/cart-components/OrderSummary";
 
 const { width, height } = Dimensions.get("screen");
 
-const CheckOut = ({ navigation }) => {
+const CheckOut = ({ route, navigation }) => {
+const [data, setData] = useState([]);
+  useEffect(() => {
+    setData(route.params.data);
+   
+  }, [navigation])
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -81,7 +86,7 @@ const CheckOut = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-     <OrderSummary />
+     <OrderSummary items={data}/>
 
       <View style={styles.paymentMethodsWrapper}>
         <Text style={styles.title}>Choose payment method</Text>
@@ -156,8 +161,9 @@ const CheckOut = ({ navigation }) => {
             <Text style={{
                 color: COLORS.white,
                 fontSize: 18,
-                fontWeight: "500"
-            }}>Check Out</Text>
+                fontWeight: "500",
+                textTransform: "uppercase",
+            }}>Send Order</Text>
         </TouchableOpacity>
       </View>
     </View>
