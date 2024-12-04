@@ -1,15 +1,5 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
-
-import casioWatch from "../assets/images/featured-products/casio-watch.png";
-import adidasShoe from "../assets/images/featured-products/adidas-shoe.png";
-import adidasShoe2 from "../assets/images/featured-products/adidas-shoe-2.png";
-import adidasShoe3 from "../assets/images/featured-products/adidas-shoe-3.png";
-import hoodie from "../assets/images/featured-products/hoodie.png";
-import hoodie2 from "../assets/images/featured-products/hoodie-2.png";
-import smartWatch from "../assets/images/featured-products/smart-watch.png";
-import heart from "../assets/images/icons/heart.png";
-import add from "../assets/images/icons/add.png";
 import COLORS from "../assets/colors";
 import { useSelector } from 'react-redux';
 import FavoriteIcon from './iconsComponents/FavoriteIcon';
@@ -19,11 +9,15 @@ const { width, height } = Dimensions.get("screen");
 
 
 
-const Product = ({navigation}) => {
+const Product = ({navigation, data}) => {
   const [items, setItems] = useState([])
   const productsList = useSelector((state) => state.productsReducer.productsList)
   useEffect(() => {
-  setItems(productsList)
+  if(data) {
+    setItems(data)
+  } else {
+    setItems(productsList)
+  }
   })
     const products = ({ item, index }) => {
 

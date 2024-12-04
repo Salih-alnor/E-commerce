@@ -10,7 +10,7 @@ import {
 import React from "react";
 import COLORS from "../assets/colors";
 
-import profile from "../assets/images/icons/profile.png";
+import order from "../assets/images/icons/order.png";
 import setting from "../assets/images/icons/setting.png";
 import mail from "../assets/images/icons/mail.png";
 import share from "../assets/images/icons/share.png";
@@ -23,8 +23,8 @@ const { width, height } = Dimensions.get("screen");
 
 const sections = [
   {
-    image: profile,
-    title: "Profile",
+    image: order,
+    title: "Orders",
     page: "userInformation",
   },
 

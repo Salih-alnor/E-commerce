@@ -8,7 +8,7 @@ import {
   TextInput,
   Platform,
 } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
 import clear from "../assets/images/icons/remove.png";
@@ -16,9 +16,45 @@ import search from "../assets/images/icons/search.png";
 import Products from "./Products";
 import Product from "../components/Product";
 const { width, height } = Dimensions.get("screen");
+import { useSelector } from 'react-redux';
+import filter from 'lodash.filter';
 
 const Search = ({ navigation }) => {
-  const [text, setText] = React.useState("");
+  const [text, setText] = useState("");
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("")
+  const productsList = useSelector((state) => state.productsReducer.productsList)
+useEffect(() => {
+  setFullData(productsList)
+}, [])
+
+
+
+  const handleSearch = (query) => {
+    setText(query);
+    setSearchQuery(query);
+    if (query.length === 0) {
+      setData(fullData);
+      return;
+    }
+    const formattedQuery = query.toLowerCase();
+    const filterData = filter(fullData, (product) => {
+     return contains(product, formattedQuery); 
+    // console.log(product.name)
+    });
+    setData(filterData)
+    
+ };
+
+ const contains = ({ name }, formattedQuery) => {
+  if (name.toLowerCase().includes(formattedQuery)) {
+    return true;
+  }
+  return false;
+};
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -56,8 +92,9 @@ const Search = ({ navigation }) => {
             </View>
             <TextInput
               keyboardType="search"
-              value={text}
-              onChangeText={setText}
+              value={searchQuery}
+              
+              onChangeText={(query) => handleSearch(query)}
               placeholder="Search"
               placeholderTextColor={
                 Platform.OS == "ios"
@@ -74,7 +111,10 @@ const Search = ({ navigation }) => {
           {text !== "" && (
             <TouchableOpacity
               style={styles.clearButton}
-              onPress={() => setText("")}
+              onPress={() => {
+                setSearchQuery(""),
+                setData(fullData)
+              }}
             >
               <Image style={styles.clearButtonText} source={clear} />
             </TouchableOpacity>
@@ -86,11 +126,11 @@ const Search = ({ navigation }) => {
           flexDirection: "row"
          }}>
           <Text style={{fontSize: 16, color: COLORS.secondaryColor, fontWeight: "400"}}>Results for </Text>
-          {text ? <Text style={{fontSize: 16, fontWeight: "500"}}>"{text}"</Text>: <Text></Text>}
+          {searchQuery ? <Text style={{fontSize: 16, fontWeight: "500"}}>"{searchQuery}"</Text>: <Text></Text>}
          </View>
-         <Text style={{fontSize: 14, color: COLORS.mainColor, fontWeight: "500"}}>14 Results Found</Text>
+         <Text style={{fontSize: 14, color: COLORS.mainColor, fontWeight: "500"}}>{data.length} Results Found</Text>
       </View>
-      <Product navigation={navigation} />
+      <Product navigation={navigation} data={data}/>
     </View>
   );
 };

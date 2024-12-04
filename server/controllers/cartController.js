@@ -1,7 +1,7 @@
 const Cart = require("../models/cartModel");
 
 const addToCart = async (req, res) => {
-  const { productId, quantity, price } = req.body;
+  const { productId, quantity, statesProduct, price } = req.body;
   const id = "6741898a4eb5cfdaf31b7d3e";
   if (!productId || !quantity || !price) {
     return res.status(400).json({ message: "Invalid request data" });
@@ -9,7 +9,7 @@ const addToCart = async (req, res) => {
 
   try {
     const cart = await Cart.findOne({ userId: id });
-    
+
     if (!cart) {
       await Cart.create({
         userId: id,
@@ -22,8 +22,15 @@ const addToCart = async (req, res) => {
       );
 
       if (productIndex >= 0) {
-        cart.items[productIndex].quantity += quantity;
-        cart.totalPrice += quantity * price;
+
+        if (statesProduct === "increasing") {
+          cart.items[productIndex].quantity += quantity;
+          cart.totalPrice += quantity * price;
+        } else {
+          cart.items[productIndex].quantity -= quantity;
+          cart.totalPrice -= quantity * price;
+        }
+
       } else {
         cart.items.push({ productId, quantity });
         cart.totalPrice += quantity * price;
@@ -31,7 +38,7 @@ const addToCart = async (req, res) => {
       await cart.save();
     }
 
-    const newCart = await Cart.findOne({userId: id})
+    const newCart = await Cart.findOne({ userId: id })
       .populate("items.productId")
       .populate({
         path: "items.productId",
@@ -51,7 +58,7 @@ const addToCart = async (req, res) => {
 const getCartProducts = async (req, res) => {
   const { id } = req.params;
   try {
-    const cart = await Cart.findOne({userId: id})
+    const cart = await Cart.findOne({ userId: id })
       .populate("items.productId")
       .populate({
         path: "items.productId",
@@ -71,9 +78,9 @@ const deleteProduct = async (req, res) => {
   const { productId } = req.body;
 
   try {
-    const cart = await Cart.findOne({userId: "6741898a4eb5cfdaf31b7d3e"}).populate(
-      "items.productId"
-    );
+    const cart = await Cart.findOne({
+      userId: "6741898a4eb5cfdaf31b7d3e",
+    }).populate("items.productId");
 
     const productIndex = cart.items.findIndex(
       (item) => item.productId._id.toString() === productId
@@ -84,9 +91,9 @@ const deleteProduct = async (req, res) => {
         cart.items[productIndex].productId.price;
       cart.items.splice(productIndex, 1);
       await cart.save();
-      const newCart = await Cart.findOne({userId: "6741898a4eb5cfdaf31b7d3e"}).populate(
-        "items.productId"
-      );
+      const newCart = await Cart.findOne({
+        userId: "6741898a4eb5cfdaf31b7d3e",
+      }).populate("items.productId");
       return res
         .status(200)
         .json({ message: "Product deleted from cart successfully", newCart });

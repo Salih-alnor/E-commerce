@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
+    "lodash.filter": "^4.6.0",
     "mongoose": "^8.8.0",
     "react": "18.2.0",
     "react-native": "0.74.5",

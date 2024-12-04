@@ -59,8 +59,48 @@ const Cart = ({ route, navigation }) => {
     }
   };
 
+const increase = async (item, statesProduct) => {
+
+ 
+ 
+   const  data = {
+      productId: item.productId._id,
+      quantity: 1,
+      statesProduct: statesProduct,
+      price: item.productId.price
+  }
+ 
+      try {
+          const response = await axios.post(`http://172.20.10.4:4000/api/cart`, data,
+          
+          
+          {
+              headers: {
+                'Content-Type': 'application/json', 
+              },
+            }
+          
+          )
+         
+          const payload = {
+            items: response.data.newCart.items,
+            totalPrice: response.data.newCart.totalPrice,
+          
+          }
+
+          dispatch({ type: "getCartItems",payload });
+
+        
+      } catch (error) {
+          console.log(error);
+      }
+}
+
+
+
+
   const Product = ({ item }) => {
-    // console.log(item)
+  
     return (
       <TouchableOpacity style={styles.product}
       onPress={() =>
@@ -109,12 +149,12 @@ const Cart = ({ route, navigation }) => {
           </TouchableOpacity>
 
           <View style={styles.addAndSubBtn}>
-            <TouchableOpacity style={styles.addBtn}>
+            <TouchableOpacity style={styles.addBtn} onPress={() => increase(item, "decreasing")}>
               <Image
                 style={{
                   width: "40%",
                   height: "40%",
-                  tintColor: COLORS.white,
+                  tintColor: "green",
                 }}
                 source={subtraction}
               />
@@ -124,16 +164,17 @@ const Cart = ({ route, navigation }) => {
                 fontSize: 16,
                 fontWeight: "400",
                 color: "#9999",
+                marginHorizontal: 5,
               }}
             >
               {item.quantity}
             </Text>
-            <TouchableOpacity style={styles.addBtn}>
+            <TouchableOpacity style={styles.addBtn} onPress={() => increase(item, "increasing")}>
               <Image
                 style={{
                   width: "40%",
                   height: "40%",
-                  tintColor: COLORS.white,
+                  tintColor: COLORS.secondaryColor,
                 }}
                 source={add}
               />
@@ -325,14 +366,15 @@ const styles = StyleSheet.create({
   addAndSubBtn: {
     width: 80,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
 
   addBtn: {
-    width: 25,
-    height: 25,
-    backgroundColor: COLORS.mainColor,
+    width: 20,
+    height: 20,
+    borderColor: "#999",
+    borderWidth: 1,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
