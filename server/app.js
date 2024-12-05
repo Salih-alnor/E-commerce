@@ -8,6 +8,7 @@ const brandApi = require("./api/brandApi")
 const productApi = require("./api/productApi")
 const favoriteApi = require("./api/favoriteApi")
 const cartApi = require("./api/cartApi")
+const userApi = require("./api/userApi")
 const path = require("path");
 const cors = require('cors');
 
@@ -30,6 +31,7 @@ app.use('/api/brand', brandApi);
 app.use('/api/product', productApi);
 app.use('/api/favorite', favoriteApi);
 app.use('/api/cart', cartApi);
+app.use('/api/user', userApi);
 
 
 

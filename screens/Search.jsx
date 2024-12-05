@@ -26,6 +26,7 @@ const Search = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const productsList = useSelector((state) => state.productsReducer.productsList)
 useEffect(() => {
+  setData(productsList)
   setFullData(productsList)
 }, [])
 
