@@ -18,7 +18,7 @@ const Product = ({navigation, data}) => {
   } else {
     setItems(productsList)
   }
-  })
+  },[data, navigation])
     const products = ({ item, index }) => {
 
    

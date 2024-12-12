@@ -11,6 +11,7 @@ const dispatch = useDispatch();
       data = {
         productId: item._id,
         quantity: 1,
+        statesProduct: "increasing",
         price: item.price
     }
    
@@ -44,9 +45,9 @@ const dispatch = useDispatch();
     <TouchableOpacity
     style={{
       backgroundColor: COLORS.mainColor,
-      width: 30,
-      height: 30,
-      borderRadius: 15,
+      width: 25,
+      height: 25,
+      borderRadius: 5,
       justifyContent: "center",
       alignItems: "center",
       justifyContent: "center",

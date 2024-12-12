@@ -28,6 +28,7 @@ const Search = ({ navigation }) => {
 useEffect(() => {
   setData(productsList)
   setFullData(productsList)
+  
 }, [])
 
 
@@ -42,14 +43,15 @@ useEffect(() => {
     const formattedQuery = query.toLowerCase();
     const filterData = filter(fullData, (product) => {
      return contains(product, formattedQuery); 
-    // console.log(product.name)
+    
     });
     setData(filterData)
     
  };
 
- const contains = ({ name }, formattedQuery) => {
-  if (name.toLowerCase().includes(formattedQuery)) {
+ const contains = ({ name, brand }, formattedQuery) => {
+  const nameBrand = brand.name;
+  if (name.toLowerCase().includes(formattedQuery) || nameBrand.toLowerCase().includes(formattedQuery)) {
     return true;
   }
   return false;

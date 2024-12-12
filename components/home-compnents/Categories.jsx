@@ -5,34 +5,40 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
+import { useSelector } from "react-redux";
+const { width, height } = Dimensions.get("screen");
 
+const Categories = ({ categories, navigation, navigateTo, page }) => {
+  const [data, setData] = useState();
 
-const Categories = ({categories, navigation, navigateTo, page}) => {
- const [data, setData] = useState();
+  const productsList = useSelector(
+    (state) => state.productsReducer.productsList
+  );
 
-
-useEffect(() => {
-  setData(categories);
-  // setSubCategoryId
-}, [categories, navigation])
-
+  useEffect(() => {
+    setData(categories);
+  }, [categories, navigation]);
 
   const Category = ({ item, index }) => {
     const dataLength = data.length;
-  
+
+ 
+
     return (
       <TouchableOpacity
-      onPress={() => navigation.navigate(navigateTo, {
-        name: item.name,
-        slug: item.slug,
-        image: item.image,
-        categoryId: item.mainCategory || null,
-        subCategoryId:  item._id,
-      })}
-
+        onPress={() =>
+          navigation.navigate(navigateTo, {
+            name: item.name,
+            slug: item.slug,
+            image: item.image,
+            categoryId: item.mainCategory || null,
+            subCategoryId: item._id,
+          })
+        }
         style={[
           styles.category,
           {
@@ -41,34 +47,52 @@ useEffect(() => {
         ]}
         key={index}
       >
-        <View style={{
-          width: 90,
-          height: 60,
-          backgroundColor: "#EEE",
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom:10,
-          borderRadius: 10,
-        }}>
-          <Image style={{
-            width: "70%",
-            height: "70%",
-            resizeMode: "contain",
-      
-          }} source={{uri: `http://172.20.10.4:4000/${page === "home" ? "CategoriesImages" : page === "brand"? "BrandsImages": "SubCategoriesImages"}/${item.image}`}}/>
+        <View
+          style={{
+            width: 90,
+            height: 60,
+            backgroundColor: "#EEE",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: 10,
+            borderRadius: 10,
+          }}
+        >
+          <Image
+            style={{
+              width: "70%",
+              height: "70%",
+              resizeMode: "contain",
+            }}
+            source={{
+              uri: `http://172.20.10.4:4000/${
+                page === "home"
+                  ? "CategoriesImages"
+                  : page === "brand"
+                  ? "BrandsImages"
+                  : "SubCategoriesImages"
+              }/${item.image}`,
+            }}
+          />
         </View>
-        {page !== "brand" ? <Text style={{
-          fontSize: 14,
-          fontWeight: "500",
-        color: COLORS.secondaryColor
-        }}>{item.name}</Text>: <View></View>}
+        {page !== "brand" ? (
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "500",
+              color: COLORS.secondaryColor,
+            }}
+          >
+            {item.name}
+          </Text>
+        ) : (
+          <View></View>
+        )}
       </TouchableOpacity>
     );
   };
   return (
     <View>
-
-
       <FlatList
         data={data}
         horizontal
@@ -93,5 +117,21 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 20,
+    width: width - 32,
+    height: 100,
+  },
+
+  backBtn: {
+    width: 100,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
 });

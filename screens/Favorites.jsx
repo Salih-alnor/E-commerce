@@ -114,7 +114,7 @@ const Favorites = ({ navigation }) => {
             alignItems: "flex-end",
           }}
         >
-          <AddToCartIcon item={item}/>
+          
 
           <TouchableOpacity
             onPress={() => deleteItemFromFavoritesList(item.productId._id)}
@@ -125,9 +125,10 @@ const Favorites = ({ navigation }) => {
                 fontSize: 16,
               }}
             >
-              Remove
+              Delete
             </Text>
           </TouchableOpacity>
+          <AddToCartIcon item={item}/>
         </View>
       </TouchableOpacity>
     );
@@ -167,7 +168,7 @@ const Favorites = ({ navigation }) => {
               fontWeight: 500,
             }}
           >
-            Delete all
+            Remove all
           </Text>
         </TouchableOpacity>
       </View>

@@ -4,7 +4,7 @@ const User = require("../models/userModel");
   @desc create user
   @route POST /api/user
   @access Private
-  */
+*/
 const createUser = async (req, res) => {
   const { name, email, password, phone, role } = req.body;
 
@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
   @desc get users
   @route GET /api/user
   @access Private
-  */
+*/
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -47,7 +47,7 @@ const getUsers = async (req, res) => {
   @desc get one user
   @route GET /api/user/:id
   @access Private
-  */
+*/
 const getUser = async (req, res) => {
   const {email, password} = req.body
   try {

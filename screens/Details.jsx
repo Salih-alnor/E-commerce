@@ -29,6 +29,7 @@ const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
     data = {
       productId: id,
       quantity: 1,
+      statesProduct: "increasing",
       price: item.price
   }
  

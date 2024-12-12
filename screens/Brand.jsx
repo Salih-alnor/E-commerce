@@ -1,50 +1,31 @@
 import {
+  FlatList,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
-  FlatList,
   Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import COLORS from "../assets/colors";
-import Categories from "../components/home-compnents/Categories";
-import axios from "axios";
-import back from "../assets/images/icons/back.png";
 import { useSelector } from "react-redux";
-import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
+
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
-
+import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
+import COLORS from "../assets/colors";
 const { width, height } = Dimensions.get("screen");
-const Brands = ({ route, navigation }) => {
-  const [data, setData] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
 
+const Brand = ({ route, navigation }) => {
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const productsList = useSelector(
     (state) => state.productsReducer.productsList
   );
 
   useEffect(() => {
-    const getBrands = async (categoryId, subCategoryId) => {
-      try {
-        const response = await axios.get(
-          `http://172.20.10.4:4000/api/brand/${categoryId}/${subCategoryId}/brands`
-        );
-        setData(response.data.brands);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getBrands(route.params.categoryId, route.params.subCategoryId);
-  }, [navigation]);
-
-  useEffect(() => {
     const filtered = productsList.filter(
       (item) =>
         item.mainCategory._id === route.params.categoryId &&
-        route.params.subCategoryId === item.subCategory._id
+        route.params.subCategoryId === item.brand._id
     );
     setFilteredProducts(filtered);
   }, [productsList, route.params]);
@@ -123,52 +104,8 @@ const Brands = ({ route, navigation }) => {
   );
 
   return (
-    <View
-      style={{
-        backgroundColor: COLORS.white,
-        flex: 1,
-      }}
-    >
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => navigation.goBack()}
-        >
-          <Image style={{ width: "25%", height: "50%" }} source={back} />
-        </TouchableOpacity>
-
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "500",
-          }}
-        >
-          {route.params.name}
-        </Text>
-
-        <View
-          style={{
-            width: 100,
-            height: 50,
-            alignItems: "flex-end",
-            justifyContent: "center",
-          }}
-        ></View>
-      </View>
-      <Categories
-        categories={data}
-        navigation={navigation}
-        navigateTo="brand"
-        page="brand"
-      />
-
-      <View
-        style={{
-          backgroundColor: "#fff",
-          paddingHorizontal: 16,
-          flex: 1,
-        }}
-      >
+    <View style={styles.container}>
+      {filteredProducts != null ? (
         <FlatList
           data={filteredProducts} // البيانات المعروضة
           renderItem={renderItem} // عنصر العرض
@@ -177,33 +114,23 @@ const Brands = ({ route, navigation }) => {
           // contentContainerStyle={styles.container} // تنسيق الحاوية
           showsVerticalScrollIndicator={false} // إخفاء مؤشر التمرير
         />
-      </View>
+      ) : (
+        <View>
+          <Text>Not products found</Text>
+        </View>
+      )}
     </View>
   );
 };
 
-export default Brands;
+export default Brand;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
-    flex: 1,
-  },
-
-  header: {
+    backgroundColor: "#fff",
     paddingHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 50,
-    height: 100,
-  },
-
-  backBtn: {
-    width: 100,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "flex-start",
+    paddingBottom: 20,
+    flex: 1,
   },
 
   card: {

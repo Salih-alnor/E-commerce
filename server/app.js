@@ -16,7 +16,7 @@ const cors = require('cors');
 dotenv.config({ path: "config.env" });
 dbConnected()
 
-// app.use(cors());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 

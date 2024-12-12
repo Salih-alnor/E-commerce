@@ -12,10 +12,18 @@ import SignUp from "../../screens/SignUp";
 import SubCategories from "../../screens/SubCategories";
 import Brands from "../../screens/Brands";
 import Favorites from "../../screens/Favorites";
+import Splash from "../../screens/Splash";
+import Brand from "../../screens/Brand";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="splash"
+        component={Splash}
+      />
+
       <Stack.Screen
         options={{ headerShown: false }}
         name="onboarding"
@@ -71,7 +79,7 @@ const StackNav = () => {
 
       <Stack.Screen
         options={{
-          headerShown: true,
+          headerShown: false,
         }}
         name="brands"
         component={Brands}
@@ -79,9 +87,16 @@ const StackNav = () => {
 
       <Stack.Screen
         options={{
+          headerShown: true,
+        }}
+        name="brand"
+        component={Brand}
+      />
+
+      <Stack.Screen
+        options={{
           headerShown: false,
           headerTitleAlign: "center",
-          
         }}
         name="favorites"
         component={Favorites}
