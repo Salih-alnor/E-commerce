@@ -22,6 +22,11 @@ const productSchema = new Schema({
         trim: true,
         required: [true, "Price is required"]
     },
+    
+    isFavorite: {
+        type: Boolean,
+        default: false
+    },
 
     quantity: {
         type: Number,

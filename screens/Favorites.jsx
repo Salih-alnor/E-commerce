@@ -30,8 +30,12 @@ const Favorites = ({ navigation }) => {
         const response = await axios.get(
           "http://172.20.10.4:4000/api/favorite"
         );
-        dispatch({ type: "setFavorites", payload: response.data });
-        setFavoritesList(response.data || []);
+        
+        dispatch({
+          type: "setFavorites",
+          payload: response.data.favoritesList,
+        });
+        setFavoritesList(response.data.favoritesList || []);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +51,12 @@ const Favorites = ({ navigation }) => {
       );
 
       setFavoritesList(response.data.favoritesList);
-      dispatch({ type: "setFavorites", payload: response.data.favoritesList || [] });
+      dispatch({
+        type: "setFavorites",
+        payload: response.data.favoritesList || [],
+      });
+
+      dispatch({ type: "getProducts", payload: response.data.product });
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +68,7 @@ const Favorites = ({ navigation }) => {
         `http://172.20.10.4:4000/api/favorite`
       );
       setFavoritesList([]);
-      
+
       dispatch({ type: "clearFavorites" });
     } catch (error) {
       console.log(error);
@@ -114,8 +123,6 @@ const Favorites = ({ navigation }) => {
             alignItems: "flex-end",
           }}
         >
-          
-
           <TouchableOpacity
             onPress={() => deleteItemFromFavoritesList(item.productId._id)}
           >
@@ -128,7 +135,7 @@ const Favorites = ({ navigation }) => {
               Delete
             </Text>
           </TouchableOpacity>
-          <AddToCartIcon item={item}/>
+          <AddToCartIcon item={item} />
         </View>
       </TouchableOpacity>
     );

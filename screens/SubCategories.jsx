@@ -5,7 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
-  FlatList
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import COLORS from "../assets/colors";
@@ -18,8 +18,9 @@ import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 const SubCategories = ({ route, navigation }) => {
   const [subCategories, setSubCategories] = useState([]);
-  const [subCategoryId, setSubCategoryId] = useState(null);
+  const [mainCategoryId, setMainCategoryId] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+
   const productsList = useSelector(
     (state) => state.productsReducer.productsList
   );
@@ -34,22 +35,77 @@ const SubCategories = ({ route, navigation }) => {
         setSubCategories(fetchedSubCategories || []);
         for (let index = 0; index < fetchedSubCategories.length; index++) {
           if (id === fetchedSubCategories[index].mainCategory) {
-            setSubCategoryId(fetchedSubCategories[index].mainCategory);
+            setMainCategoryId(fetchedSubCategories[index].mainCategory);
           }
         }
       } catch (error) {
         console.log(error);
       }
     };
-    getSubCategories(route.params.subCategoryId);
-  }, [route.params.categoryId, navigation]);
+    getSubCategories(route.params.id);
+  }, [route.params.id, navigation]);
 
   useEffect(() => {
     const filtered = productsList.filter(
-      (item) => item.mainCategory._id == route.params.subCategoryId
+      (item) => item.mainCategory._id === route.params.id
     );
     setFilteredProducts(filtered);
   }, [productsList, route.params]);
+
+  const Category = ({ item, index }) => {
+    const dataLength = subCategories.length;
+
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("brands", {
+            name: item.name,
+            mainCategoryId: mainCategoryId,
+            subCategoryId: item._id,
+          })
+        }
+        style={[
+          styles.category,
+          {
+            marginRight: dataLength - 1 === index ? 16 : 0,
+          },
+        ]}
+        key={index}
+      >
+        <View
+          style={{
+            width: 90,
+            height: 60,
+            backgroundColor: "#EEE",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: 10,
+            borderRadius: 10,
+          }}
+        >
+          <Image
+            style={{
+              width: "70%",
+              height: "70%",
+              resizeMode: "contain",
+            }}
+            source={{
+              uri: `http://172.20.10.4:4000/SubCategoriesImages/${item.image}`,
+            }}
+          />
+        </View>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "500",
+            color: COLORS.secondaryColor,
+          }}
+        >
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity
@@ -62,7 +118,7 @@ const SubCategories = ({ route, navigation }) => {
       ]}
       onPress={() =>
         navigation.navigate("details", {
-          title: item.title,
+          name: item.name,
           price: item.price,
           description: item.description,
           images: item.images,
@@ -73,7 +129,7 @@ const SubCategories = ({ route, navigation }) => {
       <FavoriteIcon
         productId={item._id}
         style={{
-          tintColor: "#FFF",
+          tintColor: item.isFavorite ? COLORS.red : COLORS.white,
           width: "100%",
           height: "100%",
         }}
@@ -153,26 +209,32 @@ const SubCategories = ({ route, navigation }) => {
         ></View>
       </View>
 
-      <Categories
-        categories={subCategories}
-        subCategoryId={subCategoryId}
-        navigation={navigation}
-        navigateTo={"brands"}
+      <FlatList
+        data={subCategories}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={Category}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        keyExtractor={(item, index) => index.toString()}
+        pagingEnabled={true}
+        snapToInterval={106}
       />
-      <View style={{
-        backgroundColor: "#fff",
-        paddingHorizontal: 16,
-        flex: 1,
-      }}>
-              <FlatList
-                data={filteredProducts} // البيانات المعروضة
-                renderItem={renderItem} // عنصر العرض
-                keyExtractor={(item) => item._id} // مفتاح فريد لكل عنصر
-                numColumns={2} // عدد الأعمدة
-                // contentContainerStyle={styles.container} // تنسيق الحاوية
-                showsVerticalScrollIndicator={false} // إخفاء مؤشر التمرير
-              />
-            </View>
+
+      <FlatList
+        data={filteredProducts}
+        renderItem={renderItem}
+        keyExtractor={(item) => item._id}
+        numColumns={2}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+        showsVerticalScrollIndicator={false}
+      />
+      <View
+        style={{
+          backgroundColor: "#fff",
+          paddingHorizontal: 16,
+          flex: 1,
+        }}
+      ></View>
     </View>
   );
 };
@@ -183,6 +245,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
     flex: 1,
+  },
+
+  category: {
+    width: 90,
+    height: 90,
+    borderRadius: 10,
+    marginLeft: 16,
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   header: {

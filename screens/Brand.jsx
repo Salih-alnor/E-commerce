@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import back from "../assets/images/icons/back.png";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import COLORS from "../assets/colors";
@@ -21,11 +21,16 @@ const Brand = ({ route, navigation }) => {
     (state) => state.productsReducer.productsList
   );
 
+  console.log(route.params.mainCategoryId);
+  console.log(route.params.subCategoryId);
+  console.log(route.params.brandId);
+
   useEffect(() => {
     const filtered = productsList.filter(
       (item) =>
-        item.mainCategory._id === route.params.categoryId &&
-        route.params.subCategoryId === item.brand._id
+        item.mainCategory._id === route.params.mainCategoryId &&
+        item.subCategory._id === route.params.subCategoryId &&
+        item.brand._id === route.params.brandId
     );
     setFilteredProducts(filtered);
   }, [productsList, route.params]);
@@ -52,7 +57,7 @@ const Brand = ({ route, navigation }) => {
       <FavoriteIcon
         productId={item._id}
         style={{
-          tintColor: "#FFF",
+          tintColor: item.isFavorite ? COLORS.red : COLORS.white,
           width: "100%",
           height: "100%",
         }}
@@ -105,14 +110,41 @@ const Brand = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => navigation.goBack()}
+        >
+          <Image style={{ width: "25%", height: "50%" }} source={back} />
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "500",
+          }}
+        >
+          {route.params.name}
+        </Text>
+
+        <View
+          style={{
+            width: 100,
+            height: 50,
+            alignItems: "flex-end",
+            justifyContent: "center",
+          }}
+        ></View>
+      </View>
+
       {filteredProducts != null ? (
         <FlatList
-          data={filteredProducts} // البيانات المعروضة
-          renderItem={renderItem} // عنصر العرض
-          keyExtractor={(item) => item._id} // مفتاح فريد لكل عنصر
-          numColumns={2} // عدد الأعمدة
-          // contentContainerStyle={styles.container} // تنسيق الحاوية
-          showsVerticalScrollIndicator={false} // إخفاء مؤشر التمرير
+          data={filteredProducts} 
+          renderItem={renderItem} 
+          keyExtractor={(item) => item._id} 
+          numColumns={2} 
+          contentContainerStyle={{ paddingHorizontal: 16 }} 
+          showsVerticalScrollIndicator={false} 
         />
       ) : (
         <View>
@@ -128,9 +160,24 @@ export default Brand;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
     paddingBottom: 20,
     flex: 1,
+  },
+
+  header: {
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 50,
+    height: 100,
+  },
+
+  backBtn: {
+    width: 100,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
 
   card: {

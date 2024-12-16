@@ -13,11 +13,18 @@ const FavoriteIcon = ({ productId, style, heartIcon }) => {
       const response = await axios.post(
         `http://172.20.10.4:4000/api/favorite/${productId}`
       );
+
+      
+
       dispatch({
         type: "setFavorites",
-        payload: response.data.favoritesList,
+        payload: response.data.favorites,
       });
-      console.log(response.data.message);
+
+      dispatch({
+        type: "getProducts",
+        payload: response.data.products,
+      });
     } catch (error) {
       console.log(error);
     }

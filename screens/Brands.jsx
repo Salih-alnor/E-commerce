@@ -20,34 +20,89 @@ const { width, height } = Dimensions.get("screen");
 const Brands = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [mainCategoryId, setMainCategoryId] = useState(null);
+  const [subCategoryId, setSubCategoryId] = useState(null);
 
   const productsList = useSelector(
     (state) => state.productsReducer.productsList
   );
 
   useEffect(() => {
+    setMainCategoryId(route.params.mainCategoryId);
+    setSubCategoryId(route.params.subCategoryId);
     const getBrands = async (categoryId, subCategoryId) => {
       try {
         const response = await axios.get(
           `http://172.20.10.4:4000/api/brand/${categoryId}/${subCategoryId}/brands`
         );
         setData(response.data.brands);
+        // console.log(response.data.brands);
       } catch (error) {
         console.log(error);
       }
     };
 
-    getBrands(route.params.categoryId, route.params.subCategoryId);
+    getBrands(route.params.mainCategoryId, route.params.subCategoryId);
   }, [navigation]);
 
   useEffect(() => {
     const filtered = productsList.filter(
       (item) =>
-        item.mainCategory._id === route.params.categoryId &&
-        route.params.subCategoryId === item.subCategory._id
+        item.mainCategory._id === route.params.mainCategoryId &&
+      route.params.subCategoryId === item.subCategory._id
     );
     setFilteredProducts(filtered);
-  }, [productsList, route.params]);
+  }, [productsList, navigation]);
+
+  console.log(route)
+
+  const Category = ({ item, index }) => {
+    const dataLength = data.length;
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("brand", {
+            name: item.name,
+            slug: item.slug,
+            image: item.image,
+            mainCategoryId,
+            subCategoryId,
+            brandId: item._id,
+          })
+        }
+        style={[
+          styles.category,
+          {
+            marginRight: dataLength - 1 === index ? 16 : 0,
+          },
+        ]}
+        key={index}
+      >
+        <View
+          style={{
+            width: 90,
+            height: 60,
+            backgroundColor: "#EEE",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: 10,
+            borderRadius: 10,
+          }}
+        >
+          <Image
+            style={{
+              width: "70%",
+              height: "70%",
+              resizeMode: "contain",
+            }}
+            source={{
+              uri: `http://172.20.10.4:4000/BrandsImages/${item.image}`,
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity
@@ -71,7 +126,7 @@ const Brands = ({ route, navigation }) => {
       <FavoriteIcon
         productId={item._id}
         style={{
-          tintColor: "#FFF",
+          tintColor: item.isFavorite ? COLORS.red : COLORS.white,
           width: "100%",
           height: "100%",
         }}
@@ -155,11 +210,25 @@ const Brands = ({ route, navigation }) => {
           }}
         ></View>
       </View>
-      <Categories
-        categories={data}
-        navigation={navigation}
-        navigateTo="brand"
-        page="brand"
+
+      <FlatList
+        data={data}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={Category}
+        contentContainerStyle={{paddingBottom: 20}}
+        keyExtractor={(item, index) => index.toString()}
+        pagingEnabled={true}
+        snapToInterval={106}
+      />
+
+      <FlatList
+        data={filteredProducts} 
+        renderItem={renderItem} 
+        keyExtractor={(item) => item._id} 
+        numColumns={2} 
+        contentContainerStyle={{paddingHorizontal: 16}} 
+        showsVerticalScrollIndicator={false} 
       />
 
       <View
@@ -168,16 +237,7 @@ const Brands = ({ route, navigation }) => {
           paddingHorizontal: 16,
           flex: 1,
         }}
-      >
-        <FlatList
-          data={filteredProducts} // البيانات المعروضة
-          renderItem={renderItem} // عنصر العرض
-          keyExtractor={(item) => item._id} // مفتاح فريد لكل عنصر
-          numColumns={2} // عدد الأعمدة
-          // contentContainerStyle={styles.container} // تنسيق الحاوية
-          showsVerticalScrollIndicator={false} // إخفاء مؤشر التمرير
-        />
-      </View>
+      ></View>
     </View>
   );
 };
@@ -197,6 +257,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 50,
     height: 100,
+  },
+
+  category: {
+    width: 90,
+    height: 90,
+    borderRadius: 10,
+    marginLeft: 16,
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   backBtn: {

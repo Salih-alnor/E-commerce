@@ -87,7 +87,7 @@ const StackNav = () => {
 
       <Stack.Screen
         options={{
-          headerShown: true,
+          headerShown: false,
         }}
         name="brand"
         component={Brand}

@@ -12,7 +12,7 @@ import COLORS from "../../assets/colors";
 import { useSelector } from "react-redux";
 const { width, height } = Dimensions.get("screen");
 
-const Categories = ({ categories, navigation, navigateTo, page }) => {
+const Categories = ({ categories, navigation, }) => {
   const [data, setData] = useState();
 
   const productsList = useSelector(
@@ -24,19 +24,16 @@ const Categories = ({ categories, navigation, navigateTo, page }) => {
   }, [categories, navigation]);
 
   const Category = ({ item, index }) => {
-    const dataLength = data.length;
+   
 
- 
+ const dataLength = categories.length
 
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(navigateTo, {
+          navigation.navigate("subcategories", {
             name: item.name,
-            slug: item.slug,
-            image: item.image,
-            categoryId: item.mainCategory || null,
-            subCategoryId: item._id,
+            id: item._id,
           })
         }
         style={[
@@ -65,18 +62,11 @@ const Categories = ({ categories, navigation, navigateTo, page }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://172.20.10.4:4000/${
-                page === "home"
-                  ? "CategoriesImages"
-                  : page === "brand"
-                  ? "BrandsImages"
-                  : "SubCategoriesImages"
-              }/${item.image}`,
+              uri: `http://172.20.10.4:4000/CategoriesImages/${item.image}`,
             }}
           />
         </View>
-        {page !== "brand" ? (
-          <Text
+        <Text
             style={{
               fontSize: 14,
               fontWeight: "500",
@@ -85,9 +75,6 @@ const Categories = ({ categories, navigation, navigateTo, page }) => {
           >
             {item.name}
           </Text>
-        ) : (
-          <View></View>
-        )}
       </TouchableOpacity>
     );
   };

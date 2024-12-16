@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Header = ({navigation, favoritesList}) => {
 
 
-  const products = favoritesList;
+  const products = favoritesList || 0;
 
  
  

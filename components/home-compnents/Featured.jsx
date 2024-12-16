@@ -19,7 +19,7 @@ const Featured = ({ title, navigation, products }) => {
  
   useEffect(() => {
     setData(products);
-  }, [navigation, products]);
+  } );
 
   
 
@@ -47,13 +47,14 @@ const Featured = ({ title, navigation, products }) => {
             description: item.description,
             quantity: item.quantity,
             id: item._id,
+            isFavorite: item.isFavorite
           })
         }
       >
         <FavoriteIcon
           productId={item._id}
           style={{
-            tintColor: "white",
+            tintColor: item.isFavorite ? COLORS.red: COLORS.white,
             width: "100%",
             height: "100%",
           }}

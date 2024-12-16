@@ -18,7 +18,7 @@ const Product = ({navigation, data}) => {
   } else {
     setItems(productsList)
   }
-  },[data, navigation])
+  },[data, navigation, productsList])
     const products = ({ item, index }) => {
 
    
@@ -44,7 +44,7 @@ const Product = ({navigation, data}) => {
           
 
             <FavoriteIcon productId={item._id} style={{
-              tintColor: "#FFF",
+              tintColor: item.isFavorite ? COLORS.red : COLORS.white,
               width: "100%",
               height: "100%",
             }} heartIcon={{

@@ -36,17 +36,7 @@ const Home = ({ navigation }) => {
       }
     };
 
-    const getFavoritesList = async () => {
-      try {
-        const response = await axios.get(
-          "http://172.20.10.4:4000/api/favorite"
-        );
 
-        dispatch({ type: "setFavorites", payload: response.data });
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
     const getCartItems = async () => {
       try {
@@ -65,10 +55,9 @@ const Home = ({ navigation }) => {
     };
 
     getCartItems();
-    getFavoritesList();
     fetchCategories();
     getProducts();
-  }, [navigation]);
+  }, [navigation, favorite ]);
 
   const homeComponents = () => {
     return (
