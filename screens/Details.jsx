@@ -21,7 +21,6 @@ const { width, height } = Dimensions.get("screen");
 const Details = ({ route, navigation }) => {
   const item = route.params;
   const images = item.images;
-
 const dispatch = useDispatch()
 const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
 

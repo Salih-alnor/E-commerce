@@ -82,7 +82,7 @@ const getFavorites = async (req, res) => {
       .populate("productId");
     if (favoritesList.length === 0)
       return res.json({ message: "No favorite products found" });
-    res.json({favoritesList});
+    res.json({ favoritesList });
   } catch (error) {
     res.json(error);
   }
@@ -110,13 +110,11 @@ const deleteFavorite = async (req, res) => {
     await Favorite.findOneAndDelete({ productId });
     const product = await Product.findById(productId);
 
-    console.log(productId)
     product.isFavorite = false;
     await product.save();
 
     const favoritesList = await Favorite.find().populate("productId");
-    // if (favoritesList.length === 0)
-    //   return res.json({ message: "No favorite products found" });
+    
 
     res.json({ product, favoritesList });
   } catch (error) {
@@ -126,9 +124,15 @@ const deleteFavorite = async (req, res) => {
 
 const clearFavorites = async (req, res) => {
   try {
-    const favorite = await Favorite.deleteMany({});
-    if (favorite.deletedCount === 0)
-      return res.json({ message: "No favorite products found" });
+    const favoritelist = await Favorite.find().populate("productId");
+    for (let favorite of favoritelist) {
+      const product = await Product.findById(favorite.productId);
+      product.isFavorite = false;
+      await product.save();
+      
+    }
+    await Favorite.deleteMany({});
+
     res
       .status(200)
       .json({ message: "All products removed from favorite list" });

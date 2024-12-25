@@ -29,7 +29,7 @@ useEffect(() => {
   setData(productsList)
   setFullData(productsList)
   
-}, [])
+}, [productsList])
 
 
 

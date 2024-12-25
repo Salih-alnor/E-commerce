@@ -21,9 +21,7 @@ const Brand = ({ route, navigation }) => {
     (state) => state.productsReducer.productsList
   );
 
-  console.log(route.params.mainCategoryId);
-  console.log(route.params.subCategoryId);
-  console.log(route.params.brandId);
+  
 
   useEffect(() => {
     const filtered = productsList.filter(
@@ -51,6 +49,7 @@ const Brand = ({ route, navigation }) => {
           description: item.description,
           images: item.images,
           sizes: item.sizes,
+          id: item._id
         })
       }
     >

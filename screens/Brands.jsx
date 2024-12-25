@@ -54,7 +54,7 @@ const Brands = ({ route, navigation }) => {
     setFilteredProducts(filtered);
   }, [productsList, navigation]);
 
-  console.log(route)
+  
 
   const Category = ({ item, index }) => {
     const dataLength = data.length;
@@ -120,6 +120,7 @@ const Brands = ({ route, navigation }) => {
           description: item.description,
           images: item.images,
           sizes: item.sizes,
+          id: item._id
         })
       }
     >

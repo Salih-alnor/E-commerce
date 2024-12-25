@@ -37,7 +37,8 @@ const Product = ({navigation, data}) => {
                 price: item.price,
                 description: item.description,
                 images: item.images,
-                sizes: item.sizes
+                sizes: item.sizes,
+                id: item._id
               })
             }
           >

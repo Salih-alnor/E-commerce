@@ -50,7 +50,7 @@ const SubCategories = ({ route, navigation }) => {
       (item) => item.mainCategory._id === route.params.id
     );
     setFilteredProducts(filtered);
-  }, [productsList, route.params]);
+  }, [productsList, route.params, navigation]);
 
   const Category = ({ item, index }) => {
     const dataLength = subCategories.length;
@@ -123,6 +123,7 @@ const SubCategories = ({ route, navigation }) => {
           description: item.description,
           images: item.images,
           sizes: item.sizes,
+          id: item._id
         })
       }
     >
