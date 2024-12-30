@@ -7,17 +7,15 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
-
 import order from "../assets/images/icons/order.png";
 import setting from "../assets/images/icons/setting.png";
 import mail from "../assets/images/icons/mail.png";
 import share from "../assets/images/icons/share.png";
 import help from "../assets/images/icons/help.png";
 import next from "../assets/images/icons/next.png";
-
-
+import * as ImagePicker from "expo-image-picker";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -53,29 +51,67 @@ const sections = [
   },
 ];
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const selectImageFromLibrary = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if(status !== "granted") {
+      alert("Access to camera roll is required");
+      return;
+    
+  } else {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      console.log("Canceled!");
+    }
+  }
+  
+};
+
+  // const result = await ImagePicker.launchImageLibraryAsync({
+  //   allowsEditing: false,
+  //   aspectRatio: 1,
+  //   quality: 0.5,
+  // })
+
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <TouchableOpacity style={styles.imageWrapper}>
+        <TouchableOpacity
+          style={styles.imageWrapper}
+          onPress={() => selectImageFromLibrary()}
+        >
           <Image
             resizeMode="contain"
             style={{
               width: "100%",
               height: "100%",
             }}
-            source={{uri: "http://172.20.10.4:4000/ProfileImage/profile.png"}}
+            source={{ uri: selectedImage }}
           />
         </TouchableOpacity>
         <Text style={styles.userName}>Salih alnor</Text>
         <Text style={styles.email}>salihalnor1996@gmail.com</Text>
       </View>
-      
+
       <ScrollView>
         <View style={styles.sections}>
           {sections.map((item, index) => {
             return (
-              <TouchableOpacity style={styles.section} key={index} onPress={() => navigation.navigate(item.page)}>
+              <TouchableOpacity
+                style={styles.section}
+                key={index}
+                onPress={() => navigation.navigate(item.page)}
+              >
                 <View style={styles.iconSection}>
                   <View style={styles.iconWrapper}>
                     <Image style={styles.image} source={item.image} />
@@ -92,9 +128,15 @@ const Profile = ({navigation}) => {
                   </Text>
                 </View>
                 <View style={styles.iconWrapper}>
-                  <Image style={[styles.image, {
-                    tintColor: "#9999"
-                  }]} source={next} />
+                  <Image
+                    style={[
+                      styles.image,
+                      {
+                        tintColor: "#9999",
+                      },
+                    ]}
+                    source={next}
+                  />
                 </View>
               </TouchableOpacity>
             );

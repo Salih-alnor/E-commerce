@@ -54,6 +54,23 @@ const Home = ({ navigation }) => {
       }
     };
 
+    const getFavoritesList = async () => {
+      try {
+        const response = await axios.get(
+          "http://172.20.10.4:4000/api/favorite"
+        );
+        
+        dispatch({
+          type: "setFavorites",
+          payload: response.data.favoritesList,
+        });
+       
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getFavoritesList();
     getCartItems();
     fetchCategories();
     getProducts();

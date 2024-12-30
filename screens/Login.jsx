@@ -8,6 +8,7 @@ import {
   Dimensions,
   Platform,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import back from "../assets/images/icons/back.png";
@@ -121,6 +122,7 @@ const Login = ({ navigation }) => {
 
   const handleFormSubmit = (values) => {
     Alert.alert(JSON.stringify(values));
+  
   };
 
   const validationSchema = Yup.object().shape({
@@ -149,140 +151,127 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <Text
-        style={{
-          fontSize: 25,
-          fontWeight: 600,
-          marginTop: 20,
-          marginBottom: 10,
-        }}
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
       >
-        Welcome Back.
-      </Text>
-      <Text
-        style={{
-          fontSize: 18,
-          color: COLORS.secondaryColor,
-        }}
-      >
-        Let's sign in
-      </Text>
-
-      <View style={styles.formWrapper}>
-        <Formik
-          initialValues={{
-            email: "",
-            password: "",
-          }}
-          onSubmit={(values) => handleFormSubmit(values)}
-          validationSchema={validationSchema}
-        >
-          {(formikProps) => {
-            return (
-              <React.Fragment>
-                <InputFilad
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  icon={email}
-                  formikProps={formikProps}
-                  formikKey="email"
-                  autoFocus={true}
-                  value={formikProps.values["email"]}
-                />
-
-                <InputFilad
-                  placeholder="Password"
-                  keyboardType="text"
-                  icon={lock}
-                  secureTextEntry={hidePassword}
-                  formikProps={formikProps}
-                  formikKey="password"
-                  value={formikProps.values["password"]}
-                />
-
-                <View style={styles.forgetPassword}>
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: Platform.OS == "ios" ? 600 : 500,
-                        color: COLORS.mainColor,
-                      }}
-                    >
-                      Recover Password
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity
-                  onPress={formikProps.handleSubmit}
-                  style={{
-                    marginTop: 30,
-                    width: width - 32,
-                    backgroundColor: COLORS.mainColor,
-                    height: 55,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 10,
-                    marginBottom: 20,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: COLORS.white,
-                      fontWeight: 500,
-                    }}
-                  >
-                    Sign in
-                  </Text>
-                </TouchableOpacity>
-              </React.Fragment>
-            );
-          }}
-        </Formik>
-      </View>
-
-      <View
-        style={{
-          width: width - 32,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={styles.line}></View>
         <Text
           style={{
-            color: COLORS.secondaryColor,
-            fontWeight: "500",
+            fontSize: 25,
+            fontWeight: 600,
+            marginTop: 20,
+            marginBottom: 10,
           }}
         >
-          or continue with
+          Welcome Back.
         </Text>
-        <View style={styles.line}></View>
-      </View>
+        <Text
+          style={{
+            fontSize: 18,
+            color: COLORS.secondaryColor,
+          }}
+        >
+          Let's sign in
+        </Text>
 
-      <View style={styles.otherAccounts}>
-        <TouchableOpacity style={styles.account}>
-          <View style={styles.accountLogo}>
-            <Image style={styles.accountImage} source={google} />
-          </View>
+        <View style={styles.formWrapper}>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            onSubmit={(values) => handleFormSubmit(values)}
+            validationSchema={validationSchema}
+          >
+            {(formikProps) => {
+              return (
+                <React.Fragment>
+                  <InputFilad
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    icon={email}
+                    formikProps={formikProps}
+                    formikKey="email"
+                    autoFocus={true}
+                    value={formikProps.values["email"]}
+                  />
+
+                  <InputFilad
+                    placeholder="Password"
+                    keyboardType="text"
+                    icon={lock}
+                    secureTextEntry={hidePassword}
+                    formikProps={formikProps}
+                    formikKey="password"
+                    value={formikProps.values["password"]}
+                  />
+
+                  <View style={styles.forgetPassword}>
+                    <TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: Platform.OS == "ios" ? 600 : 500,
+                          color: COLORS.mainColor,
+                        }}
+                      >
+                        Recover Password
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={formikProps.handleSubmit}
+                    style={{
+                      marginTop: 30,
+                      width: width - 32,
+                      backgroundColor: COLORS.mainColor,
+                      height: 55,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      marginBottom: 20,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: COLORS.white,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Sign in
+                    </Text>
+                  </TouchableOpacity>
+                </React.Fragment>
+              );
+            }}
+          </Formik>
+        </View>
+
+        <View
+          style={{
+            width: width - 32,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={styles.line}></View>
           <Text
             style={{
-              fontSize: 17,
               color: COLORS.secondaryColor,
-              fontWeight: 500,
+              fontWeight: "500",
             }}
           >
-            Continue with Google
+            or continue with
           </Text>
-        </TouchableOpacity>
+          <View style={styles.line}></View>
+        </View>
 
-        {Platform.OS == "ios" ? (
+        <View style={styles.otherAccounts}>
           <TouchableOpacity style={styles.account}>
             <View style={styles.accountLogo}>
-              <Image style={styles.accountImage} source={apple} />
+              <Image style={styles.accountImage} source={google} />
             </View>
             <Text
               style={{
@@ -291,57 +280,74 @@ const Login = ({ navigation }) => {
                 fontWeight: 500,
               }}
             >
-              Continue with Apple ID
+              Continue with Google
             </Text>
           </TouchableOpacity>
-        ) : (
-          <View></View>
-        )}
 
-        <TouchableOpacity style={styles.account}>
-          <View style={styles.accountLogo}>
-            <Image style={styles.accountImage} source={facebook} />
-          </View>
-          <Text
-            style={{
-              fontSize: 17,
-              color: COLORS.secondaryColor,
-              fontWeight: 500,
-            }}
-          >
-            Continue with Facebook
-          </Text>
-        </TouchableOpacity>
-      </View>
+          {Platform.OS == "ios" ? (
+            <TouchableOpacity style={styles.account}>
+              <View style={styles.accountLogo}>
+                <Image style={styles.accountImage} source={apple} />
+              </View>
+              <Text
+                style={{
+                  fontSize: 17,
+                  color: COLORS.secondaryColor,
+                  fontWeight: 500,
+                }}
+              >
+                Continue with Apple ID
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View></View>
+          )}
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginTop: 20,
-        }}
-      >
-        <Text
+          <TouchableOpacity style={styles.account}>
+            <View style={styles.accountLogo}>
+              <Image style={styles.accountImage} source={facebook} />
+            </View>
+            <Text
+              style={{
+                fontSize: 17,
+                color: COLORS.secondaryColor,
+                fontWeight: 500,
+              }}
+            >
+              Continue with Facebook
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
           style={{
-            fontSize: 16,
-            color: COLORS.secondaryColor,
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 20,
           }}
         >
-          Don't have an account?
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("sign-up")}>
           <Text
             style={{
               fontSize: 16,
-              fontWeight: "500",
-              color: COLORS.mainColor,
+              color: COLORS.secondaryColor,
             }}
           >
-            {" "}
-            Sign Up !
+            Don't have an account?
           </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => navigation.navigate("sign-up")}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "500",
+                color: COLORS.mainColor,
+              }}
+            >
+              {" "}
+              Sign Up !
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -361,7 +367,7 @@ const styles = StyleSheet.create({
   },
 
   formWrapper: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
 
   forgetPassword: {

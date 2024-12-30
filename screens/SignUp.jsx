@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   },
 
   formWrapper: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
 
   forgetPassword: {

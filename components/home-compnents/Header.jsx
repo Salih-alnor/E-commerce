@@ -4,13 +4,10 @@ import COLORS from "../../assets/colors";
 import favorites from "../../assets/images/icons/heart.png";
 import { useSelector } from "react-redux";
 
-const Header = ({navigation, favoritesList}) => {
+const Header = ({ navigation, favoritesList }) => {
+  
+const products = favoritesList || 0;
 
-
-  const products = favoritesList || 0;
-
- 
- 
   return (
     <View style={styles.container}>
       <View
@@ -29,7 +26,12 @@ const Header = ({navigation, favoritesList}) => {
           }}
         >
           <TouchableOpacity style={styles.profile}>
-            <Image style={styles.profileImage} source={{uri: "http://172.20.10.4:4000/ProfileImage/profile.png"}} />
+            <Image
+              style={styles.profileImage}
+              source={{
+                uri: "http://172.20.10.4:4000/ProfileImage/profile.png",
+              }}
+            />
           </TouchableOpacity>
           <View style={styles.userInfo}>
             <Text>Hello!</Text>
@@ -43,27 +45,36 @@ const Header = ({navigation, favoritesList}) => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.favorites} onPress={() => navigation.navigate("favorites")}>
+        <TouchableOpacity
+          style={styles.favorites}
+          onPress={() => navigation.navigate("favorites")}
+        >
           {products.length > 0 ? (
-            <View style={{
-              position: "absolute",
-              top: -16,
-              right: -10,
-              height: 20,
-              minWidth: 20,
-              backgroundColor: COLORS.mainColor,
-              borderRadius: 10,
-              paddingHorizontal: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            <View
+              style={{
+                position: "absolute",
+                top: -16,
+                right: -10,
+                height: 20,
+                minWidth: 20,
+                backgroundColor: COLORS.mainColor,
+                borderRadius: 10,
+                paddingHorizontal: 5,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <View>
-                <Text style={{
-                color: COLORS.white,
-                width: "100%",
-                fontSize: 14,
-                fontWeight: "600",
-              }}>{products.length}</Text>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    width: "100%",
+                    fontSize: 14,
+                    fontWeight: "600",
+                  }}
+                >
+                  {products.length}
+                </Text>
               </View>
             </View>
           ) : null}
@@ -94,8 +105,8 @@ const styles = StyleSheet.create({
     height: 50,
     overflow: "hidden",
     borderRadius: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   profileImage: {
@@ -110,9 +121,9 @@ const styles = StyleSheet.create({
   favorites: {
     width: 35,
     height: 35,
-    borderWidth: .9,
+    borderWidth: 0.9,
     borderColor: "#ddd",
     padding: 4,
-    borderRadius: 6
+    borderRadius: 6,
   },
 });

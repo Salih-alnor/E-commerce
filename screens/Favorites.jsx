@@ -76,8 +76,25 @@ const Favorites = ({ navigation }) => {
   };
 
   const Product = ({ item }) => {
+    
     return (
-      <TouchableOpacity style={styles.product}>
+      <TouchableOpacity
+      style={styles.product}
+      onPress={() =>
+        navigation.navigate("details", {
+          name: item.productId.name,
+          price: item.productId.price,
+          images: item.productId.images,
+          sizes: item.productId.sizes,
+          colors: item.productId.colors,
+          categoryId: item.productId.mainCategory,
+          subCategoryId: item.productId.subCategory,
+          brandId: item.productId.brand,
+          description: item.productId.description,
+          quantity: item.productId.quantity,
+          id: item.productId._id,
+        })}
+      >
         <View style={styles.imageAndInfo}>
           <View style={styles.imageProduct}>
             <Image
