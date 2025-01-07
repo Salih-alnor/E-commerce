@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal,
   Alert,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
@@ -55,11 +56,10 @@ const sections = [
     page: "help",
   },
 ];
-
+const defaultProfile = "http://172.20.10.4:4000/ProfileImage/profile.png";
 const Profile = ({ navigation }) => {
-  const [selectedImage, setSelectedImage] = useState(
-    "http://172.20.10.4:4000/ProfileImage/profile.png"
-  );
+  const [selectedImage, setSelectedImage] = useState(defaultProfile);
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const pickImage = async (source) => {
@@ -68,8 +68,13 @@ const Profile = ({ navigation }) => {
       if (source === "camera") {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
-          Alert.alert("Access to camera is required");
+          if (Platform.OS === "android") {
+            Alert.alert("Access to camera is required");
+          } else {
+            alert("Access to camera is required");
+          }
         }
+
         result = await ImagePicker.launchCameraAsync({
           allowsEditing: true,
           aspect: [1, 1],
@@ -80,7 +85,11 @@ const Profile = ({ navigation }) => {
           status,
         } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
-          Alert.alert("Access to camera roll is required");
+          if (Platform.OS === "android") {
+            Alert.alert("Access to camera roll is required");
+          } else {
+            alert("Access to camera roll is required");
+          }
         }
 
         result = await ImagePicker.launchImageLibraryAsync({
@@ -94,7 +103,13 @@ const Profile = ({ navigation }) => {
         setSelectedImage(result.assets[0].uri);
         setModalVisible(false);
       } else {
-        Alert.alert("Canceled!");
+        if (Platform.OS === "android") {
+          Alert.alert("Canceled!");
+          setModalVisible(false);
+        } else {
+          alert("Canceled!");
+          setModalVisible(false);
+        }
       }
     } catch (error) {
       Alert.alert(error.message);

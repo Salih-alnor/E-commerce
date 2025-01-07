@@ -120,6 +120,7 @@ const SignUp = ({ navigation }) => {
 
   const handleFormSubmit = (values) => {
     Alert.alert(JSON.stringify(values));
+    navigation.navigate("tabBar")
   };
 
   const validationSchema = Yup.object().shape({

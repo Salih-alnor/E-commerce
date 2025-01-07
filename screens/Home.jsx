@@ -14,67 +14,68 @@ const Home = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const favorite = useSelector((state) => state.reducer.favoritesList);
+
+  const getProducts = async () => {
+    try {
+      const response = await axios.get("http://172.20.10.4:4000/api/product");
+      setProducts(response.data.products);
+      dispatch({ type: "getProducts", payload: response.data.products });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFavoritesList = async () => {
+    try {
+      const response = await axios.get("http://172.20.10.4:4000/api/favorite");
+
+      dispatch({
+        type: "setFavorites",
+        payload: response.data.favoritesList,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("http://172.20.10.4:4000/api/category");
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCartItems = async () => {
+    try {
+      const response = await axios.get(
+        `http://172.20.10.4:4000/api/cart/6741898a4eb5cfdaf31b7d3e`
+      );
+      // console.log(response.data.items);
+      const data = {
+        items: response.data.items,
+        totalPrice: response.data.totalPrice,
+      };
+      dispatch({ type: "getCartItems", payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "http://172.20.10.4:4000/api/category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const getProducts = async () => {
-      try {
-        const response = await axios.get("http://172.20.10.4:4000/api/product");
-        setProducts(response.data.products);
-        dispatch({ type: "getProducts", payload: response.data.products });
-      } catch (error) {
-        console.log(error)
-      }
-    };
-
-
-
-    const getCartItems = async () => {
-      try {
-        const response = await axios.get(
-          `http://172.20.10.4:4000/api/cart/6741898a4eb5cfdaf31b7d3e`
-        );
-        // console.log(response.data.items);
-        const data = {
-          items: response.data.items,
-          totalPrice: response.data.totalPrice,
-        };
-        dispatch({ type: "getCartItems", payload: data });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const getFavoritesList = async () => {
-      try {
-        const response = await axios.get(
-          "http://172.20.10.4:4000/api/favorite"
-        );
-        
-        dispatch({
-          type: "setFavorites",
-          payload: response.data.favoritesList,
-        });
-       
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getFavoritesList();
     getCartItems();
     fetchCategories();
     getProducts();
-  }, [navigation, favorite ]);
+  }, []);
+
+
+  useEffect(() => {
+
+    getProducts();
+  }, [favorite]);
+
 
   const homeComponents = () => {
     return (

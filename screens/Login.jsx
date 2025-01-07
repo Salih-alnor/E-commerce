@@ -122,6 +122,7 @@ const Login = ({ navigation }) => {
 
   const handleFormSubmit = (values) => {
     Alert.alert(JSON.stringify(values));
+    navigation.navigate("tabBar")
   
   };
 
