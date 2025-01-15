@@ -7,7 +7,7 @@ const Splash = ({navigation}) => {
 
     useEffect(() => {
         setTimeout(() => {
-            navigation.navigate('tabBar')
+            navigation.navigate('onboarding')
         }, 1000) // Change the delay to your desired time in milliseconds
      },[])
   return (

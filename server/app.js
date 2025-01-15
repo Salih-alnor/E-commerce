@@ -9,6 +9,8 @@ const productApi = require("./api/productApi")
 const favoriteApi = require("./api/favoriteApi")
 const cartApi = require("./api/cartApi")
 const userApi = require("./api/userApi")
+const authApi = require("./api/authApi")
+// const uploadProfileApi = require("./api/uploadProfileApi")
 const path = require("path");
 const cors = require('cors');
 
@@ -32,6 +34,17 @@ app.use('/api/product', productApi);
 app.use('/api/favorite', favoriteApi);
 app.use('/api/cart', cartApi);
 app.use('/api/user', userApi);
+app.use('/api/auth', authApi);
+// app.use('/api/upload', uploadProfileApi);
+
+app.all('*', (req, res, next) => {
+   const error = new Error(`the url ${req.url} is not found`);
+   next(error);
+})
+
+app.use((err, req, res, next) => {
+    res.status(400).json({error: err.message})
+})
 
 
 

@@ -11,6 +11,8 @@ const {
     deleteBrand,
 } = require("../controllers/brandController");
 
+const {auth} = require("../controllers/authController")
+
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, path.join(__dirname, "../Uploads/BrandsImages"), (err, path) => {
@@ -31,7 +33,7 @@ const upload = multer({storage});
 
 router.use('/:categoryId/:subCategoryId/brands', getBrands)
 
-router.route("/").post(upload.single('image'), createBrand).get(getBrands);
+router.route("/").post(auth, upload.single('image'), createBrand).get(getBrands);
 router.route("/:id").get(getBrand).put(updateBrand).delete(deleteBrand);
 
 module.exports = router;

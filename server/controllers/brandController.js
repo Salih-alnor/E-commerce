@@ -1,28 +1,32 @@
+const { brandValidatorSchema } = require("../validators/brandValidator");
 const Brand = require("../models/brandModel");
 const slugify = require("slugify");
+const asyncHandler = require("express-async-handler");
 
 /*
   @desc create brand
   @route POST /api/brand
   @access Private
   */
-const createBrand = async (req, res) => {
+const createBrand = asyncHandler(async (req, res, next) => {
   const { name, mainCategory, subCategory } = req.body;
+  const { error } = brandValidatorSchema.validate(req.body);
 
-  try {
-    const brand = await Brand.create({
-      name,
-      slug: slugify(name),
-      mainCategory,
-      subCategory,
-      image: req.file.filename
-    });
-
-    res.json({ data: brand });
-  } catch (error) {
-    res.json({ message: error });
+  if(error) {
+    const err = new Error(error.details[0].message);
+    return next(err);
   }
-};
+
+  const brand = await Brand.create({
+    name,
+    slug: slugify(name),
+    mainCategory,
+    subCategory,
+    image: req.file.filename,
+  });
+
+  res.json({ data: brand });
+});
 
 /*
   @desc get brands
@@ -33,10 +37,10 @@ const getBrands = async (req, res) => {
   // let page = req.query.page * 1 || 1;
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
-    const {categoryId, subCategoryId} = req.params;
-    let filterObject = {};
-    if (categoryId && subCategoryId)
-      filterObject = { mainCategory: categoryId, subCategory:  subCategoryId};
+  const { categoryId, subCategoryId } = req.params;
+  let filterObject = {};
+  if (categoryId && subCategoryId)
+    filterObject = { mainCategory: categoryId, subCategory: subCategoryId };
   try {
     const brands = await Brand.find(filterObject); /*.skip(skip).limit(limit);*/
     res.json({ brands });

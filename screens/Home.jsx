@@ -72,7 +72,6 @@ const Home = ({ navigation }) => {
 
 
   useEffect(() => {
-
     getProducts();
   }, [favorite]);
 

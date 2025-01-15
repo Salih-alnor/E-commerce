@@ -33,7 +33,9 @@ const upload = multer({storage});
 router
   .route("/")
   .post(upload.single('image'),createUser)
-  .get(getUser)
+ 
+
+  router.route("/login").post(getUser)
   
 
   router.get("/users",getUsers )

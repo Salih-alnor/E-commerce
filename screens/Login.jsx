@@ -22,6 +22,8 @@ import facebook from "../assets/images/icons/facebook.png";
 import COLORS from "../assets/colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get("screen");
 
 const Login = ({ navigation }) => {
@@ -120,9 +122,19 @@ const Login = ({ navigation }) => {
     );
   };
 
-  const handleFormSubmit = (values) => {
-    Alert.alert(JSON.stringify(values));
-    navigation.navigate("tabBar")
+  const handleFormSubmit = async(data) => {
+ 
+    try {
+      const response = await axios.post("http://172.20.10.4:4000/api/user/login", {data});
+
+      console.log(response.data.token);
+
+    }catch(error) {
+      console.log(error)
+    }
+
+    // Alert.alert(JSON.stringify(data));
+    // navigation.navigate("tabBar")
   
   };
 

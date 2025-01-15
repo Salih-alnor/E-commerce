@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
 
 /*
   @desc create user
@@ -10,18 +11,17 @@ const createUser = async (req, res) => {
 
   try {
     const userExist = await User.findOne({ email });
-    if (userExist){
-        return res.status(400).json({ message: "User already exists" });
-    } 
-        const user = await User.create({
-          name,
-          email,
-          password,
-          phone,
-          profileImage: req.file.filename,
-          role,
-        });
-    
+    if (userExist) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    const user = await User.create({
+      name,
+      email,
+      password,
+      phone,
+      profileImage: req.file.filename,
+      role,
+    });
 
     res.json({ data: user });
   } catch (error) {
@@ -45,28 +45,33 @@ const getUsers = async (req, res) => {
 
 /*
   @desc get one user
-  @route GET /api/user/:id
+  @route GET /api/user
   @access Private
 */
 const getUser = async (req, res) => {
-  const {email, password} = req.body
+  const { email, password } = req.body;
+console.log(email)
   try {
-    const user = await User.findOne({email, password});
+    // 1- check if user is exist and password is valid
 
-    if (!user){
-        return res.status(404).json({ message: "User not found" });
+    const user = await User.findOne({ email });
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
-    res.json({user});
+
+  
+
+    
+    res.json({ user });
 
   } catch (error) {
     res.status(500).json({ message: error });
   }
 };
 
-
-
 module.exports = {
-    createUser,
-    getUsers,
-    getUser,
-  };
+  createUser,
+  getUsers,
+  getUser,
+};
