@@ -99,8 +99,15 @@ const auth = asyncHandler(async (req, res, next) => {
     next(error);
     return;
    }
+
+   // 4- check if user is authorized to access this page
+   if(req.user._id !== decoded.userId) { 
+    const error = new Error("Unauthorized access");
+    return next(error);
+   
+   }
   
-  next()
+  console.log(req.user);
   
 })
 
