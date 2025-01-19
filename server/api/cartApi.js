@@ -1,19 +1,18 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const {
-    addToCart,
-    getCartProducts,
-    deleteProduct
+  addToCart,
+  getCartProducts,
+  deleteProduct,
 } = require("../controllers/cartController");
+
+const { auth, allowedToAccess } = require("../controllers/authController");
 
 router
   .route("/")
-  .post(addToCart)
-  .delete(deleteProduct)
-  
+  .post(auth, allowedToAccess("user", "admin"), addToCart)
+  .delete(auth, allowedToAccess("user", "admin"), deleteProduct);
 
-  router.use("/:id", getCartProducts )
- 
-// router.route("/").get(getFavorites).delete(clearFavorites);
+router.use("/:id", auth, allowedToAccess("user", "admin"), getCartProducts);
 
 module.exports = router;

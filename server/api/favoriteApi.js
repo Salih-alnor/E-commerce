@@ -8,11 +8,16 @@ const {
   clearFavorites,
 } = require("../controllers/favoriteController");
 
+const { auth, allowedToAccess } = require("../controllers/authController");
+
 router
   .route("/:productId")
-  .post(addToFavorite)
-  .get(getFavorite)
+  .post(auth, allowedToAccess("user", "admin"), addToFavorite)
+  .get(auth, allowedToAccess("user", "admin"), getFavorite)
   .delete(deleteFavorite);
-router.route("/").get(getFavorites).delete(clearFavorites);
+router
+  .route("/")
+  .get(auth, allowedToAccess("user", "admin"), getFavorites)
+  .delete(auth, allowedToAccess("user", "admin"), clearFavorites);
 
 module.exports = router;

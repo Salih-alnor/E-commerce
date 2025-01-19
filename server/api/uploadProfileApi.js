@@ -3,6 +3,7 @@ const multer = require('multer')
 const path = require('path'); 
 const fs = require('fs')
 const  User = require("../models/user");
+const { auth, allowedToAccess } = require("../controllers/authController");
 
 let fileName = '';
 
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 
-router.put('/:id', upload.single('image'), async(req, res) => {
+router.put('/:id', auth, allowedToAccess("user", "admin"), upload.single('image'), async(req, res) => {
     try {
         const userProfile = await User.findById(req.params.id)
         const link = path.join(__dirname, '../Uploads/ProfileImage', userProfile.profile)
