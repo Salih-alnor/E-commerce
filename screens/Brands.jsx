@@ -15,7 +15,7 @@ import back from "../assets/images/icons/back.png";
 import { useSelector } from "react-redux";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 const Brands = ({ route, navigation }) => {
   const [data, setData] = useState([]);
@@ -31,14 +31,19 @@ const Brands = ({ route, navigation }) => {
     setMainCategoryId(route.params.mainCategoryId);
     setSubCategoryId(route.params.subCategoryId);
     const getBrands = async (categoryId, subCategoryId) => {
+      const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.4:4000/api/brand/${categoryId}/${subCategoryId}/brands`
+          `http://172.20.10.4:4000/api/brand/${categoryId}/${subCategoryId}/brands`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setData(response.data.brands);
         // console.log(response.data.brands);
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.error);
       }
     };
 

@@ -3,7 +3,6 @@ const router = express.Router({ mergeParams: true });
 const {
   addToFavorite,
   getFavorites,
-  getFavorite,
   deleteFavorite,
   clearFavorites,
 } = require("../controllers/favoriteController");
@@ -12,12 +11,11 @@ const { auth, allowedToAccess } = require("../controllers/authController");
 
 router
   .route("/:productId")
-  .post(auth, allowedToAccess("user", "admin"), addToFavorite)
-  .get(auth, allowedToAccess("user", "admin"), getFavorite)
+  .post(auth, allowedToAccess("user"), addToFavorite)
   .delete(deleteFavorite);
 router
   .route("/")
-  .get(auth, allowedToAccess("user", "admin"), getFavorites)
-  .delete(auth, allowedToAccess("user", "admin"), clearFavorites);
+  .get(auth, allowedToAccess("user"), getFavorites)
+  .delete(auth, allowedToAccess("user"), clearFavorites);
 
 module.exports = router;

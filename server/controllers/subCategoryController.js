@@ -49,7 +49,7 @@ const getSubCategories = async (req, res) => {
     ); /*.skip(skip).limit(limit);*/
     res.json({ subCategories });
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(502).json({ message: error });
   }
 };
 

@@ -15,7 +15,7 @@ const userSchema = new Schema({
         type: String,
         required: [true, "Email is required"],
         unique: [true, 'Email must be unique'],
-        lowercase: true,
+    
     },
 
     password: {
@@ -38,6 +38,13 @@ const userSchema = new Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
+
+    favoritesList: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }
+    ]
 
 
 }, {timeseries: true});

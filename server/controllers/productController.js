@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const slugify = require("slugify");
+const asyncHandler = require("express-async-handler");
 
 /*
   @desc create product
@@ -19,10 +20,8 @@ const createProduct = async (req, res) => {
   } = req.body;
 
   // const sizesArray = JSON.parse(sizes);
- 
 
   try {
-    
     const productImages = req.files.map((file) => file.filename);
 
     // if (!sizesArray.length) {
@@ -30,7 +29,9 @@ const createProduct = async (req, res) => {
     // }
 
     if (!productImages.length) {
-      return res.status(400).json({ message: "Please upload at least one image" });
+      return res
+        .status(400)
+        .json({ message: "Please upload at least one image" });
     }
 
     const product = await Product.create({
@@ -57,18 +58,24 @@ const createProduct = async (req, res) => {
   @route GET /api/product
   @access Public
   */
-const getProducts = async (req, res) => {
+const getProducts = asyncHandler(async (req, res) => {
   // let page = req.query.page * 1 || 1;
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
 
-  try {
-    const products = await Product.find({}).sort({ createdAt: -1 }).populate( "mainCategory").populate("subCategory").populate("brand"); /*.skip(skip).limit(limit);*/
-    res.json({ products });
-  } catch (error) {
-    res.status(500).json({ message: error });
+  const products = await Product.find({})
+    .sort({ createdAt: -1 })
+    .populate("mainCategory")
+    .populate("subCategory")
+    .populate("brand"); /*.skip(skip).limit(limit);*/
+
+  if (!products) {
+    const err = new Error("products not found");
+    err.code = 404;
+    return next(err);
   }
-};
+  res.json({ products });
+});
 
 /*
   @desc get one product

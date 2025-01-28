@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, Dimensions } from 'react-native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
 import onboarding1 from "../assets/images/onboarding/onboarding1.png"
 import onboarding2 from "../assets/images/onboarding/onboarding2.png"
@@ -7,10 +7,12 @@ import onboarding3 from "../assets/images/onboarding/onboarding3.png"
 import onboarding4 from "../assets/images/onboarding/onboarding4.png"
 import next from "../assets/images/onboarding/next.png"
 import COLORS from '../assets/colors'
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const {width, height} = Dimensions.get('screen')
 
 const Onboarding = ({navigation}) => {
+
     const data = [
         {
             title: "One touch shopping",
@@ -68,7 +70,8 @@ const Onboarding = ({navigation}) => {
         )
       }
 
-      const renderDoneButton = () => {
+      const renderDoneButton = async() => {
+        await AsyncStorage.setItem('onboardingCompleted', "true")
         return (
           <View style={styles.doneBtn}>
             <Text style={{fontSize: 18 , color: COLORS.white, marginRight: 16, fontWeight: "600"}}>Getting Started</Text>
@@ -94,7 +97,7 @@ const Onboarding = ({navigation}) => {
        showDoneButton={true}
        dotStyle={styles.dot}
        activeDotStyle={styles.activeDot}
-       onDone={() => navigation.navigate("login")}
+       onDone={() => navigation.navigate("sign-up")}
       />
   
   )

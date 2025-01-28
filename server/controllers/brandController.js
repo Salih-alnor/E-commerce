@@ -33,21 +33,23 @@ const createBrand = asyncHandler(async (req, res, next) => {
   @route GET /api/brand
   @access Public
   */
-const getBrands = async (req, res) => {
+const getBrands = asyncHandler(async (req, res) => {
   // let page = req.query.page * 1 || 1;
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
   const { categoryId, subCategoryId } = req.params;
   let filterObject = {};
-  if (categoryId && subCategoryId)
+  if (!categoryId && !subCategoryId) {
+    const err = new Error("Please provide category and subcategory");
+    err.code = 400;
+    return next(err);
+  }
     filterObject = { mainCategory: categoryId, subCategory: subCategoryId };
-  try {
+
     const brands = await Brand.find(filterObject); /*.skip(skip).limit(limit);*/
     res.json({ brands });
-  } catch (error) {
-    res.status(500).json({ message: error });
-  }
-};
+
+}) 
 
 /*
   @desc get one brand

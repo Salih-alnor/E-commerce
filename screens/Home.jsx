@@ -7,27 +7,47 @@ import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
 import Categories from "../components/home-compnents/Categories";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
+
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+
   const dispatch = useDispatch();
-  const favorite = useSelector((state) => state.reducer.favoritesList);
+  const favorite = useSelector((state) => state.favoritesReducer.favoritesList);
+ 
+  const getUserInfo = async () => {
+    const userInfo = await AsyncStorage.getItem('user');
+    if (userInfo) {
+      dispatch({ type: "setUserInfo", payload: JSON.parse(userInfo) });
+    }
+  }
 
   const getProducts = async () => {
+    const token = await AsyncStorage.getItem("token");
     try {
-      const response = await axios.get("http://172.20.10.4:4000/api/product");
+      const response = await axios.get("http://172.20.10.4:4000/api/product", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProducts(response.data.products);
       dispatch({ type: "getProducts", payload: response.data.products });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
     }
   };
 
   const getFavoritesList = async () => {
+    const token = await AsyncStorage.getItem("token");
     try {
-      const response = await axios.get("http://172.20.10.4:4000/api/favorite");
+      const response = await axios.get("http://172.20.10.4:4000/api/favorite", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       dispatch({
         type: "setFavorites",
@@ -39,18 +59,29 @@ const Home = ({ navigation }) => {
   };
 
   const fetchCategories = async () => {
+    const token = await AsyncStorage.getItem("token");
     try {
-      const response = await axios.get("http://172.20.10.4:4000/api/category");
+      const response = await axios.get("http://172.20.10.4:4000/api/category", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCategories(response.data.categories);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
     }
   };
 
   const getCartItems = async () => {
+    const token = await AsyncStorage.getItem("token");
     try {
       const response = await axios.get(
-        `http://172.20.10.4:4000/api/cart/6741898a4eb5cfdaf31b7d3e`
+        `http://172.20.10.4:4000/api/cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       // console.log(response.data.items);
       const data = {
@@ -59,22 +90,21 @@ const Home = ({ navigation }) => {
       };
       dispatch({ type: "getCartItems", payload: data });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
     }
   };
 
   useEffect(() => {
+    getUserInfo();
     getFavoritesList();
     getCartItems();
     fetchCategories();
     getProducts();
   }, []);
 
-
   useEffect(() => {
     getProducts();
   }, [favorite]);
-
 
   const homeComponents = () => {
     return (

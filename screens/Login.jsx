@@ -23,7 +23,7 @@ import COLORS from "../assets/colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 
 const Login = ({ navigation }) => {
@@ -122,20 +122,28 @@ const Login = ({ navigation }) => {
     );
   };
 
-  const handleFormSubmit = async(data) => {
- 
+  const handleFormSubmit = async (values) => {
     try {
-      const response = await axios.post("http://172.20.10.4:4000/api/user/login", {data});
+      const response = await axios.post(
+        "http://172.20.10.4:4000/api/auth/login",
+        { data: values }
+      );
 
-      console.log(response.data.token);
+      if (response.data.token && response.data.user) {
+        await AsyncStorage.setItem("token", response.data.token);
 
-    }catch(error) {
-      console.log(error)
+        if (response.data.user) {
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(response.data.user)
+          );
+
+          navigation.replace("tabBar");
+        }
+      }
+    } catch (error) {
+      Alert.alert(error.response.data.error);
     }
-
-    // Alert.alert(JSON.stringify(data));
-    // navigation.navigate("tabBar")
-  
   };
 
   const validationSchema = Yup.object().shape({
@@ -164,9 +172,7 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-      showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text
           style={{
             fontSize: 25,

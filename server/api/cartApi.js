@@ -8,11 +8,10 @@ const {
 
 const { auth, allowedToAccess } = require("../controllers/authController");
 
-router
-  .route("/")
-  .post(auth, allowedToAccess("user", "admin"), addToCart)
-  .delete(auth, allowedToAccess("user", "admin"), deleteProduct);
+router.route("/:id").post(auth, allowedToAccess("user", "admin"), addToCart);
 
-router.use("/:id", auth, allowedToAccess("user", "admin"), getCartProducts);
+router.delete("/:productId", auth, allowedToAccess("user", "admin"), deleteProduct);
+
+router.get("/", auth, allowedToAccess("user", "admin"), getCartProducts);
 
 module.exports = router;

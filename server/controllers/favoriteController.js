@@ -1,5 +1,6 @@
-const Favorite = require("../models/favoriteModel");
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
+const asyncHandler = require("express-async-handler");
 
 /*
 
@@ -9,118 +10,87 @@ const Product = require("../models/productModel");
 
   */
 
-const addToFavorite = async (req, res) => {
-  try {
-    const { productId } = req.params;
+const addToFavorite = asyncHandler(async (req, res, next) => {
+  const { productId } = req.params;
 
-    const product = await Product.findById(productId);
-    if (!product) return res.json({ message: "Product not found" });
-
-    if (product.isFavorite === true) {
-      await Favorite.findOneAndDelete({ productId });
-      const favorites = await Favorite.find()
-        .sort({ createdAt: -1 })
-        .populate("productId");
-      product.isFavorite = !product.isFavorite;
-      await product.save();
-      const products = await Product.find({})
-        .sort({ createdAt: -1 })
-        .populate("mainCategory")
-        .populate("subCategory")
-        .populate("brand");
-
-      return res.json({ products, favorites });
-    } else if (product.isFavorite === false) {
-      await Favorite.create({ productId });
-      const favorites = await Favorite.find()
-        .sort({ createdAt: -1 })
-        .populate("productId");
-      product.isFavorite = !product.isFavorite;
-      await product.save();
-      const products = await Product.find({})
-        .sort({ createdAt: -1 })
-        .populate("mainCategory")
-        .populate("subCategory")
-        .populate("brand");
-
-      return res.json({ products, favorites });
-    }
-  } catch (error) {
-    res.json(error);
+  if (!productId) {
+    const err = new Error("Product ID is required");
+    err.statusCode = 400;
+    return next(err);
   }
-};
 
-// const addToFavorite = async (req, res) => {
-//   try {
-//     const { productId } = req.params;
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $addToSet: {
+        favoritesList: productId,
+      },
+    },
+    { new: true }
+  ).populate("favoritesList");
 
-//     const product = await Product.findById(productId);
-//     if (!product) return res.json({ message: "Product not found" });
-
-//     const favorite = await Favorite.findOne({ productId });
-//     if (favorite){
-//       const favorites = await Favorite.find().sort({ createdAt: -1 }).populate("productId");
-//       return res.json({ message: "Product already in favorites list", favoritesList: favorites});
-//     }
-
-//     await Favorite.create({ productId });
-//     const updatedFavoriteList = await Favorite.find().sort({ createdAt: -1 }).populate("productId");
-
-//     res.json({ message: "Product added successfully", favoritesList: updatedFavoriteList });
-//   } catch (error) {
-//     res.json(error);
-//   }
-// };
+  res
+    .status(200)
+    .json({
+      favoritesList: user.favoritesList,
+      message: "Product add to favorites successfully!",
+    });
+});
 
 /*
-  
-  */
-const getFavorites = async (req, res) => {
-  try {
-    const favoritesList = await Favorite.find()
-      .sort({ createdAt: -1 })
-      .populate("productId");
-    if (favoritesList.length === 0)
-      return res.json({ message: "No favorite products found" });
-    res.json({ favoritesList });
-  } catch (error) {
-    res.json(error);
-  }
-};
 
-const getFavorite = async (req, res) => {
+  @desc Remove product from favorite list
+  @route DELETE /api/favorite/:productId
+  @access Public
+
+*/
+
+const deleteFavorite = asyncHandler( async(req, res, next) => {
   const { productId } = req.params;
-  try {
-    const favorite = await Favorite.findOne({ productId });
-    if (!favorite)
-      return res.json({ message: "Product not found in favorite list" });
-    res.json(favorite);
-  } catch (error) {
-    res.json(error);
+
+  if (!productId) {
+    const err = new Error("Product ID is required");
+    err.statusCode = 400;
+    return next(err);
   }
-};
 
-const deleteFavorite = async (req, res) => {
-  const { productId } = req.params;
-  try {
-    const favorite = await Favorite.findOne({ productId });
-    if (!favorite)
-      return res.json({ message: "Product not found in favorite list" });
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: {
+        favoritesList: productId,
+      },
+    },
+    { new: true }
+  );
 
-    await Favorite.findOneAndDelete({ productId });
-    const product = await Product.findById(productId);
+  res
+    .status(200)
+    .json({
+      data: user.favoritesList,
+      message: "Product removed from favorites successfully!",
+    });
+})
 
-    product.isFavorite = false;
-    await product.save();
 
-    const favoritesList = await Favorite.find().populate("productId");
-    
-
-    res.json({ product, favoritesList });
-  } catch (error) {
-    res.json(error);
+const getFavorites = asyncHandler(async (req, res, next) => {
+const {favoritesList} = await User.findById(req.user._id).populate("favoritesList")
+  if (!favoritesList) {
+    const err = new Error("No favorites found");
+    err.statusCode = 404;
+    return next(err);
   }
-};
+  res.status(200).json({status: "success", favoritesList})
+
+  res.json({
+    data: favoritesList,
+    message: "Favorites list",
+  });
+});
+
+
+
+
 
 const clearFavorites = async (req, res) => {
   try {
@@ -129,7 +99,6 @@ const clearFavorites = async (req, res) => {
       const product = await Product.findById(favorite.productId);
       product.isFavorite = false;
       await product.save();
-      
     }
     await Favorite.deleteMany({});
 
@@ -144,7 +113,7 @@ const clearFavorites = async (req, res) => {
 module.exports = {
   addToFavorite,
   getFavorites,
-  getFavorite,
+
   deleteFavorite,
   clearFavorites,
 };

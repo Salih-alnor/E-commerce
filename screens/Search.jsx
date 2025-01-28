@@ -15,9 +15,9 @@ import clear from "../assets/images/icons/remove.png";
 import search from "../assets/images/icons/search.png";
 import Products from "./Products";
 import Product from "../components/Product";
-const { width, height } = Dimensions.get("screen");
 import { useSelector } from 'react-redux';
 import filter from 'lodash.filter';
+const { width, height } = Dimensions.get("screen");
 
 const Search = ({ navigation }) => {
   const [text, setText] = useState("");

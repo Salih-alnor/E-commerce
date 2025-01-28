@@ -3,32 +3,36 @@ import React from "react";
 import heart from "../../assets/images/icons/heart.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-// import COLORS from "../../assets/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const FavoriteIcon = ({ productId, style, heartIcon }) => {
   const dispatch = useDispatch();
+  
 
   const AddToFavoriteList = async (productId) => {
+    const token = await AsyncStorage.getItem("token");
     try {
       const response = await axios.post(
-        `http://172.20.10.4:4000/api/favorite/${productId}`
+        `http://172.20.10.4:4000/api/favorite/${productId}`,{}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      
+      console.log(response.data);
 
       dispatch({
         type: "setFavorites",
-        payload: response.data.favorites,
+        payload: response.data.favoritesList,
       });
 
-      dispatch({
-        type: "getProducts",
-        payload: response.data.products,
-      });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
     }
   };
+
   return (
     <TouchableOpacity
       style={heartIcon}

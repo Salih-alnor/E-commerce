@@ -16,6 +16,7 @@ const { width, height } = Dimensions.get("screen");
 import { useSelector } from "react-redux";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const SubCategories = ({ route, navigation }) => {
   const [subCategories, setSubCategories] = useState([]);
   const [mainCategoryId, setMainCategoryId] = useState(null);
@@ -27,9 +28,14 @@ const SubCategories = ({ route, navigation }) => {
 
   useEffect(() => {
     const getSubCategories = async (id) => {
+      const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.4:4000/api/category/${id}/subcategories`
+          `http://172.20.10.4:4000/api/category/${id}/subcategories`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const fetchedSubCategories = response.data.subCategories || [];
         setSubCategories(fetchedSubCategories || []);
@@ -39,7 +45,7 @@ const SubCategories = ({ route, navigation }) => {
           }
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.error);
       }
     };
     getSubCategories(route.params.id);

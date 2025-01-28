@@ -16,47 +16,48 @@ import halfStar from "../assets/images/icons/half-star.png";
 import back from "../assets/images/icons/back.png";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 
 const Details = ({ route, navigation }) => {
   const item = route.params;
   const images = item.images;
-const dispatch = useDispatch()
-const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
+  const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
 
-  const addProductToCart = async (id) => {
+  const addProductToCart = async (id, userInfo) => {
+    const token = await AsyncStorage.getItem("token");
     data = {
       productId: id,
       quantity: 1,
       statesProduct: "increasing",
-      price: item.price
-  }
- 
-      try {
-          const response = await axios.post(`http://172.20.10.4:4000/api/cart`, data,
-          
-          
-          {
-              headers: {
-                'Content-Type': 'application/json', 
-              },
-            }
-          
-          )
-          console.log(response.data.message)
-          const payload = {
-            items: response.data.newCart.items,
-            totalPrice: response.data.newCart.totalPrice,
-          
-          }
+      price: item.price,
+    };
+    const userId = userInfo._id;
+    try {
+      const response = await axios.post(
+        `http://172.20.10.4:4000/api/cart/${userId}`,
+        data,
 
-          dispatch({ type: "getCartItems",payload });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data.message);
+      const payload = {
+        items: response.data.newCart.items,
+        totalPrice: response.data.newCart.totalPrice,
+      };
 
-        
-      } catch (error) {
-          console.log(error);
-      }
-  }
+      dispatch({ type: "getCartItems", payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -69,26 +70,24 @@ const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
             <Image style={styles.icon} source={back} />
           </TouchableOpacity>
 
-
-          <TouchableOpacity
-            style={styles.backBtnAndFavIcon}
-          
-          >
-            <FavoriteIcon style={{
-              tintColor: "#DDD",
-              width: "60%",
-              height: "60%",
-            }} heartIcon={{
-              width: 50,
-              height: 50,
-              borderRadius: 50,
-              backgroundColor: COLORS.white,
-              justifyContent: "center",
-              alignItems: "center",
-            }} productId={item.id}/>
+          <TouchableOpacity style={styles.backBtnAndFavIcon}>
+            <FavoriteIcon
+              style={{
+                tintColor: "#DDD",
+                width: "60%",
+                height: "60%",
+              }}
+              heartIcon={{
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                backgroundColor: COLORS.white,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              productId={item.id}
+            />
           </TouchableOpacity>
-
-          
         </View>
         <ScrollView
           horizontal
@@ -244,29 +243,41 @@ const cartItems = useSelector((state) => state.cartReducer.cartItems.items);
             Buy Now
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cartBtn} onPress={() => addProductToCart(item.id) }>
-       {cartItems.length > 0 ? 
-       ( <View style={{
-        position: "absolute",
-        top: -5,
-        right: 5,
-        height: 20,
-        minWidth: 20,
-        backgroundColor: COLORS.mainColor,
-        borderRadius: 10,
-        paddingHorizontal: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        <View>
-          <Text style={{
-          color: COLORS.white,
-          width: "100%",
-          fontSize: 14,
-          fontWeight: "600",
-        }}>{cartItems.length}</Text>
-        </View>
-      </View>) : (<View></View>)}
+        <TouchableOpacity
+          style={styles.cartBtn}
+          onPress={() => addProductToCart(item.id, userInfo)}
+        >
+          {cartItems.length > 0 ? (
+            <View
+              style={{
+                position: "absolute",
+                top: -5,
+                right: 5,
+                height: 20,
+                minWidth: 20,
+                backgroundColor: COLORS.mainColor,
+                borderRadius: 10,
+                paddingHorizontal: 5,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    width: "100%",
+                    fontSize: 14,
+                    fontWeight: "600",
+                  }}
+                >
+                  {cartItems.length}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View></View>
+          )}
           <Image
             style={{
               width: 30,

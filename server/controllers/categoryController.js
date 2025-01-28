@@ -1,17 +1,21 @@
 const Category = require("../models/categoryModel");
 const slugify = require("slugify");
+const asyncHandler = require("express-async-handler");
 
 /*
   @desc create category
   @route POST /api/category
   @access Private
   */
-const createCategory = async (req, res) => {
+const createCategory = async (req, res, next) => {
   const { name } = req.body;
 
-
   try {
-    const category = await Category.create({ name, slug: slugify(name), image: req.file.filename });
+    const category = await Category.create({
+      name,
+      slug: slugify(name),
+      image: req.file.filename,
+    });
 
     res.json({ category });
   } catch (error) {
@@ -19,25 +23,26 @@ const createCategory = async (req, res) => {
   }
 };
 
- 
-
 /*
   @desc get categories
   @route GET /api/category
   @access Public
   */
-const getCategories = async (req, res) => {
+const getCategories = asyncHandler(async (req, res, next) => {
   // let page = req.query.page * 1 || 1;
   // const limit = req.query.limit * 1 || 2;
   // const skip = (page - 1) * limit;
 
-  try {
-    const categories = await Category.find({}); /*.skip(skip).limit(limit);*/
-    res.json({ categories });
-  } catch (error) {
-    res.status(500).json({ message: error });
+  const categories = await Category.find({}); /*.skip(skip).limit(limit);*/
+
+  if (!categories) {
+    const err = new Error("categories not found");
+    err.code = 404;
+    return next(err);
   }
-};
+
+  res.json({ categories });
+});
 
 /*
   @desc get one category

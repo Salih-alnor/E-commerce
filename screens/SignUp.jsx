@@ -21,6 +21,8 @@ import COLORS from "../assets/colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
 const { width, height } = Dimensions.get("screen");
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const SignUp = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -118,9 +120,29 @@ const SignUp = ({ navigation }) => {
     );
   };
 
-  const handleFormSubmit = (values) => {
-    Alert.alert(JSON.stringify(values));
-    navigation.navigate("tabBar")
+  const handleFormSubmit = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://172.20.10.4:4000/api/auth/signup",
+        { data: values }
+      );
+
+      if (response.data.token) {
+        await AsyncStorage.setItem("token", response.data.token);
+        console.log(response.data.token);
+        if (response.data.user) {
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(response.data.user)
+          );
+          navigation.replace("login");
+        }
+      }
+
+      // navigation.navigate("tabBar")
+    } catch (error) {
+      Alert.alert(error.response.data.error);
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -156,9 +178,7 @@ const SignUp = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-      showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text
           style={{
             fontSize: 25,
@@ -228,7 +248,6 @@ const SignUp = ({ navigation }) => {
                     value={formikProps.values["confirm_password"]}
                   />
 
-                 
                   <TouchableOpacity
                     onPress={formikProps.handleSubmit}
                     style={{
@@ -273,7 +292,7 @@ const SignUp = ({ navigation }) => {
           >
             Already have an account?
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("login")}>
+          <TouchableOpacity onPress={() => navigation.replace("login")}>
             <Text
               style={{
                 fontSize: 16,

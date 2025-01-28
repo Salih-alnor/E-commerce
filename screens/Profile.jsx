@@ -21,7 +21,9 @@ import next from "../assets/images/icons/next.png";
 import remove from "../assets/images/icons/remove.png";
 import camera from "../assets/images/icons/camera.png";
 import gallery from "../assets/images/icons/gallery.png";
+import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -59,6 +61,8 @@ const sections = [
 const defaultProfile = "http://172.20.10.4:4000/ProfileImage/profile.png";
 const Profile = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(defaultProfile);
+
+  const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -164,8 +168,8 @@ const Profile = ({ navigation }) => {
             source={{ uri: selectedImage }}
           />
         </TouchableOpacity>
-        <Text style={styles.userName}>Salih alnor</Text>
-        <Text style={styles.email}>salihalnor1996@gmail.com</Text>
+        <Text style={styles.userName}>{userInfo.name}</Text>
+        <Text style={styles.email}>{userInfo.email}</Text>
       </View>
 
       <ScrollView>
@@ -209,7 +213,13 @@ const Profile = ({ navigation }) => {
         </View>
 
         <View style={styles.signOut}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await AsyncStorage.removeItem("user");
+              await AsyncStorage.removeItem("token");
+              navigation.navigate("login");
+            }}
+          >
             <Text
               style={{
                 fontSize: 18,

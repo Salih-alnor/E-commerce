@@ -13,8 +13,8 @@ import add from "../assets/images/icons/add.png";
 import back from "../assets/images/icons/back.png";
 import halfStar from "../assets/images/icons/half-star.png";
 
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import COLORS from "../assets/colors";
 import axios from "axios";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
@@ -22,14 +22,23 @@ import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 const { width, height } = Dimensions.get("screen");
 const Favorites = ({ navigation }) => {
   const [favoritesList, setFavoritesList] = useState([]);
+  
   const dispatch = useDispatch();
-
+  const favorite = useSelector((state) => state.favoritesReducer.favoritesList);
   useEffect(() => {
+    
     const getFavoritesList = async () => {
+      const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://172.20.10.4:4000/api/favorite"
+          `http://172.20.10.4:4000/api/favorite`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+
+        // console.log(response.data)
         
         dispatch({
           type: "setFavorites",
@@ -37,62 +46,33 @@ const Favorites = ({ navigation }) => {
         });
         setFavoritesList(response.data.favoritesList || []);
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.error);
       }
     };
 
     getFavoritesList();
-  }, [navigation]);
+  },[navigation]);
 
-  const deleteItemFromFavoritesList = async (id) => {
-    try {
-      const response = await axios.delete(
-        `http://172.20.10.4:4000/api/favorite/${id}`
-      );
 
-      setFavoritesList(response.data.favoritesList);
-      dispatch({
-        type: "setFavorites",
-        payload: response.data.favoritesList || [],
-      });
 
-      dispatch({ type: "getProducts", payload: response.data.product });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const clearFavoritesList = async () => {
-    try {
-      const response = await axios.delete(
-        `http://172.20.10.4:4000/api/favorite`
-      );
-      setFavoritesList([]);
-
-      dispatch({ type: "clearFavorites" });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const Product = ({ item }) => {
-    
     return (
       <TouchableOpacity
       style={styles.product}
       onPress={() =>
         navigation.navigate("details", {
-          name: item.productId.name,
-          price: item.productId.price,
-          images: item.productId.images,
-          sizes: item.productId.sizes,
-          colors: item.productId.colors,
-          categoryId: item.productId.mainCategory,
-          subCategoryId: item.productId.subCategory,
-          brandId: item.productId.brand,
-          description: item.productId.description,
-          quantity: item.productId.quantity,
-          id: item.productId._id,
+          name: item.name,
+          price: item.price,
+          images: item.images,
+          sizes: item.sizes,
+          colors: item.colors,
+          categoryId: item.mainCategory,
+          subCategoryId: item.subCategory,
+          brandId: item.brand,
+          description: item.description,
+          quantity: item.quantity,
+          id: item._id,
         })}
       >
         <View style={styles.imageAndInfo}>
@@ -101,13 +81,13 @@ const Favorites = ({ navigation }) => {
               resizeMode="contain"
               style={styles.image}
               source={{
-                uri: `http://172.20.10.4:4000/ProductsImages/${item.productId.images[0]}`,
+                uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`,
               }}
             />
           </View>
           <View style={styles.info}>
-            <Text style={styles.namePruduct}>{item.productId.name}</Text>
-            <Text style={styles.price}>${item.productId.price}</Text>
+            <Text style={styles.namePruduct}>{item.name}</Text>
+            <Text style={styles.price}>${item.price}</Text>
             <View style={styles.rate}>
               <View style={styles.star}>
                 <Image
@@ -141,7 +121,7 @@ const Favorites = ({ navigation }) => {
           }}
         >
           <TouchableOpacity
-            onPress={() => deleteItemFromFavoritesList(item.productId._id)}
+            onPress={() => deleteItemFromFavoritesList(item._id)}
           >
             <Text
               style={{

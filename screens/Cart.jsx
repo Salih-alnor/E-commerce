@@ -19,12 +19,14 @@ import watch from "../assets/images/featured-products/casio-watch.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
 const Cart = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [items, setItems] = useState([]);
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
   useEffect(() => {
     if (route.params && route.params.items.items) {
       setData(route.params.items);
@@ -33,20 +35,56 @@ const Cart = ({ route, navigation }) => {
   }, [route.params]);
 
   const deleteProductFromCart = async (item) => {
-    const data = {
-      productId: item._id,
-    };
+    const token = await AsyncStorage.getItem("token");
 
     // وفقًا لـ axios، يتم تمرير البيانات في طلب DELETE كجزء من config (وليس كمعامل مستقل مثل في طلبات POST أو PUT).
     // الكود الحالي يحاول تمرير data كمعامل ثانٍ في طلب axios.delete، مما يؤدي إلى تجاهل البيانات.
+    const id = item._id;
+    try {
+      const response = await axios.delete(
+        `http://172.20.10.4:4000/api/cart/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const payload = {
+        items: response.data.newCart.items,
+        totalPrice: response.data.newCart.totalPrice,
+      };
+      console.log(response.data.message)
+
+      dispatch({ type: "getCartItems", payload });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  };
+
+  const increase = async (item, statesProduct, userInfo) => {
+    const token = await AsyncStorage.getItem("token");
+    const data = {
+      productId: item.productId._id,
+      quantity: 1,
+      statesProduct: statesProduct,
+      price: item.productId.price,
+    };
+    const id = userInfo._id;
 
     try {
-      const response = await axios.delete("http://172.20.10.4:4000/api/cart", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      });
+      const response = await axios.post(
+        `http://172.20.10.4:4000/api/cart/${id}`,
+        data,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const payload = {
         items: response.data.newCart.items,
@@ -59,65 +97,25 @@ const Cart = ({ route, navigation }) => {
     }
   };
 
-const increase = async (item, statesProduct) => {
-
- 
- 
-   const  data = {
-      productId: item.productId._id,
-      quantity: 1,
-      statesProduct: statesProduct,
-      price: item.productId.price
-  }
- 
-      try {
-          const response = await axios.post(`http://172.20.10.4:4000/api/cart`, data,
-          
-          
-          {
-              headers: {
-                'Content-Type': 'application/json', 
-              },
-            }
-          
-          )
-         
-          const payload = {
-            items: response.data.newCart.items,
-            totalPrice: response.data.newCart.totalPrice,
-          
-          }
-
-          dispatch({ type: "getCartItems",payload });
-
-        
-      } catch (error) {
-          console.log(error);
-      }
-}
-
-
-
-
   const Product = ({ item }) => {
-  
     return (
-      <TouchableOpacity style={styles.product}
-      onPress={() =>
-        navigation.navigate("details", {
-          name: item.productId.name,
-          price: item.productId.price,
-          images: item.productId.images,
-          sizes: item.productId.sizes,
-          colors: item.productId.colors,
-          categoryId: item.productId.mainCategory,
-          subCategoryId: item.productId.subCategory,
-          brandId: item.productId.brand,
-          description: item.productId.description,
-          quantity: item.productId.quantity,
-          id: item.productId._id,
-        })
-      }
+      <TouchableOpacity
+        style={styles.product}
+        onPress={() =>
+          navigation.navigate("details", {
+            name: item.productId.name,
+            price: item.productId.price,
+            images: item.productId.images,
+            sizes: item.productId.sizes,
+            colors: item.productId.colors,
+            categoryId: item.productId.mainCategory,
+            subCategoryId: item.productId.subCategory,
+            brandId: item.productId.brand,
+            description: item.productId.description,
+            quantity: item.productId.quantity,
+            id: item.productId._id,
+          })
+        }
       >
         <View style={styles.imageAndInfo}>
           <View style={styles.imageProduct}>
@@ -149,7 +147,10 @@ const increase = async (item, statesProduct) => {
           </TouchableOpacity>
 
           <View style={styles.addAndSubBtn}>
-            <TouchableOpacity style={styles.addBtn} onPress={() => increase(item, "decreasing")}>
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => increase(item, "decreasing", userInfo)}
+            >
               <Image
                 style={{
                   width: "40%",
@@ -169,7 +170,10 @@ const increase = async (item, statesProduct) => {
             >
               {item.quantity}
             </Text>
-            <TouchableOpacity style={styles.addBtn} onPress={() => increase(item, "increasing")}>
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => increase(item, "increasing", userInfo)}
+            >
               <Image
                 style={{
                   width: "40%",
@@ -235,11 +239,13 @@ const increase = async (item, statesProduct) => {
             : null}
         </View>
 
-        <View style={{
-          flex: 1,
-          minHeight: height / 2 - 100,
-          justifyContent: "flex-end",
-        }}>
+        <View
+          style={{
+            flex: 1,
+            minHeight: height / 2 - 100,
+            justifyContent: "flex-end",
+          }}
+        >
           <OrderSummary items={data} />
 
           <TouchableOpacity

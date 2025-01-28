@@ -3,10 +3,21 @@ import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import favorites from "../../assets/images/icons/heart.png";
 import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Header = ({ navigation, favoritesList }) => {
+
+const Header = ({ navigation}) => {
+  const [cartCount, setCartCount] = useState(0);
+  const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
+  const favoritesCount = useSelector((state) => state.favoritesReducer.favoritesList);
+
+    useEffect(() => {
   
-const products = favoritesList || 0;
+     setCartCount(favoritesCount.length)
+   
+    }, [favoritesCount]);
+
+  
 
   return (
     <View style={styles.container}>
@@ -41,7 +52,7 @@ const products = favoritesList || 0;
                 fontWeight: "600",
               }}
             >
-              Salih alnor
+              {userInfo.name}
             </Text>
           </View>
         </View>
@@ -49,7 +60,7 @@ const products = favoritesList || 0;
           style={styles.favorites}
           onPress={() => navigation.navigate("favorites")}
         >
-          {products.length > 0 ? (
+          {cartCount > 0 ? (
             <View
               style={{
                 position: "absolute",
@@ -73,7 +84,7 @@ const products = favoritesList || 0;
                     fontWeight: "600",
                   }}
                 >
-                  {products.length}
+                  {cartCount}
                 </Text>
               </View>
             </View>
