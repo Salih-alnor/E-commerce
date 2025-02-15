@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Button } from "react-native";
+import { View, Button, StatusBar, TouchableOpacity, Text } from "react-native";
 import { WebView } from "react-native-webview";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,6 +15,7 @@ export default function PayPalPayment({route, navigation}) {
     const token = await AsyncStorage.getItem("token");
     try {
       const {cartId} = items.params;
+     
       const response = await fetch(
         `http://172.20.10.4:4000/api/order/create-paypal-payment/${cartId}`,
         {
@@ -26,16 +27,27 @@ export default function PayPalPayment({route, navigation}) {
         }
       );
       const data = await response.json();
-      setUrl(`https://www.paypal.com/checkoutnow?token=${data.id}`);
+      console.log(data)
+      setUrl(`https://www.sandbox.paypal.com/checkoutnow?token=${data.id}`);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center'}}>
+    <View style={{ flex: 1, justifyContent: 'center', paddingTop: 30, backgroundColor: "#FFF" }}>
+      <StatusBar barStyle="dark-content" hidden={true}/>
+      
       {url ? (
-        <WebView
+        <View style={{ flex: 1, justifyContent: 'center', paddingTop: 30, backgroundColor: "#FFF" }}>
+          <View>
+            <TouchableOpacity onPress={() => navigation.goBack()}><Text style={{
+              color: "blue",
+              fontSize: 17,
+              marginLeft: 16
+            }}>Back</Text></TouchableOpacity>
+          </View>
+          <WebView
           source={{ uri: url }}
           onNavigationStateChange={(navState) => {
             if (navState.url.includes("success")) {
@@ -44,6 +56,7 @@ export default function PayPalPayment({route, navigation}) {
             }
           }}
         />
+        </View>
       ) : (
         null
       )}

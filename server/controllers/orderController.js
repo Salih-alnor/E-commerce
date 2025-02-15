@@ -137,14 +137,18 @@ const client = new paypal.core.PayPalHttpClient(environment);
 
 
 const createPayPalOrder = asyncHandler(async (req, res) => {
+  const cartId = req.params.cartId;
+  const cart = await Cart.findById(cartId);
+  console.log(cartId)
   const request = new paypal.orders.OrdersCreateRequest();
   request.requestBody({
     intent: "CAPTURE",
     purchase_units: [
       {
+        reference_id: cartId,
         amount: {
           currency_code: "USD",
-          value: "10.00", // المبلغ
+          value: cart.totalPrice, // المبلغ
         },
       },
     ],

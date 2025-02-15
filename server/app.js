@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.post("/webhook", express.raw({ type: "application/json" }), webHook);
-app.post("/create-paypal-payment/:cartId", createPayPalOrder)
+app.post("/api/order/create-paypal-payment/:cartId", createPayPalOrder)
 
 
 
