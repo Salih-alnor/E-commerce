@@ -45,7 +45,7 @@ const OrderSummary = ({items}) => {
     </View>
 
     <View style={styles.totalPrice}>
-      <Text style={{ fontSize: 18, fontWeight: "500" }}>Total</Text>
+      <Text style={{ fontSize: 18, fontWeight: "500" }}>Total Price</Text>
       <Text style={{ fontSize: 18, fontWeight: "500" }}>${data.totalPrice || 0}</Text>
     </View>
   </View>

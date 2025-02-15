@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const addToCart = asyncHandler(async (req, res, next) => {
   const { productId, quantity, statesProduct, price } = req.body;
   const { id } = req.params;
-  console.log(id);
+
   if (!productId || !quantity || !price) {
     return res.status(400).json({ message: "Invalid request data" });
   }
@@ -57,8 +57,8 @@ const addToCart = asyncHandler(async (req, res, next) => {
 });
 
 const getCartProducts = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  console.log(req.user._id);
+  
+  
   if (!req.user._id) {
     const err = new Error("user ID not found");
     err.code = 404;
@@ -79,13 +79,13 @@ const getCartProducts = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  res.status(200).json(cart);
+  res.status(200).json({Cart: cart});
 });
 
 const deleteProduct = asyncHandler(async (req, res, next) => {
   
   const { productId } = req.params;
- console.log(req.user._id)
+ 
 
   if(!productId) {
     const err = new Error("Product not found");

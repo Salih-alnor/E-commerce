@@ -83,10 +83,11 @@ const Home = ({ navigation }) => {
           },
         }
       );
-      // console.log(response.data.items);
+    
       const data = {
-        items: response.data.items,
-        totalPrice: response.data.totalPrice,
+        cartId: response.data.Cart._id,
+        items: response.data.Cart.items,
+        totalPrice: response.data.Cart.totalPrice,
       };
       dispatch({ type: "getCartItems", payload: data });
     } catch (error) {

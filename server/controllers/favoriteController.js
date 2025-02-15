@@ -54,7 +54,7 @@ const deleteFavorite = asyncHandler( async(req, res, next) => {
     return next(err);
   }
 
-  const user = await User.findByIdAndUpdate(
+  const {favoritesList} = await User.findByIdAndUpdate(
     req.user._id,
     {
       $pull: {
@@ -62,12 +62,12 @@ const deleteFavorite = asyncHandler( async(req, res, next) => {
       },
     },
     { new: true }
-  );
+  ).populate("favoritesList");
 
   res
     .status(200)
     .json({
-      data: user.favoritesList,
+      favoritesList,
       message: "Product removed from favorites successfully!",
     });
 })
@@ -81,11 +81,6 @@ const {favoritesList} = await User.findById(req.user._id).populate("favoritesLis
     return next(err);
   }
   res.status(200).json({status: "success", favoritesList})
-
-  res.json({
-    data: favoritesList,
-    message: "Favorites list",
-  });
 });
 
 
@@ -113,7 +108,6 @@ const clearFavorites = async (req, res) => {
 module.exports = {
   addToFavorite,
   getFavorites,
-
   deleteFavorite,
   clearFavorites,
 };

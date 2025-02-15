@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "myapp",
     "name": "e-commerce",
     "slug": "e-commerce",
     "version": "1.0.0",
@@ -25,6 +26,3 @@
     }
   }
 }
-
-
-

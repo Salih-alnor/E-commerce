@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
-import menu from "../assets/images/icons/menu.png";
+import emptyCart from "../assets/images/icons/empty-cart.png";
 import trash from "../assets/images/icons/delete.png";
 import add from "../assets/images/icons/add.png";
 import subtraction from "../assets/images/icons/subtraction.png";
@@ -27,12 +27,15 @@ const Cart = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
+  const cart = useSelector((state) => state.cartReducer.cartItems);
+  const cartItems = cart.items;
   useEffect(() => {
     if (route.params && route.params.items.items) {
       setData(route.params.items);
-      setItems(route.params.items.items);
+      setItems(cartItems.reverse());
+      
     }
-  }, [route.params]);
+  }, [route.params, navigation]);
 
   const deleteProductFromCart = async (item) => {
     const token = await AsyncStorage.getItem("token");
@@ -52,11 +55,12 @@ const Cart = ({ route, navigation }) => {
       );
 
       const payload = {
+        cartId: response.data.newCart._id,
         items: response.data.newCart.items,
         totalPrice: response.data.newCart.totalPrice,
       };
-      console.log(response.data.message)
-
+      console.log(response.data.message);
+      console.log(response.data.newCart)
       dispatch({ type: "getCartItems", payload });
     } catch (error) {
       console.log(error.response.data.error);
@@ -87,10 +91,10 @@ const Cart = ({ route, navigation }) => {
       );
 
       const payload = {
+        cartId: response.data.newCart._id,
         items: response.data.newCart.items,
         totalPrice: response.data.newCart.totalPrice,
       };
-
       dispatch({ type: "getCartItems", payload });
     } catch (error) {
       console.log(error);
@@ -209,6 +213,7 @@ const Cart = ({ route, navigation }) => {
         </Text>
 
         <TouchableOpacity
+        disabled={items.length === 0 ? true : false}
           style={{
             width: 100,
             height: 50,
@@ -230,6 +235,47 @@ const Cart = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
+      {items.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            height,
+            width,
+            borderRadius: 10,
+            position: "absolute",
+            top: 100,
+          }}
+        >
+          <View
+            style={{
+              marginBottom: 200,
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: "contain",
+              }}
+              source={emptyCart}
+            />
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "500",
+                textAlign: "center",
+                color: "#9999",
+              }}
+            >
+              Your cart is empty
+            </Text>
+          </View>
+        </View>
+      ) : null}
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.products}>
           {items.length > 0
@@ -246,35 +292,38 @@ const Cart = ({ route, navigation }) => {
             justifyContent: "flex-end",
           }}
         >
-          <OrderSummary items={data} />
+          {items.length > 0 ? <OrderSummary items={data} /> : null}
 
-          <TouchableOpacity
-            style={{
-              width: "100%",
-              height: 60,
-              backgroundColor: COLORS.mainColor,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 30,
-              marginTop: 40,
-              marginBottom: 20,
-            }}
-            onPress={() =>
-              navigation.navigate("Check Out", {
-                data: data,
-              })
-            }
-          >
-            <Text
+          {items.length > 0 ? (
+            <TouchableOpacity
               style={{
-                color: COLORS.white,
-                fontSize: 18,
-                fontWeight: "500",
+                width: "100%",
+                height: 60,
+                backgroundColor: items.length > 0 ? COLORS.mainColor : "#DDD",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 30,
+                marginTop: 40,
+                marginBottom: 20,
               }}
+              onPress={() =>
+                navigation.navigate("Check Out", {
+                  data,
+                  items
+                })
+              }
             >
-              Check Out
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontSize: 18,
+                  fontWeight: "500",
+                }}
+              >
+                Check Out
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </ScrollView>
     </View>

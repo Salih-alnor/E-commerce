@@ -12,7 +12,6 @@ import trash from "../assets/images/icons/delete.png";
 import add from "../assets/images/icons/add.png";
 import back from "../assets/images/icons/back.png";
 import halfStar from "../assets/images/icons/half-star.png";
-
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import COLORS from "../assets/colors";
@@ -21,59 +20,60 @@ import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 
 const { width, height } = Dimensions.get("screen");
 const Favorites = ({ navigation }) => {
-  const [favoritesList, setFavoritesList] = useState([]);
-  
+  const [favoritesList, setFavoritesList] = useState();
+  const favorite = useSelector(
+    (state) => state.favoritesReducer.favoritesList || []
+  );
   const dispatch = useDispatch();
-  const favorite = useSelector((state) => state.favoritesReducer.favoritesList);
+
   useEffect(() => {
-    
-    const getFavoritesList = async () => {
-      const token = await AsyncStorage.getItem("token");
-      try {
-        const response = await axios.get(
-          `http://172.20.10.4:4000/api/favorite`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    setFavoritesList(favorite.reverse());
+  }, [navigation]);
 
-        // console.log(response.data)
-        
-        dispatch({
-          type: "setFavorites",
-          payload: response.data.favoritesList,
-        });
-        setFavoritesList(response.data.favoritesList || []);
-      } catch (error) {
-        console.log(error.response.data.error);
-      }
-    };
+  const deleteProductFromFavoritesList = async (id) => {
+    const token = await AsyncStorage.getItem("token");
+    try {
+      const response = await axios.delete(
+        `http://172.20.10.4:4000/api/favorite/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    getFavoritesList();
-  },[navigation]);
+      
 
-
-
+      console.log(response.data.message);
+      dispatch({
+        type: "setFavorites",
+        payload: response.data.favoritesList,
+      });
+      setFavoritesList(response.data.favoritesList)
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  };
 
   const Product = ({ item }) => {
     return (
       <TouchableOpacity
-      style={styles.product}
-      onPress={() =>
-        navigation.navigate("details", {
-          name: item.name,
-          price: item.price,
-          images: item.images,
-          sizes: item.sizes,
-          colors: item.colors,
-          categoryId: item.mainCategory,
-          subCategoryId: item.subCategory,
-          brandId: item.brand,
-          description: item.description,
-          quantity: item.quantity,
-          id: item._id,
-        })}
+        style={styles.product}
+        onPress={() =>
+          navigation.navigate("details", {
+            name: item.name,
+            price: item.price,
+            images: item.images,
+            sizes: item.sizes,
+            colors: item.colors,
+            categoryId: item.mainCategory,
+            subCategoryId: item.subCategory,
+            brandId: item.brand,
+            description: item.description,
+            quantity: item.quantity,
+            id: item._id,
+          })
+        }
       >
         <View style={styles.imageAndInfo}>
           <View style={styles.imageProduct}>
@@ -121,7 +121,7 @@ const Favorites = ({ navigation }) => {
           }}
         >
           <TouchableOpacity
-            onPress={() => deleteItemFromFavoritesList(item._id)}
+            onPress={() => deleteProductFromFavoritesList(item._id)}
           >
             <Text
               style={{
@@ -163,7 +163,7 @@ const Favorites = ({ navigation }) => {
             alignItems: "flex-end",
             justifyContent: "center",
           }}
-          onPress={() => clearFavoritesList()}
+         
         >
           <Text
             style={{

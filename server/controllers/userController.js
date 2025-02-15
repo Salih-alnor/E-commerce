@@ -50,7 +50,7 @@ const getUsers = async (req, res) => {
 */
 const getUser = async (req, res) => {
   const { email, password } = req.body;
-console.log(email)
+
   try {
     // 1- check if user is exist and password is valid
 

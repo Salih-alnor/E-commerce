@@ -12,7 +12,7 @@ const { auth, allowedToAccess } = require("../controllers/authController");
 router
   .route("/:productId")
   .post(auth, allowedToAccess("user"), addToFavorite)
-  .delete(deleteFavorite);
+  .delete(auth, allowedToAccess("user"),deleteFavorite);
 router
   .route("/")
   .get(auth, allowedToAccess("user"), getFavorites)

@@ -36,6 +36,7 @@ const AddToCartIcon = ({ item }) => {
       );
       console.log(response.data.message);
       const payload = {
+        cartId: response.data.newCart._id,
         items: response.data.newCart.items,
         totalPrice: response.data.newCart.totalPrice,
       };

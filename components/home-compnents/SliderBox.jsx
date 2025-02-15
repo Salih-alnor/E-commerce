@@ -90,6 +90,7 @@ export default SliderBox;
 const styles = StyleSheet.create({
   container: {
     height: 250,
+    // marginTop: 20
   },
 
   slide: {

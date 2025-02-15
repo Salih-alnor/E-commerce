@@ -5,168 +5,311 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
-  ScrollView
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import COLORS from "../assets/colors";
-
+import axios from "axios";
 import location from "../assets/images/icons/location.png";
 import clock from "../assets/images/icons/clock.png";
 import back from "../assets/images/icons/back.png";
-
-import payPal from "../assets/images/icons/payPal.png"
-import card from "../assets/images/icons/credit-card.png"
-import cash from "../assets/images/icons/cash.png"
-import check from "../assets/images/icons/check.png"
+import payPal from "../assets/images/icons/payPal.png";
+import card from "../assets/images/icons/credit-card.png";
+import cash from "../assets/images/icons/cash.png";
+import check from "../assets/images/icons/check.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
+import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
+
 
 const { width, height } = Dimensions.get("screen");
 
-const CheckOut = ({ route, navigation }) => {
-const [data, setData] = useState([]);
+const publishableKey =
+  "pk_test_51Qr4PaKg2ri1qMe4GDJq8CvLFo3LkSqR0EXXkkLQqg6K9bPJQpQKHpRqTuNnij30fo2SNfvKdX8FP0e8AjaMICuH00YtgMQ1EC";
+
+const CheckOut = ({ navigation }) => {
+  const [items, setItems] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
+  const cartItems = useSelector((state) => state.cartReducer.cartItems);
+  const dispatch = useDispatch();
   useEffect(() => {
-    setData(route.params.data);
-   
-  }, [navigation])
+    setItems(cartItems);
+  }, [navigation]);
+
+  const handlePayment = (method) => {
+    if (method === "cash") {
+      const createCashOrder = async (data) => {
+        const token = await AsyncStorage.getItem("token");
+        try {
+          const cartId = data.cartId;
+          console.log(cartId);
+          const response = await axios.post(
+            `http://172.20.10.4:4000/api/order/cash/${cartId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log(response.data);
+          dispatch({ type: "clearCartItems" });
+        } catch (error) {
+          console.error(error.response.data.error);
+        }
+      };
+      createCashOrder(items);
+    } else if (method === "card") {
+      const fetchPaymentIntent = async (data) => {
+        const token = await AsyncStorage.getItem("token");
+        try {
+          const cartId = data.cartId;
+
+          const response = await fetch(
+            `http://172.20.10.4:4000/api/order/checkout/${cartId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: {},
+            }
+          );
+
+          const { clientSecret } = await response.json();
+          return clientSecret;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const handlePayment = async (items) => {
+        setLoading(true);
+        const clientSecret = await fetchPaymentIntent(items);
+        if (!clientSecret) return;
+        const { error } = await initPaymentSheet({
+          merchantDisplayName: "E-Commerce",
+          allowsDelayedPaymentMethods: true,
+          paymentIntentClientSecret: clientSecret,
+          returnURL: "myapp://stripe-redirect",
+        });
+        if (error) {
+          Alert.alert("Error", error.message);
+          setLoading(false);
+          return;
+        }
+
+        const { error: paymentError } = await presentPaymentSheet();
+        setLoading(false);
+        if (paymentError) {
+          Alert.alert("Payment Failed", paymentError.message);
+        } else {
+          Alert.alert("Success", "Payment was successful!");
+        }
+      };
+
+      handlePayment(items);
+    } else if (method === "paypal") {
+      const createPayPalPayment = async (item) => {
+        navigation.navigate("payPalPayment", {
+          cartId: item.cartId,
+        })
+      };
+
+      createPayPalPayment(items);
+    }
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => navigation.goBack()}
-        >
-          <Image style={{ width: "50%", height: "50%" }} source={back} />
-        </TouchableOpacity>
+    <StripeProvider publishableKey={publishableKey}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => navigation.goBack()}
+          >
+            <Image style={{ width: "50%", height: "50%" }} source={back} />
+          </TouchableOpacity>
 
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "500",
-          }}
-        >
-          Check Out
-        </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          >
+            Check Out
+          </Text>
 
-        <TouchableOpacity style={{ width: 50, height: 50 }}></TouchableOpacity>
-      </View>
-      <View style={styles.locationAndTimeDeleviryWrapper}>
-        <TouchableOpacity style={styles.location}>
-          <View style={styles.iconWrapper}>
-            <Image style={styles.icon} source={location} />
-          </View>
-          <View>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>
-              325 15th Eighth Avenue, NewYork
-            </Text>
+          <TouchableOpacity
+            style={{ width: 50, height: 50 }}
+          ></TouchableOpacity>
+        </View>
+  
+        <View style={styles.locationAndTimeDeleviryWrapper}>
+          <TouchableOpacity style={styles.location}>
+            <View style={styles.iconWrapper}>
+              <Image style={styles.icon} source={location} />
+            </View>
+            <View>
+              <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                325 15th Eighth Avenue, NewYork
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "400",
+                  color: COLORS.secondaryColor,
+                }}
+              >
+                Saepe eaque fugiat ea voluptatum veniam.
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.location}>
+            <View style={styles.iconWrapper}>
+              <Image style={styles.icon} source={clock} />
+            </View>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: "400",
                 color: COLORS.secondaryColor,
               }}
             >
-              Saepe eaque fugiat ea voluptatum veniam.
+              6:00 pm, Wednesday 20
             </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.location}>
-          <View style={styles.iconWrapper}>
-            <Image style={styles.icon} source={clock} />
-          </View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              color: COLORS.secondaryColor,
-            }}
-          >
-            6:00 pm, Wednesday 20
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-     <OrderSummary items={data}/>
-
-      <View style={styles.paymentMethodsWrapper}>
-        <Text style={styles.title}>Choose payment method</Text>
-
-        <View>
-
-
-          <TouchableOpacity style={styles.payMethod}>
-            <View style={{
-                flexDirection: "row",
-            }}>
-            <View style={styles.ImageWrapper}>
-              <Image resizeMode="contain" style={styles.image} source={payPal}/>
-            </View>
-            <Text style={{fontSize: 18}}>PayPal</Text>
-            </View>
-            <View style={styles.ckeckedWrapper}>
-             <Image style={[styles.image, {tintColor: COLORS.mainColor}]} source={check}/>
-            </View>
           </TouchableOpacity>
-
-
-          <TouchableOpacity style={styles.payMethod}>
-            <View style={{
-                flexDirection: "row",
-            }}>
-            <View style={styles.ImageWrapper}>
-              <Image resizeMode="contain" style={styles.image} source={card}/>
-            </View>
-            <Text style={{fontSize: 18}}>Credit Card</Text>
-            </View>
-            <View style={styles.ckeckedWrapper}>
-             <Image style={[styles.image, {tintColor: COLORS.mainColor}]} source={check}/>
-            </View>
-          </TouchableOpacity>
-
-
-          <TouchableOpacity style={styles.payMethod}>
-            <View style={{
-                flexDirection: "row",
-            }}>
-            <View style={styles.ImageWrapper}>
-              <Image resizeMode="contain" style={styles.image} source={cash}/>
-            </View>
-            <Text style={{fontSize: 18}}>Cash</Text>
-            </View>
-            <View style={styles.ckeckedWrapper}>
-             <Image style={[styles.image, {tintColor: COLORS.mainColor}]} source={check}/>
-            </View>
-          </TouchableOpacity>
-          
         </View>
 
-        
+        <OrderSummary items={items} />
 
-        <TouchableOpacity style={styles.addNewMethod}>
-          <Text style={{fontSize: 18}}>Add new payment method</Text>
-          <Text style={{fontSize: 25, color: COLORS.mainColor}}>+</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.paymentMethodsWrapper}>
+          <Text style={styles.title}>Choose payment method</Text>
 
-      <View style={styles.checkBtnWrapper}>
-        <TouchableOpacity style={{
-            width: "100%",
-            height: 60,
-            backgroundColor: COLORS.mainColor,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 30,
-           
-        }}>
-            <Text style={{
+          <View>
+            <TouchableOpacity
+              style={styles.payMethod}
+              onPress={() => setPaymentMethod("cash")}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <View style={styles.ImageWrapper}>
+                  <Image
+                    resizeMode="contain"
+                    style={styles.image}
+                    source={cash}
+                  />
+                </View>
+                <Text style={{ fontSize: 18, marginTop: 2 }}>Cash</Text>
+              </View>
+              <View style={styles.ckeckedWrapper}>
+                {paymentMethod === "cash" ? (
+                  <Image
+                    style={[styles.image, { tintColor: COLORS.mainColor }]}
+                    source={check}
+                  />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.payMethod}
+              onPress={() => setPaymentMethod("card")}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  // alignItems: 'center',
+                }}
+              >
+                <View style={styles.ImageWrapper}>
+                  <Image
+                    resizeMode="contain"
+                    style={styles.image}
+                    source={card}
+                  />
+                </View>
+                <Text style={{ fontSize: 18, marginTop: 2 }}>Credit Card</Text>
+              </View>
+              <View style={styles.ckeckedWrapper}>
+                {paymentMethod === "card" ? (
+                  <Image
+                    style={[styles.image, { tintColor: COLORS.mainColor }]}
+                    source={check}
+                  />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.payMethod}
+              onPress={() => setPaymentMethod("paypal")}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <View style={styles.ImageWrapper}>
+                  <Image
+                    resizeMode="contain"
+                    style={styles.image}
+                    source={payPal}
+                  />
+                </View>
+                <Text style={{ fontSize: 18, marginTop: 2 }}>PayPal</Text>
+              </View>
+              <View style={styles.ckeckedWrapper}>
+                {paymentMethod === "paypal" ? (
+                  <Image
+                    style={[styles.image, { tintColor: COLORS.mainColor }]}
+                    source={check}
+                  />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.addNewMethod}>
+            <Text style={{ fontSize: 18 }}>Add new payment method</Text>
+            <Text style={{ fontSize: 25, color: COLORS.mainColor }}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.checkBtnWrapper}>
+          <TouchableOpacity
+            onPress={() => handlePayment(paymentMethod)}
+            disabled={paymentMethod === "" ? true : false}
+            style={{
+              width: "100%",
+              height: 60,
+              backgroundColor: paymentMethod === "" ? "#DDD" : COLORS.mainColor,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 30,
+            }}
+          >
+            <Text
+              style={{
                 color: COLORS.white,
                 fontSize: 18,
                 fontWeight: "500",
                 textTransform: "uppercase",
-            }}>Send Order</Text>
-        </TouchableOpacity>
+              }}
+            >
+              payment
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </StripeProvider>
   );
 };
 
@@ -228,29 +371,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16
+    marginBottom: 16,
   },
 
   ImageWrapper: {
     width: 35,
-    height: 35
+    height: 35,
   },
 
   image: {
     width: "80%",
-    height: "80%"
+    height: "80%",
   },
 
   ckeckedWrapper: {
     width: 20,
-    height: 20
+    height: 20,
   },
 
   addNewMethod: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 16
+    marginTop: 16,
   },
 
   checkBtnWrapper: {
@@ -259,5 +402,5 @@ const styles = StyleSheet.create({
     bottom: 40,
     left: 16,
     marginTop: 30,
-  }
+  },
 });

@@ -49,6 +49,7 @@ const Details = ({ route, navigation }) => {
       );
       console.log(response.data.message);
       const payload = {
+        cartId: response.data.newCart._id,
         items: response.data.newCart.items,
         totalPrice: response.data.newCart.totalPrice,
       };
@@ -231,7 +232,9 @@ const Details = ({ route, navigation }) => {
       <View style={styles.buyAndCart}>
         <TouchableOpacity
           style={styles.buyBtn}
-          onPress={() => navigation.navigate("cart")}
+          onPress={() => navigation.navigate("cart", {
+             
+          })}
         >
           <Text
             style={{
