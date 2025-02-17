@@ -12,10 +12,10 @@ const bcrypt = require("bcryptjs");
   @access Public
 */
 const signup = asyncHandler(async (req, res, next) => {
-  const { user_name, email, password, phone, role } = req.body.data;
+  const { user_name, email, password, phone, role } = req.body;
 
   // 1- validate request body
-  const { error } = signupSchemaValidator.validate(req.body.data);
+  const { error } = signupSchemaValidator.validate(req.body);
   if (error) {
     const err = new Error(error.details[0].message);
     next(err);
@@ -47,7 +47,7 @@ const signup = asyncHandler(async (req, res, next) => {
   const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET_KEY);
 
   // 5- send user and token to client side
-  res.status(201).json({ user: newUser, token });
+  res.status(201).json({status: "success", message: "Registerd Successfully!", user: newUser, token });
 });
 
 /*
@@ -56,7 +56,7 @@ const signup = asyncHandler(async (req, res, next) => {
   @access Public
 */
 const login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body.data;
+  const { email, password } = req.body;
 
   // 1- validate request body
   const { error } = loginSchemaValidator.validate(req.body.data);
@@ -80,7 +80,7 @@ const login = asyncHandler(async (req, res, next) => {
 
   if (!hashedPassword) {
     const err = new Error("Invalid email or password");
-    err.code = 405;
+    err.code = 402;
     return next(err);
   }
 
@@ -88,7 +88,7 @@ const login = asyncHandler(async (req, res, next) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
 
   // 4- send user and token to client side
-  res.json({ user, token });
+  res.status(200).json({ status: "success", message: "Logind Successfully!", user, token });
 });
 
 const auth = asyncHandler(async (req, res, next) => {

@@ -23,9 +23,11 @@ const createCashOrder = asyncHandler(async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
-
+  // create order id
+  const orderId = Date.now().toString();
   // 2- create cash order
   const order = await Order.create({
+    orderId,
     user: req.user._id,
     cartItems: cart.items,
     totalPrice: cart.totalPrice,
@@ -36,7 +38,7 @@ const createCashOrder = asyncHandler(async (req, res, next) => {
 
   res
     .status(201)
-    .json({ status: "success", message: "Order created successfully", order });
+    .json({ status: "success", message: "Created cash order successfully!", order });
 });
 
 /*
@@ -96,37 +98,36 @@ const webHook = async (req, res) => {
     const userId = paymentIntent.metadata.userId;
     const cart = await Cart.findById(cartId);
 
-      if (!cart) {
-        const error = new Error("Cart not found");
-        error.statusCode = 404;
-        return next(error);
-      }
+    if (!cart) {
+      const error = new Error("Cart not found");
+      error.statusCode = 404;
+      return next(error);
+    }
 
-      // 2- create online transaction order
-      const order = await Order.create({
-        user: userId,
-        paymentMethod: "card",
-        cartItems: cart.items,
-        totalPrice: cart.totalPrice,
-      });
+    const orderId = Date.now().toString();
+    // 2- create online transaction order
+    const order = await Order.create({
+      orderId,
+      user: userId,
+      paymentMethod: "Card",
+      statusPayment: "Paid",
+      cartItems: cart.items,
+      totalPrice: cart.totalPrice,
+    });
 
-      // 3- clear cart items after order has been created
-      await Cart.findByIdAndDelete(cartId);
+    // 3- clear cart items after order has been created
+    await Cart.findByIdAndDelete(cartId);
 
-      res.status(201).json({
-        status: "success",
-        message: "Order created successfully",
-        order,
-        cart
-      });
-      console.log(order);
-      
-
+    // res.status(201).json({
+    //   status: "success",
+    //   message: "Order created successfully",
+    //   order,
+    //   cart,
+    // });
   }
 
-  // res.json({ received: true });
+  res.status(200).send("Webhook received");
 };
-
 
 const environment = new paypal.core.SandboxEnvironment(
   "AUnMvQNid-EeTj0CwgbM-DCxzrxJCqUrsDQCUw8wkcouAstdThbtjgKw407OSkU8KiL4CYOUkO0amgF9",
@@ -135,11 +136,10 @@ const environment = new paypal.core.SandboxEnvironment(
 
 const client = new paypal.core.PayPalHttpClient(environment);
 
-
 const createPayPalOrder = asyncHandler(async (req, res) => {
   const cartId = req.params.cartId;
   const cart = await Cart.findById(cartId);
-  console.log(cartId)
+  console.log(cartId);
   const request = new paypal.orders.OrdersCreateRequest();
   request.requestBody({
     intent: "CAPTURE",
@@ -160,6 +160,28 @@ const createPayPalOrder = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(500).send(error.message);
   }
-})
+});
 
-module.exports = { createCashOrder, createCheckoutSessions, webHook, createPayPalOrder };
+const getOrdersByUser = asyncHandler(async (req, res, next) => {
+  // 1- get user id
+  const userId = req.user._id;
+
+  // 2- get orders by user id
+  const orders = await Order.find({ user: userId }).populate("cartItems.productId",);
+
+  if(!orders) {
+    const error = new Error("Orders not found");
+    error.statusCode = 404;
+    return next(error);
+  } 
+
+  res.json({ Status: "success", results: orders.length, orders: orders });
+});
+
+module.exports = {
+  createCashOrder,
+  createCheckoutSessions,
+  webHook,
+  createPayPalOrder,
+  getOrdersByUser
+};

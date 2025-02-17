@@ -6,147 +6,79 @@ import SearchBox from "../components/home-compnents/SearchBox";
 import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
 import Categories from "../components/home-compnents/Categories";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
-
+import { getProducts } from "../services/productService";
+import { getCategories } from "../services/categoresService";
+import { getCartItems } from "../services/cartService";
+import { getFavoritesList } from "../services/favoritesService";
 
 const Home = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-
   const dispatch = useDispatch();
   const favorite = useSelector((state) => state.favoritesReducer.favoritesList);
- 
-  const getUserInfo = async () => {
-    const userInfo = await AsyncStorage.getItem('user');
-    if (userInfo) {
-      dispatch({ type: "setUserInfo", payload: JSON.parse(userInfo) });
-    }
-  }
-
-  const getProducts = async () => {
-    const token = await AsyncStorage.getItem("token");
-    try {
-      const response = await axios.get("http://172.20.10.4:4000/api/product", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setProducts(response.data.products);
-      dispatch({ type: "getProducts", payload: response.data.products });
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
-  };
-
-  const getFavoritesList = async () => {
-    const token = await AsyncStorage.getItem("token");
-    try {
-      const response = await axios.get("http://172.20.10.4:4000/api/favorite", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      dispatch({
-        type: "setFavorites",
-        payload: response.data.favoritesList,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    const token = await AsyncStorage.getItem("token");
-    try {
-      const response = await axios.get("http://172.20.10.4:4000/api/category", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCategories(response.data.categories);
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
-  };
-
-  const getCartItems = async () => {
-    const token = await AsyncStorage.getItem("token");
-    try {
-      const response = await axios.get(
-        `http://172.20.10.4:4000/api/cart`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    
-      const data = {
-        cartId: response.data.Cart._id,
-        items: response.data.Cart.items,
-        totalPrice: response.data.Cart.totalPrice,
-      };
-      dispatch({ type: "getCartItems", payload: data });
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
-  };
 
   useEffect(() => {
-    getUserInfo();
-    getFavoritesList();
-    getCartItems();
-    fetchCategories();
-    getProducts();
+    const fetchData = async () => {
+      try {
+        const productsData = await getProducts();
+        setProducts(productsData);
+        dispatch({ type: "getProducts", payload: productsData });
+
+        const cart = await getCartItems();
+        
+        const cartData = {
+          cartId: cart._id,
+          items: cart.items,
+          totalPrice: cart.totalPrice,
+        }
+        dispatch({ type: "getCartItems", payload: cartData });
+
+        const favoriteData = await getFavoritesList();
+
+        dispatch({ type: "setFavorites", payload: favoriteData });
+
+        const categoriesData = await getCategories();
+        setCategories(categoriesData.categories);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    getProducts();
-  }, [favorite]);
-
-  const homeComponents = () => {
-    return (
-      <View>
-        <SearchBox />
-        <SliderBox />
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "600",
-            marginLeft: 16,
-          }}
-        >
-          Categories
-        </Text>
-        <Categories
-          categories={categories}
-          navigation={navigation}
-          navigateTo={"subcategories"}
-          page={"home"}
-        />
-        <Featured
-          title="Featured"
-          navigation={navigation}
-          products={products}
-        />
-        <Featured
-          title="Most Popular"
-          navigation={navigation}
-          products={products}
-        />
-      </View>
-    );
-  };
   return (
     <View style={styles.container}>
       <Header navigation={navigation} favoritesList={favorite} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={[""]}
-        renderItem={homeComponents}
+        renderItem={() => (
+          <View>
+            <SearchBox />
+            <SliderBox />
+            <Text style={{ fontSize: 20, fontWeight: "600", marginLeft: 16 }}>
+              Categories
+            </Text>
+            <Categories
+              categories={categories}
+              navigation={navigation}
+              navigateTo="subcategories"
+              page="home"
+            />
+            <Featured
+              title="Featured"
+              navigation={navigation}
+              products={products}
+            />
+            <Featured
+              title="Most Popular"
+              navigation={navigation}
+              products={products}
+            />
+          </View>
+        )}
         keyExtractor={(item, index) => index.toString()}
       />
     </View>

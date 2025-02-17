@@ -21,7 +21,7 @@ import OrderSummary from "../components/cart-components/OrderSummary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
-
+import Notification from "../components/notifications/Notification";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,6 +33,9 @@ const CheckOut = ({ navigation }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
   const cartItems = useSelector((state) => state.cartReducer.cartItems);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -45,7 +48,7 @@ const CheckOut = ({ navigation }) => {
         const token = await AsyncStorage.getItem("token");
         try {
           const cartId = data.cartId;
-          console.log(cartId);
+
           const response = await axios.post(
             `http://172.20.10.4:4000/api/order/cash/${cartId}`,
             {},
@@ -55,7 +58,19 @@ const CheckOut = ({ navigation }) => {
               },
             }
           );
-          console.log(response.data);
+            console.log(response.data.message);
+
+          if(response.data.status === 'success') {
+            setModalVisible(true);
+            setMessage(response.data.message);
+            setStatus(response.data.status);
+
+            setTimeout(() => {
+              setModalVisible(false);
+              navigation.navigate("cart")
+            }, 3000);
+            
+          }
           dispatch({ type: "clearCartItems" });
         } catch (error) {
           console.error(error.response.data.error);
@@ -106,9 +121,21 @@ const CheckOut = ({ navigation }) => {
         const { error: paymentError } = await presentPaymentSheet();
         setLoading(false);
         if (paymentError) {
-          Alert.alert("Payment Failed", paymentError.message);
+          setModalVisible(true);
+          setStatus("unSuccess");
+          setMessage(paymentError.message);
+
+          setTimeout(() => {
+            setModalVisible(false);
+          }, 2000);
         } else {
-          Alert.alert("Success", "Payment was successful!");
+          setModalVisible(true);
+          setStatus("success");
+          setMessage("Payment was successful!");
+          dispatch({ type: "clearCartItems"});
+          setTimeout(() => {
+            setModalVisible(false);
+          }, 2000);
         }
       };
 
@@ -117,7 +144,7 @@ const CheckOut = ({ navigation }) => {
       const createPayPalPayment = async (item) => {
         navigation.navigate("payPalPayment", {
           cartId: item.cartId,
-        })
+        });
       };
 
       createPayPalPayment(items);
@@ -147,7 +174,7 @@ const CheckOut = ({ navigation }) => {
             style={{ width: 50, height: 50 }}
           ></TouchableOpacity>
         </View>
-  
+
         <View style={styles.locationAndTimeDeleviryWrapper}>
           <TouchableOpacity style={styles.location}>
             <View style={styles.iconWrapper}>
@@ -309,6 +336,11 @@ const CheckOut = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <Notification
+        showModal={modalVisible}
+        message={message}
+        status={status}
+      />
     </StripeProvider>
   );
 };

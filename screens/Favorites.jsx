@@ -17,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import COLORS from "../assets/colors";
 import axios from "axios";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
+import {removeFromFavorites} from "../services/favoritesService"
 
 const { width, height } = Dimensions.get("screen");
 const Favorites = ({ navigation }) => {
@@ -31,27 +32,20 @@ const Favorites = ({ navigation }) => {
   }, [navigation]);
 
   const deleteProductFromFavoritesList = async (id) => {
-    const token = await AsyncStorage.getItem("token");
+    
     try {
-      const response = await axios.delete(
-        `http://172.20.10.4:4000/api/favorite/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await removeFromFavorites(id)
 
       
 
-      console.log(response.data.message);
+      console.log(response.message);
       dispatch({
         type: "setFavorites",
-        payload: response.data.favoritesList,
+        payload: response.favoritesList,
       });
-      setFavoritesList(response.data.favoritesList)
+      setFavoritesList(response.favoritesList)
     } catch (error) {
-      console.log(error.response.data.error);
+      console.log(error.response.error);
     }
   };
 

@@ -35,13 +35,13 @@ export default function PayPalPayment({route, navigation}) {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', paddingTop: 30, backgroundColor: "#FFF" }}>
+    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: "#FFF" }}>
       <StatusBar barStyle="dark-content" hidden={true}/>
       
       {url ? (
-        <View style={{ flex: 1, justifyContent: 'center', paddingTop: 30, backgroundColor: "#FFF" }}>
+        <View style={{ flex: 1, justifyContent: 'center',marginTop: 30,  backgroundColor: "#FFF" }}>
           <View>
-            <TouchableOpacity onPress={() => navigation.goBack()}><Text style={{
+            <TouchableOpacity onPress={() => navigation.replace("checkout")}><Text style={{
               color: "blue",
               fontSize: 17,
               marginLeft: 16

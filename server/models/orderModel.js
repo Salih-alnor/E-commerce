@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 
 const orderSchema = new Schema(
   {
+    orderId: {
+      type: String,
+      required: true,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -56,8 +60,14 @@ const orderSchema = new Schema(
     paymentMethod: {
       type: String,
       required: true,
-      enum: ["cash", "card"],
-      default: "cash",
+      enum: ["Cash", "Card"],
+      default: "Cash",
+    },
+    statusPayment: {
+      type: String,
+      required: true,
+      enum: ["Unpaid", "Paid"],
+      default: "Unpaid",
     },
     statusOrder: {
       type: String,
@@ -72,8 +82,12 @@ const orderSchema = new Schema(
       ],
       default: "pending",
     },
-  },
-  { timestamps: true }
+    isDelivered: {
+      type: Boolean,
+      default: false,
+    },
+    
+  }, {timestamps: true}
 );
 
 module.exports = Order = mongoose.model("Order", orderSchema);

@@ -25,35 +25,42 @@ import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { logout } from "../services/authService"
+
 const { width, height } = Dimensions.get("screen");
 
 const sections = [
   {
     image: order,
+    name: "orders",
     title: "Orders",
     page: "userInformation",
   },
 
   {
     image: setting,
+    name: "settings",
     title: "Settings",
     page: "settings",
   },
 
   {
     image: mail,
+    name: "mail",
     title: "Contact",
     page: "contact",
   },
 
   {
     image: share,
+    name: "share",
     title: "Share App",
     page: "shareApp",
   },
 
   {
     image: help,
+    name: "help",
     title: "Help",
     page: "help",
   },
@@ -179,7 +186,7 @@ const Profile = ({ navigation }) => {
               <TouchableOpacity
                 style={styles.section}
                 key={index}
-                onPress={() => navigation.navigate(item.page)}
+                onPress={() => navigation.navigate(item.name )}
               >
                 <View style={styles.iconSection}>
                   <View style={styles.iconWrapper}>
@@ -215,8 +222,7 @@ const Profile = ({ navigation }) => {
         <View style={styles.signOut}>
           <TouchableOpacity
             onPress={async () => {
-              await AsyncStorage.removeItem("user");
-              await AsyncStorage.removeItem("token");
+              logout();
               navigation.navigate("login");
             }}
           >

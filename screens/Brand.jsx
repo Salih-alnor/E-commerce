@@ -102,7 +102,7 @@ const Brand = ({ route, navigation }) => {
             ${item.price}
           </Text>
         </View>
-        <AddToCartIcon item={{ productId: item }} />
+        <AddToCartIcon item={item} />
       </View>
     </TouchableOpacity>
   );

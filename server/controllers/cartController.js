@@ -14,11 +14,11 @@ const addToCart = asyncHandler(async (req, res, next) => {
     error.code = 400;
     return next(error);
   }
-  const cart = await Cart.findOne({ userId: id });
+  const cart = await Cart.findOne({ userId: req.user._id });
 
   if (!cart) {
     await Cart.create({
-      userId: id,
+      userId: req.user._id,
       items: [{ productId, quantity }],
       totalPrice: quantity * price,
     });
@@ -42,7 +42,7 @@ const addToCart = asyncHandler(async (req, res, next) => {
     await cart.save();
   }
 
-  const newCart = await Cart.findOne({ userId: id })
+  const newCart = await Cart.findOne({ userId: req.user._id })
     .populate("items.productId")
     .populate({
       path: "items.productId",

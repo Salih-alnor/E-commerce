@@ -15,10 +15,10 @@ import emptyCart from "../assets/images/icons/empty-cart.png";
 import trash from "../assets/images/icons/delete.png";
 import add from "../assets/images/icons/add.png";
 import subtraction from "../assets/images/icons/subtraction.png";
-import watch from "../assets/images/featured-products/casio-watch.png";
 import OrderSummary from "../components/cart-components/OrderSummary";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import {removeFromCart} from "../services/cartService"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
@@ -38,32 +38,23 @@ const Cart = ({ route, navigation }) => {
   }, [route.params, navigation]);
 
   const deleteProductFromCart = async (item) => {
-    const token = await AsyncStorage.getItem("token");
+    
 
-    // وفقًا لـ axios، يتم تمرير البيانات في طلب DELETE كجزء من config (وليس كمعامل مستقل مثل في طلبات POST أو PUT).
-    // الكود الحالي يحاول تمرير data كمعامل ثانٍ في طلب axios.delete، مما يؤدي إلى تجاهل البيانات.
+    
     const id = item._id;
     try {
-      const response = await axios.delete(
-        `http://172.20.10.4:4000/api/cart/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await removeFromCart(id)
 
       const payload = {
-        cartId: response.data.newCart._id,
-        items: response.data.newCart.items,
-        totalPrice: response.data.newCart.totalPrice,
+        cartId: response.newCart._id,
+        items: response.newCart.items,
+        totalPrice: response.newCart.totalPrice,
       };
-      console.log(response.data.message);
-      console.log(response.data.newCart)
+      console.log(response.message);
+      console.log(response.newCart)
       dispatch({ type: "getCartItems", payload });
     } catch (error) {
-      console.log(error.response.data.error);
+      console.log(error.response.error);
     }
   };
 
@@ -307,7 +298,7 @@ const Cart = ({ route, navigation }) => {
                 marginBottom: 20,
               }}
               onPress={() =>
-                navigation.navigate("Check Out", {
+                navigation.navigate("checkout", {
                   data,
                   items
                 })

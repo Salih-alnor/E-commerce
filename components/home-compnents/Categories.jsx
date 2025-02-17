@@ -15,9 +15,7 @@ const { width, height } = Dimensions.get("screen");
 const Categories = ({ categories, navigation, }) => {
   const [data, setData] = useState();
 
-  const productsList = useSelector(
-    (state) => state.productsReducer.productsList
-  );
+ 
 
   useEffect(() => {
     setData(categories);

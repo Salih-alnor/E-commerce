@@ -22,9 +22,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 const { width, height } = Dimensions.get("screen");
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { register } from "../services/authService";
 
 const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
   const InputFilad = ({
     placeholder,
@@ -122,24 +124,21 @@ const SignUp = ({ navigation }) => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const response = await axios.post(
-        "http://172.20.10.4:4000/api/auth/signup",
-        { data: values }
-      );
+      const response = await register(values);
+      
 
-      if (response.data.token) {
-        await AsyncStorage.setItem("token", response.data.token);
-        console.log(response.data.token);
-        if (response.data.user) {
+      if (response.token) {
+        await AsyncStorage.setItem("token", response.token);
+        if (response.user) {
           await AsyncStorage.setItem(
             "user",
-            JSON.stringify(response.data.user)
+            JSON.stringify(response.user)
           );
+          dispatch({ type: "setUserInfo", payload: response.user });
           navigation.replace("login");
         }
       }
-
-      // navigation.navigate("tabBar")
+      console.log(response.message)
     } catch (error) {
       Alert.alert(error.response.data.error);
     }

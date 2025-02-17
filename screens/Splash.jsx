@@ -3,19 +3,21 @@ import React, { useEffect } from "react";
 import splashLogo from "../assets/images/icons/splash.png";
 import COLORS from "../assets/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
 
 const Splash = ({ navigation }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(async () => {
-      // await AsyncStorage.setItem("onboardingCompleted", "false");
       const isOnboardingCompleted = await AsyncStorage.getItem(
         "onboardingCompleted"
       );
 
-      const user = await AsyncStorage.getItem("user");
-
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      
       if (isOnboardingCompleted === "true") {
         if (user) {
+          dispatch({ type: "setUserInfo", payload: user });
           navigation.navigate("tabBar");
         } else {
           navigation.navigate("login");

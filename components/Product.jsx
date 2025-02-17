@@ -98,7 +98,7 @@ const Product = ({ navigation, data }) => {
             </Text>
           </View>
 
-          <AddToCartIcon item={{ productId: item }} />
+          <AddToCartIcon item={item} />
         </View>
       </TouchableOpacity>
     );

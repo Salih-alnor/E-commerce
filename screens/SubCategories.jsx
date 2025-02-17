@@ -114,6 +114,7 @@ const SubCategories = ({ route, navigation }) => {
   };
 
   const renderItem = ({ item, index }) => (
+    
     <TouchableOpacity
       style={[
         styles.card,
@@ -182,7 +183,7 @@ const SubCategories = ({ route, navigation }) => {
             ${item.price}
           </Text>
         </View>
-        <AddToCartIcon item={{ productId: item }} />
+        <AddToCartIcon item={item} />
       </View>
     </TouchableOpacity>
   );

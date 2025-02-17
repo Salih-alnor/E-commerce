@@ -4,46 +4,36 @@ import add from "../../assets/images/icons/add.png";
 import COLORS from "../../assets/colors";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { addToCart } from "../../services/cartService";
 
 const AddToCartIcon = ({ item }) => {
-  
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.userInfoReducer.userInfo)
+  const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
 
   const addProductToCart = async (item, userInfo) => {
-    const token = await AsyncStorage.getItem("token");
     data = {
       productId: item._id,
       quantity: 1,
       statesProduct: "increasing",
       price: item.price,
     };
-    
-    const id = userInfo._id
- 
-    try {
-      const response = await axios.post(
-        `http://172.20.10.4:4000/api/cart/${id}`,
-        data,
 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response.data.message);
+    const userId = userInfo._id;
+
+    try {
+      const response = await addToCart(data, userId);
+
       const payload = {
-        cartId: response.data.newCart._id,
-        items: response.data.newCart.items,
-        totalPrice: response.data.newCart.totalPrice,
+        cartId: response.newCart._id,
+        items: response.newCart.items,
+        totalPrice: response.newCart.totalPrice,
       };
 
       dispatch({ type: "getCartItems", payload });
+
+      console.log(response.message)
     } catch (error) {
-      console.log(error.response.data.error);
+      console.log(error.response.error);
     }
   };
 

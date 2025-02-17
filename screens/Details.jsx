@@ -18,6 +18,7 @@ import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
+import {addToCart} from "../services/cartService"
 
 const Details = ({ route, navigation }) => {
   const item = route.params;
@@ -27,7 +28,7 @@ const Details = ({ route, navigation }) => {
   const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
 
   const addProductToCart = async (id, userInfo) => {
-    const token = await AsyncStorage.getItem("token");
+  
     data = {
       productId: id,
       quantity: 1,
@@ -36,27 +37,16 @@ const Details = ({ route, navigation }) => {
     };
     const userId = userInfo._id;
     try {
-      const response = await axios.post(
-        `http://172.20.10.4:4000/api/cart/${userId}`,
-        data,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response.data.message);
+      const response = await addToCart(data, userId);
       const payload = {
-        cartId: response.data.newCart._id,
-        items: response.data.newCart.items,
-        totalPrice: response.data.newCart.totalPrice,
+        cartId: response.newCart._id,
+        items: response.newCart.items,
+        totalPrice: response.newCart.totalPrice,
       };
 
       dispatch({ type: "getCartItems", payload });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.error);
     }
   };
 

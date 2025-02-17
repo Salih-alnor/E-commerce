@@ -15,6 +15,7 @@ import Favorites from "../../screens/Favorites";
 import Splash from "../../screens/Splash";
 import Brand from "../../screens/Brand";
 import PayPalPayment from "../../screens/PayPalPayment";
+import Oreders from "../../screens/Oreders";
 const StackNav = () => {
   const Stack = createStackNavigator();
   return (
@@ -58,7 +59,7 @@ const StackNav = () => {
         options={{
           headerShown: false,
         }}
-        name="Check Out"
+        name="checkout"
         component={CheckOut}
       />
 
@@ -110,6 +111,15 @@ const StackNav = () => {
         }}
         name="payPalPayment"
         component={PayPalPayment}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerTitleAlign: "center",
+        }}
+        name="orders"
+        component={Oreders}
       />
     </Stack.Navigator>
   );

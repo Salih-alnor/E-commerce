@@ -22,11 +22,13 @@ import facebook from "../assets/images/icons/facebook.png";
 import COLORS from "../assets/colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 
 const Login = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
   const InputFilad = ({
     placeholder,
@@ -123,26 +125,23 @@ const Login = ({ navigation }) => {
   };
 
   const handleFormSubmit = async (values) => {
+    const { email, password } = values;
     try {
-      const response = await axios.post(
-        "http://172.20.10.4:4000/api/auth/login",
-        { data: values }
-      );
+      const response = await login(email, password);
 
-      if (response.data.token && response.data.user) {
-        await AsyncStorage.setItem("token", response.data.token);
-
-        if (response.data.user) {
-          await AsyncStorage.setItem(
-            "user",
-            JSON.stringify(response.data.user)
-          );
-
-          navigation.replace("tabBar");
+      if (response.status === "success") {
+        if (response.token) {
+          await AsyncStorage.setItem("token", response.token);
+          if (response.user) {
+            await AsyncStorage.setItem("user", JSON.stringify(response.user));
+            dispatch({ type: "setUserInfo", payload: response.user });
+            navigation.replace("tabBar");
+          }
         }
       }
+      console.log(response.message);
     } catch (error) {
-      Alert.alert(error.response.data.error);
+      console.log(error.response.data.error);
     }
   };
 
