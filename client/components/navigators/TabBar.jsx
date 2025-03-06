@@ -116,7 +116,6 @@ const TabBar = ({ navigation }) => {
           },
         }}
         name="cart"
-        // component={Cart}
         children={() => (
           <Cart
             route={{

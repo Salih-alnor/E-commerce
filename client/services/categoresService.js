@@ -4,7 +4,7 @@ import api from "../api";
 export const getCategories = async () => {
   try {
     const response = await api.get("/category");
-    return response.data;
+    return response.data.categories;
   } catch (error) {
     throw error;
   }

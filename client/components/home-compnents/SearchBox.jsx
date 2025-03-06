@@ -16,7 +16,7 @@ const SearchBox = () => {
         </View>
         <TextInput 
         style={styles.input}
-        keyboardType='search'
+        keyboardType='default'
         placeholder='Search here'
         placeholderTextColor={Platform.OS == "ios" ? COLORS.secondaryColor : COLORS.secondaryColor}
         />

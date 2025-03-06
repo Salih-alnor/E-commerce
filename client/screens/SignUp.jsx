@@ -14,20 +14,18 @@ import React, { useState } from "react";
 import back from "../assets/images/icons/back.png";
 import lock from "../assets/images/icons/lock.png";
 import email from "../assets/images/icons/email.png";
+import user from "../assets/images/icons/user.png";
 import showEye from "../assets/images/icons/show.png";
 import closeEye from "../assets/images/icons/close-eye.png";
-import google from "../assets/images/icons/google.png";
-import apple from "../assets/images/icons/apple-logo.png";
-import facebook from "../assets/images/icons/facebook.png";
 import COLORS from "../assets/colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { login } from "../services/authService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { register } from "../services/authService";
 
-const Login = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
   const InputFilad = ({
@@ -97,7 +95,7 @@ const Login = ({ navigation }) => {
               {...rest}
             />
           </View>
-          {placeholder === "Password" ? (
+          {formikKey === "password" ? (
             <TouchableOpacity
               style={iconInput}
               onPress={() => setHidePassword(!hidePassword)}
@@ -125,31 +123,39 @@ const Login = ({ navigation }) => {
   };
 
   const handleFormSubmit = async (values) => {
-    const { email, password } = values;
     try {
-      const response = await login(email, password);
+      const response = await register(values);
+      
 
-      if (response.status === "success") {
-        if (response.token) {
-          await AsyncStorage.setItem("token", response.token);
-          if (response.user) {
-            await AsyncStorage.setItem("user", JSON.stringify(response.user));
-            dispatch({ type: "setUserInfo", payload: response.user });
-            navigation.replace("tabBar");
-          }
+      if (response.token) {
+        await AsyncStorage.setItem("token", response.token);
+        if (response.user) {
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(response.user)
+          );
+          dispatch({ type: "setUserInfo", payload: response.user });
+          navigation.replace("login");
         }
       }
-      console.log(response.message);
+      console.log(response.message)
     } catch (error) {
-      console.log(error.response.data.error);
+      Alert.alert(error.response.data.error);
     }
   };
 
   const validationSchema = Yup.object().shape({
+    user_name: Yup.string()
+      .required("User name is required")
+      .min(5, "User name is too short...")
+      .max(20, "User name is too long"),
     email: Yup.string().email().required("Email is required"),
     password: Yup.string()
       .min(8, "Password too short...")
       .required("Password is required"),
+    confirm_password: Yup.string()
+      .oneOf([Yup.ref("password"), null], "password must be match")
+      .required("confirm password is required"),
   });
 
   return (
@@ -188,14 +194,16 @@ const Login = ({ navigation }) => {
             color: COLORS.secondaryColor,
           }}
         >
-          Let's sign in
+          Let's sign up
         </Text>
 
         <View style={styles.formWrapper}>
           <Formik
             initialValues={{
+              user_name: "",
               email: "",
               password: "",
+              confirm_password: "",
             }}
             onSubmit={(values) => handleFormSubmit(values)}
             validationSchema={validationSchema}
@@ -204,38 +212,40 @@ const Login = ({ navigation }) => {
               return (
                 <React.Fragment>
                   <InputFilad
+                    placeholder="Full Name"
+                    keyboardType="default"
+                    icon={user}
+                    formikProps={formikProps}
+                    formikKey="user_name"
+                    autoFocus={true}
+                    value={formikProps.values["user_name"]}
+                  />
+                  <InputFilad
                     placeholder="Email"
                     keyboardType="email-address"
                     icon={email}
                     formikProps={formikProps}
                     formikKey="email"
-                    autoFocus={true}
                     value={formikProps.values["email"]}
                   />
-
                   <InputFilad
                     placeholder="Password"
-                    keyboardType="text"
+                    keyboardType="default"
                     icon={lock}
                     secureTextEntry={hidePassword}
                     formikProps={formikProps}
                     formikKey="password"
                     value={formikProps.values["password"]}
                   />
-
-                  <View style={styles.forgetPassword}>
-                    <TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          fontWeight: Platform.OS == "ios" ? 600 : 500,
-                          color: COLORS.mainColor,
-                        }}
-                      >
-                        Recover Password
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  <InputFilad
+                    placeholder="Confirm Password"
+                    keyboardType="default"
+                    icon={lock}
+                    secureTextEntry={hidePassword}
+                    formikProps={formikProps}
+                    formikKey="confirm_password"
+                    value={formikProps.values["confirm_password"]}
+                  />
 
                   <TouchableOpacity
                     onPress={formikProps.handleSubmit}
@@ -257,84 +267,13 @@ const Login = ({ navigation }) => {
                         fontWeight: 500,
                       }}
                     >
-                      Sign in
+                      Sign Up
                     </Text>
                   </TouchableOpacity>
                 </React.Fragment>
               );
             }}
           </Formik>
-        </View>
-
-        <View
-          style={{
-            width: width - 32,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={styles.line}></View>
-          <Text
-            style={{
-              color: COLORS.secondaryColor,
-              fontWeight: "500",
-            }}
-          >
-            or continue with
-          </Text>
-          <View style={styles.line}></View>
-        </View>
-
-        <View style={styles.otherAccounts}>
-          <TouchableOpacity style={styles.account}>
-            <View style={styles.accountLogo}>
-              <Image style={styles.accountImage} source={google} />
-            </View>
-            <Text
-              style={{
-                fontSize: 17,
-                color: COLORS.secondaryColor,
-                fontWeight: 500,
-              }}
-            >
-              Continue with Google
-            </Text>
-          </TouchableOpacity>
-
-          {Platform.OS == "ios" ? (
-            <TouchableOpacity style={styles.account}>
-              <View style={styles.accountLogo}>
-                <Image style={styles.accountImage} source={apple} />
-              </View>
-              <Text
-                style={{
-                  fontSize: 17,
-                  color: COLORS.secondaryColor,
-                  fontWeight: 500,
-                }}
-              >
-                Continue with Apple ID
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <View></View>
-          )}
-
-          <TouchableOpacity style={styles.account}>
-            <View style={styles.accountLogo}>
-              <Image style={styles.accountImage} source={facebook} />
-            </View>
-            <Text
-              style={{
-                fontSize: 17,
-                color: COLORS.secondaryColor,
-                fontWeight: 500,
-              }}
-            >
-              Continue with Facebook
-            </Text>
-          </TouchableOpacity>
         </View>
 
         <View
@@ -350,9 +289,9 @@ const Login = ({ navigation }) => {
               color: COLORS.secondaryColor,
             }}
           >
-            Don't have an account?
+            Already have an account?
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("sign-up")}>
+          <TouchableOpacity onPress={() => navigation.replace("login")}>
             <Text
               style={{
                 fontSize: 16,
@@ -361,7 +300,7 @@ const Login = ({ navigation }) => {
               }}
             >
               {" "}
-              Sign Up !
+              Login !
             </Text>
           </TouchableOpacity>
         </View>
@@ -370,7 +309,7 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
@@ -406,9 +345,9 @@ const styles = StyleSheet.create({
     width: width - 32,
     height: 55,
     borderColor: COLORS.secondaryColor,
-    borderWidth: Platform.OS == "ios" ? 0.3 : 0.4,
+    borderWidth: Platform.OS == "ios" ? 0.3 : 0.9,
     borderRadius: 10,
-    paddingHorizontal: 80,
+    paddingHorizontal: 30,
     marginBottom: 20,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -418,7 +357,7 @@ const styles = StyleSheet.create({
   accountLogo: {
     width: 30,
     height: 30,
-    marginRight: 20,
+    marginRight: 40,
   },
 
   accountImage: {

@@ -15,10 +15,9 @@ const NotificationModal = ({ showModal, message, status }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setVisible(showModal);
-    }, 10);
-  });
+    setVisible(showModal)
+
+  }, [showModal]);
 
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
@@ -26,9 +25,9 @@ const NotificationModal = ({ showModal, message, status }) => {
         <View style={styles.modalContainer}>
           <Image
             style={{
-              width: 60,
-              height: 60,
-              marginBottom: 10,
+              width: 45,
+              height: 45,
+             
             }}
             source={status === "success" ? successIcon : unSuccessIcon}
           />
@@ -45,24 +44,26 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0)", // شفافية للخلفية
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    marginTop: 60
   },
   modalContainer: {
-    width: 300,
-    height: 200,
-    backgroundColor: "#DDDD",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderRadius: 20,
+    minWidth: "80%",
+    height: 60,
+    backgroundColor: "#DDD",
+    borderRadius: 40,
     padding: 16,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
 
   message: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
-    marginBottom: 20,
+    marginLeft: 20,
+    fontWeight: "500",
+    // marginBottom: 20,
   },
 });

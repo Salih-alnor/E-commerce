@@ -97,7 +97,7 @@ const Onboarding = ({navigation}) => {
        showDoneButton={true}
        dotStyle={styles.dot}
        activeDotStyle={styles.activeDot}
-       onDone={() => navigation.navigate("sign-up")}
+       onDone={() => navigation.navigate("login")}
       />
   
   )

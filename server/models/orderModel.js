@@ -60,7 +60,7 @@ const orderSchema = new Schema(
     paymentMethod: {
       type: String,
       required: true,
-      enum: ["Cash", "Card"],
+      enum: ["Cash", "Card", "PayPal"],
       default: "Cash",
     },
     statusPayment: {

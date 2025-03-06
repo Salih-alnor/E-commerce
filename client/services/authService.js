@@ -1,5 +1,6 @@
 import api from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import CookieManager from "@react-native-cookies/cookies";
 
 
 export const login = async (email, password) => {
@@ -25,6 +26,7 @@ export const register = async (userData) => {
 
 
 export const logout = async () => {
+  // await CookieManager.clearAll();
   await AsyncStorage.removeItem("token");
   await AsyncStorage.removeItem("user");
 };

@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getOrders } from "../services/ordersService";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -18,35 +18,23 @@ const Oreders = ({ navigation }) => {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const token = await AsyncStorage.getItem("token");
       try {
-        const response = await fetch(
-          `http://172.20.10.4:4000/api/order/get-orders`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        const orders = data.orders;
-        setOrders(orders.reverse());
+        const response = await getOrders();
+        if (response.status === "success") {
+          const orders = response.orders;
+          orders.reverse();
+          setOrders(orders);
+        }
       } catch (error) {
-        console.log("Error", error.response.data.error);
+        console.log("Error", error.response.data);
       }
     };
 
     fetchData();
   }, [navigation]);
 
-
-
   const Order = ({ item, index }) => {
-
     const formatterWithTime = new Intl.DateTimeFormat("en-US", {
-      
       month: "short",
       day: "2-digit",
       hour: "2-digit",
@@ -107,7 +95,9 @@ const Oreders = ({ navigation }) => {
               }}
             ></View>
             <View>
-              <Text style={styles.orderStatusDate}>Created : {formattedDate}</Text>
+              <Text style={styles.orderStatusDate}>
+                Created : {formattedDate}
+              </Text>
               {/* <Text style={styles.orderDate}>Shipping date : 2022-01-05</Text> */}
             </View>
           </View>

@@ -56,16 +56,12 @@ const Header = ({ navigation}) => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity
-          style={styles.favorites}
-          onPress={() => navigation.navigate("favorites")}
-        >
-          {cartCount > 0 ? (
+        {cartCount > 0 ? (
             <View
               style={{
                 position: "absolute",
-                top: -16,
-                right: -10,
+                top: 60,
+                right: -9,
                 height: 20,
                 minWidth: 20,
                 backgroundColor: COLORS.mainColor,
@@ -73,6 +69,7 @@ const Header = ({ navigation}) => {
                 paddingHorizontal: 5,
                 justifyContent: "center",
                 alignItems: "center",
+                zIndex: 10,
               }}
             >
               <View>
@@ -89,6 +86,11 @@ const Header = ({ navigation}) => {
               </View>
             </View>
           ) : null}
+        <TouchableOpacity
+          style={[styles.favorites, { overflow: "visible" }]}
+          onPress={() => navigation.navigate("favorites")}
+        >
+          
           <Image
             style={[
               styles.profileImage,

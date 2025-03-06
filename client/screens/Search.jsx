@@ -94,7 +94,7 @@ useEffect(() => {
               />
             </View>
             <TextInput
-              keyboardType="search"
+              keyboardType="default"
               value={searchQuery}
               
               onChangeText={(query) => handleSearch(query)}

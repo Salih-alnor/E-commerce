@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import Notification from "../components/notifications/Notification";
+import { createCashOrder, createCardOrder } from "../services/ordersService";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -44,58 +45,38 @@ const CheckOut = ({ navigation }) => {
 
   const handlePayment = (method) => {
     if (method === "cash") {
-      const createCashOrder = async (data) => {
-        const token = await AsyncStorage.getItem("token");
+      const fetchCashOrder = async (data) => {
         try {
           const cartId = data.cartId;
 
-          const response = await axios.post(
-            `http://172.20.10.4:4000/api/order/cash/${cartId}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-            console.log(response.data.message);
+          const response = await createCashOrder(cartId);
+          console.log(response.message);
 
-          if(response.data.status === 'success') {
+          if (response.status === "success") {
             setModalVisible(true);
-            setMessage(response.data.message);
-            setStatus(response.data.status);
+            setMessage(response.message);
+            setStatus(response.status);
 
             setTimeout(() => {
               setModalVisible(false);
-              navigation.navigate("cart")
+              navigation.navigate("cart");
             }, 3000);
-            
           }
           dispatch({ type: "clearCartItems" });
         } catch (error) {
-          console.error(error.response.data.error);
+          console.error(error.response);
         }
       };
-      createCashOrder(items);
+      fetchCashOrder(items);
     } else if (method === "card") {
       const fetchPaymentIntent = async (data) => {
         const token = await AsyncStorage.getItem("token");
         try {
           const cartId = data.cartId;
 
-          const response = await fetch(
-            `http://172.20.10.4:4000/api/order/checkout/${cartId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: {},
-            }
-          );
+          const response = await createCardOrder(cartId)
 
-          const { clientSecret } = await response.json();
+          const { clientSecret } = response;
           return clientSecret;
         } catch (error) {
           console.error(error);
@@ -132,7 +113,7 @@ const CheckOut = ({ navigation }) => {
           setModalVisible(true);
           setStatus("success");
           setMessage("Payment was successful!");
-          dispatch({ type: "clearCartItems"});
+          dispatch({ type: "clearCartItems" });
           setTimeout(() => {
             setModalVisible(false);
           }, 2000);
@@ -143,7 +124,7 @@ const CheckOut = ({ navigation }) => {
     } else if (method === "paypal") {
       const createPayPalPayment = async (item) => {
         navigation.navigate("payPalPayment", {
-          cartId: item.cartId,
+          cartItem: item,
         });
       };
 

@@ -39,7 +39,7 @@ const Home = ({ navigation }) => {
         dispatch({ type: "setFavorites", payload: favoriteData });
 
         const categoriesData = await getCategories();
-        setCategories(categoriesData.categories);
+        setCategories(categoriesData);
       } catch (error) {
         console.log(error.response.data.error);
       }

@@ -26,9 +26,9 @@ const Favorites = ({ navigation }) => {
     (state) => state.favoritesReducer.favoritesList || []
   );
   const dispatch = useDispatch();
-
+  favorite.reverse()
   useEffect(() => {
-    setFavoritesList(favorite.reverse());
+    setFavoritesList(favorite);
   }, [navigation]);
 
   const deleteProductFromFavoritesList = async (id) => {
