@@ -3,21 +3,17 @@ import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import favorites from "../../assets/images/icons/heart.png";
 import { useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-const Header = ({ navigation}) => {
+const Header = ({ navigation }) => {
   const [cartCount, setCartCount] = useState(0);
   const userInfo = useSelector((state) => state.userInfoReducer.userInfo);
-  const favoritesCount = useSelector((state) => state.favoritesReducer.favoritesList);
+  const favoritesCount = useSelector(
+    (state) => state.favoritesReducer.favoritesList
+  );
 
-    useEffect(() => {
-  
-     setCartCount(favoritesCount.length)
-   
-    }, [favoritesCount]);
-
-  
+  useEffect(() => {
+    setCartCount(favoritesCount.length);
+  }, [favoritesCount]);
 
   return (
     <View style={styles.container}>
@@ -57,40 +53,39 @@ const Header = ({ navigation}) => {
           </View>
         </View>
         {cartCount > 0 ? (
-            <View
-              style={{
-                position: "absolute",
-                top: 60,
-                right: -9,
-                height: 20,
-                minWidth: 20,
-                backgroundColor: COLORS.mainColor,
-                borderRadius: 10,
-                paddingHorizontal: 5,
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 10,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    color: COLORS.white,
-                    width: "100%",
-                    fontSize: 14,
-                    fontWeight: "600",
-                  }}
-                >
-                  {cartCount}
-                </Text>
-              </View>
+          <View
+            style={{
+              position: "absolute",
+              top: 60,
+              right: -9,
+              height: 20,
+              minWidth: 20,
+              backgroundColor: COLORS.mainColor,
+              borderRadius: 10,
+              paddingHorizontal: 5,
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 10,
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  color: COLORS.white,
+                  width: "100%",
+                  fontSize: 14,
+                  fontWeight: "600",
+                }}
+              >
+                {cartCount}
+              </Text>
             </View>
-          ) : null}
+          </View>
+        ) : null}
         <TouchableOpacity
           style={[styles.favorites, { overflow: "visible" }]}
           onPress={() => navigation.navigate("favorites")}
         >
-          
           <Image
             style={[
               styles.profileImage,

@@ -13,9 +13,7 @@ import add from "../assets/images/icons/add.png";
 import back from "../assets/images/icons/back.png";
 import halfStar from "../assets/images/icons/half-star.png";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import COLORS from "../assets/colors";
-import axios from "axios";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import {removeFromFavorites} from "../services/favoritesService"
 

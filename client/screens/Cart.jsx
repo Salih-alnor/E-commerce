@@ -51,7 +51,6 @@ const Cart = ({ route, navigation }) => {
         totalPrice: response.newCart.totalPrice,
       };
       console.log(response.message);
-      console.log(response.newCart)
       dispatch({ type: "getCartItems", payload });
     } catch (error) {
       console.log(error.response.error);

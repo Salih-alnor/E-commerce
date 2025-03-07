@@ -12,45 +12,27 @@ import { getCategories } from "../services/categoresService";
 import { getCartItems } from "../services/cartService";
 import { getFavoritesList } from "../services/favoritesService";
 
-const Home = ({ navigation }) => {
+const Home = ({route, navigation }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const dispatch = useDispatch();
-  const favorite = useSelector((state) => state.favoritesReducer.favoritesList);
+  const [favorite, setFavorite] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsData = await getProducts();
-        setProducts(productsData);
-        dispatch({ type: "getProducts", payload: productsData });
+const {favoriteList, productsList, categoriesList} = route.params;
+  // useEffect(() => {
+  //   const fetchData = async () => {
+      
+  //     setCategories(categoriesList);
+  //     setProducts(productsList);
+  //     setFavorite(favoriteList)
+  //   }
 
-        const cart = await getCartItems();
-        
-        const cartData = {
-          cartId: cart._id,
-          items: cart.items,
-          totalPrice: cart.totalPrice,
-        }
-        dispatch({ type: "getCartItems", payload: cartData });
+  //   fetchData();
 
-        const favoriteData = await getFavoritesList();
-
-        dispatch({ type: "setFavorites", payload: favoriteData });
-
-        const categoriesData = await getCategories();
-        setCategories(categoriesData);
-      } catch (error) {
-        console.log(error.response.data.error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // })
 
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} favoritesList={favorite} />
+      <Header navigation={navigation} favoritesList={favoriteList} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={[""]}
@@ -62,7 +44,7 @@ const Home = ({ navigation }) => {
               Categories
             </Text>
             <Categories
-              categories={categories}
+              categories={categoriesList}
               navigation={navigation}
               navigateTo="subcategories"
               page="home"
@@ -70,12 +52,12 @@ const Home = ({ navigation }) => {
             <Featured
               title="Featured"
               navigation={navigation}
-              products={products}
+              products={productsList}
             />
             <Featured
               title="Most Popular"
               navigation={navigation}
-              products={products}
+              products={productsList}
             />
           </View>
         )}

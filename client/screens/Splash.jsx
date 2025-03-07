@@ -25,15 +25,15 @@ const Splash = ({ navigation }) => {
         return;
       }
       navigation.navigate("onboarding");
-    }, 1000); // Change the delay to your desired time in milliseconds
+    }, 1000)
   }, []);
   return (
     <View style={styles.container}>
       <Image
         source={splashLogo}
         style={{
-          width: 300,
-          height: 300,
+          width: 100,
+          height: 100,
           resizeMode: "contain",
           tintColor: COLORS.mainColor,
         }}
@@ -44,11 +44,10 @@ const Splash = ({ navigation }) => {
           fontWeight: "bold",
           color: COLORS.mainColor,
           marginBottom: 20,
-          marginTop: -80,
           textAlign: "center",
         }}
       >
-        E-commerce
+        Shope
       </Text>
     </View>
   );
