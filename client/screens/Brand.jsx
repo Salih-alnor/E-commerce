@@ -44,7 +44,7 @@ const Brand = ({ route, navigation }) => {
       ]}
       onPress={() =>
         navigation.navigate("details", {
-          title: item.title,
+          name: item.name,
           price: item.price,
           description: item.description,
           images: item.images,

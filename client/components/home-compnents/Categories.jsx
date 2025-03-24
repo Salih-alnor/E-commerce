@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
-import { useSelector } from "react-redux";
 const { width, height } = Dimensions.get("screen");
 
 const Categories = ({ categories, navigation, }) => {

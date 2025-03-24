@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const Brand = require("../models/brandModel");
 const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
 
@@ -7,51 +8,66 @@ const asyncHandler = require("express-async-handler");
   @route POST /api/product
   @access Private
   */
-const createProduct = async (req, res) => {
+const createProduct = asyncHandler(async(req, res, next) => {
   const {
     name,
     price,
     quantity,
     description,
-    mainCategory,
-    subCategory,
-    brand,
-    // sizes
+    mainCategoryId,
+    subCategoryId,
+    brandId,
   } = req.body;
 
-  // const sizesArray = JSON.parse(sizes);
+  const brand = await Brand.findById(brandId)
+  if (!brand) {
+    const err = new Error("Invalid brand");
+    err.code = 404;
+    return next(err);
+  } 
 
-  try {
-    const productImages = req.files.map((file) => file.filename);
 
-    // if (!sizesArray.length) {
-    //   return res.status(400).json({ message: "Please provide at least one size" });
-    // }
 
-    if (!productImages.length) {
-      return res
-        .status(400)
-        .json({ message: "Please upload at least one image" });
-    }
 
-    const product = await Product.create({
-      name,
-      slug: slugify(name),
-      price,
-      quantity,
-      description,
-      mainCategory,
-      subCategory,
-      brand,
-      // sizes: sizesArray,
-      images: productImages,
-    });
+  let updateData = { name:brand.name, slug: slugify(brand.name) };
+ 
+     if (subCategoryId) {
+       updateData.$addToSet = { subCategory: subCategoryId }; // It adds the element without repetition
+     }
+ 
+     const brandUpdated = await Brand.findByIdAndUpdate(brandId, updateData, { new: true });
+ 
+     if (!brandUpdated) {
+       return res.status(404).json({ message: "Brand not found" });
+     }
 
-    res.json({ product });
-  } catch (error) {
-    res.status(400).json({ message: error });
+  const productImages = req.files.map((file) => file.filename);
+
+  if (!productImages.length) {
+    const err = new Error("Please upload at least one image");
+    err.code = 400;
+    return next(err);
   }
-};
+
+  const product = await Product.create({
+    name,
+    slug: slugify(name),
+    price,
+    quantity,
+    description,
+    mainCategory: mainCategoryId,
+    subCategory: subCategoryId,
+    brand: brandId,
+    images: productImages,
+  });
+  if (!product) {
+    const err = new Error("Product not created");
+    err.code = 500;
+    return next(err);
+  }
+
+  res.status(200).json(product);
+});
 
 /*
   @desc get products

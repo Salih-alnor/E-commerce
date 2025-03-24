@@ -27,6 +27,8 @@ const Brands = ({ route, navigation }) => {
     (state) => state.productsReducer.productsList
   );
 
+  console.log(route.params)
+
   useEffect(() => {
     setMainCategoryId(route.params.mainCategoryId);
     setSubCategoryId(route.params.subCategoryId);
@@ -120,7 +122,7 @@ const Brands = ({ route, navigation }) => {
       ]}
       onPress={() =>
         navigation.navigate("details", {
-          title: item.title,
+          name: item.name,
           price: item.price,
           description: item.description,
           images: item.images,

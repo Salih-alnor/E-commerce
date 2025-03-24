@@ -23,11 +23,11 @@ const brandSchema = new Schema({
         required: [true, "Brand must be belong to mainCategory"],
     },
 
-    subCategory: {
+    subCategory: [{
         type: mongoose.Schema.ObjectId,
         ref: "subCategory",
         required: [true, "Brand must be belong to subCategory"],
-    },
+    }],
 
     image: {
         type: String,

@@ -43,11 +43,11 @@ router.use(
 );
 router
   .route("/")
-  .post(auth, allowedToAccess("admin"), upload.single("image"), createBrand);
+  .post(auth, allowedToAccess("admin", "user"), upload.single("image"), createBrand);
 router
   .route("/:id")
   .get(auth, allowedToAccess("user", "admin"), getBrand)
-  .put(auth, allowedToAccess("admin"), updateBrand)
-  .delete(auth, allowedToAccess("admin"), deleteBrand);
+  .put(auth, allowedToAccess("admin", "user"), updateBrand)
+  .delete(auth, allowedToAccess("admin", "user"), deleteBrand);
 
 module.exports = router;

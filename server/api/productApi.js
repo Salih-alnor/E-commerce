@@ -37,7 +37,7 @@ const upload = multer({ storage });
 
 router
   .route("/")
-  .post(auth, allowedToAccess("admin"), upload.array("images"), createProduct)
+  .post(auth, allowedToAccess("user", "admin"), upload.array("images"), createProduct)
   .get(auth, allowedToAccess("user", "admin"), getProducts);
 router
   .route("/:id")

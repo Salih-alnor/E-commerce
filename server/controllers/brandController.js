@@ -12,7 +12,7 @@ const createBrand = asyncHandler(async (req, res, next) => {
   const { name, mainCategory, subCategory } = req.body;
   const { error } = brandValidatorSchema.validate(req.body);
 
-  if(error) {
+  if (error) {
     const err = new Error(error.details[0].message);
     return next(err);
   }
@@ -44,12 +44,11 @@ const getBrands = asyncHandler(async (req, res) => {
     err.code = 400;
     return next(err);
   }
-    filterObject = { mainCategory: categoryId, subCategory: subCategoryId };
+  filterObject = { mainCategory: categoryId, subCategory: subCategoryId };
 
-    const brands = await Brand.find(filterObject); /*.skip(skip).limit(limit);*/
-    res.json({ brands });
-
-}) 
+  const brands = await Brand.find(filterObject); /*.skip(skip).limit(limit);*/
+  res.json({ brands });
+});
 
 /*
   @desc get one brand
@@ -72,18 +71,25 @@ const getBrand = async (req, res) => {
   @access Private
   */
 const updateBrand = async (req, res) => {
-  const { name } = req.body;
+  const { name, subCategory } = req.body;
   const { id } = req.params;
 
   try {
-    const brand = await Brand.findByIdAndUpdate(
-      id,
-      { name, slug: slugify(name) },
-      { new: true }
-    );
+    let updateData = { name, slug: slugify(name) };
+
+    if (subCategory) {
+      updateData.$addToSet = { subCategory }; // It adds the element without repetition
+    }
+
+    const brand = await Brand.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found" });
+    }
+
     res.json({ data: brand });
   } catch (error) {
-    res.json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 };
 

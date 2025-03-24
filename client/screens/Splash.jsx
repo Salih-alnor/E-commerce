@@ -47,7 +47,7 @@ const Splash = ({ navigation }) => {
           textAlign: "center",
         }}
       >
-        Shope
+        E-Shope
       </Text>
     </View>
   );

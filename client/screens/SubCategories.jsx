@@ -11,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
 import axios from "axios";
-import Categories from "../components/home-compnents/Categories";
 const { width, height } = Dimensions.get("screen");
 import { useSelector } from "react-redux";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
@@ -31,7 +30,8 @@ const SubCategories = ({ route, navigation }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.4:4000/api/category/${id}/subcategories`, {
+          `http://172.20.10.4:4000/api/category/${id}/subcategories`,
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -114,7 +114,6 @@ const SubCategories = ({ route, navigation }) => {
   };
 
   const renderItem = ({ item, index }) => (
-    
     <TouchableOpacity
       style={[
         styles.card,
@@ -130,7 +129,7 @@ const SubCategories = ({ route, navigation }) => {
           description: item.description,
           images: item.images,
           sizes: item.sizes,
-          id: item._id
+          id: item._id,
         })
       }
     >
@@ -231,7 +230,7 @@ const SubCategories = ({ route, navigation }) => {
       <FlatList
         data={filteredProducts}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         contentContainerStyle={{ paddingHorizontal: 16 }}
         showsVerticalScrollIndicator={false}

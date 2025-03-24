@@ -1,3 +1,4 @@
+//3E:9C:C9:54:DF:DC:D8:1A:5F:81:16:0E:E4:C5:10:88:8C:08:9E:03
 import {
   StyleSheet,
   Text,
@@ -10,7 +11,7 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import back from "../assets/images/icons/back.png";
 import lock from "../assets/images/icons/lock.png";
 import email from "../assets/images/icons/email.png";
@@ -26,10 +27,60 @@ import { useDispatch } from "react-redux";
 import { login } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { getAuth, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import {auth} from "../config/config.firebase"
+import * as AppleAuthentication from "expo-apple-authentication"
+
+
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
+
+  const appleSignIn = async() => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      console.log(credential.email)
+    } catch (error) {
+      if(error.code === "ERR_REQUEST_CANCELED"){
+        Alert.alert("User Canceled Login");
+      }
+    }
+  }
+
+
+WebBrowser.maybeCompleteAuthSession();
+
+const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: "651781481837-fkvu1i53bah3pdhs111qabdfldu3vopi.apps.googleusercontent.com",
+    redirectUri: "https://auth.expo.io/@salihkreem/e-commerce",
+    scopes: ["profile", "email"],
+});
+
+
+
+useEffect(() => {
+  if (response?.type === "success") {
+    const { id_token } = response.params;
+    const credential = GoogleAuthProvider.credential(id_token);
+    signInWithCredential(auth, credential)
+      .then((userCredential) => {
+        setUserInfo(userCredential.user);
+      })
+      .catch((error) => console.log("Login error:", error));
+  }
+}, [response]);
+
+
   const InputFilad = ({
     placeholder,
     keyboardType,
@@ -287,7 +338,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.otherAccounts}>
-          <TouchableOpacity style={styles.account}>
+          <TouchableOpacity style={styles.account} onPress={() => promptAsync()}>
             <View style={styles.accountLogo}>
               <Image style={styles.accountImage} source={google} />
             </View>
@@ -303,7 +354,7 @@ const Login = ({ navigation }) => {
           </TouchableOpacity>
 
           {Platform.OS == "ios" ? (
-            <TouchableOpacity style={styles.account}>
+            <TouchableOpacity style={styles.account} onPress={appleSignIn}>
               <View style={styles.accountLogo}>
                 <Image style={styles.accountImage} source={apple} />
               </View>
