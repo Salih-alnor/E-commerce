@@ -13,7 +13,6 @@ import COLORS from "../assets/colors";
 import back from "../assets/images/icons/back.png";
 import clear from "../assets/images/icons/remove.png";
 import search from "../assets/images/icons/search.png";
-import Products from "./Products";
 import Product from "../components/Product";
 import { useSelector } from 'react-redux';
 import filter from 'lodash.filter';

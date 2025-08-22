@@ -27,20 +27,24 @@ import { useDispatch } from "react-redux";
 import { login } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import { getAuth, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import {auth} from "../config/config.firebase"
-import * as AppleAuthentication from "expo-apple-authentication"
 
+import * as Google from "expo-auth-session/providers/google";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
+import { auth } from "../config/config.firebase";
+import * as AppleAuthentication from "expo-apple-authentication";
 
+import * as WebBrowser from "expo-web-browser";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
 
-  const appleSignIn = async() => {
+  const appleSignIn = async () => {
     try {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -49,37 +53,34 @@ const Login = ({ navigation }) => {
         ],
       });
 
-      console.log(credential.email)
+      console.log(credential);
     } catch (error) {
-      if(error.code === "ERR_REQUEST_CANCELED"){
+      if (error.code === "ERR_REQUEST_CANCELED") {
         Alert.alert("User Canceled Login");
       }
     }
-  }
+  };
 
+  // WebBrowser.maybeCompleteAuthSession();
 
-WebBrowser.maybeCompleteAuthSession();
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   clientId:
+  //     "651781481837-fkvu1i53bah3pdhs111qabdfldu3vopi.apps.googleusercontent.com",
+  //   redirectUri: "https://auth.expo.io/@salihkreem/e-commerce",
+  //   scopes: ["profile", "email"],
+  // });
 
-const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: "651781481837-fkvu1i53bah3pdhs111qabdfldu3vopi.apps.googleusercontent.com",
-    redirectUri: "https://auth.expo.io/@salihkreem/e-commerce",
-    scopes: ["profile", "email"],
-});
-
-
-
-useEffect(() => {
-  if (response?.type === "success") {
-    const { id_token } = response.params;
-    const credential = GoogleAuthProvider.credential(id_token);
-    signInWithCredential(auth, credential)
-      .then((userCredential) => {
-        setUserInfo(userCredential.user);
-      })
-      .catch((error) => console.log("Login error:", error));
-  }
-}, [response]);
-
+  // useEffect(() => {
+  //   if (response?.type === "success") {
+  //     const { id_token } = response.params;
+  //     const credential = GoogleAuthProvider.credential(id_token);
+  //     signInWithCredential(auth, credential)
+  //       .then((userCredential) => {
+  //         setUserInfo(userCredential.user);
+  //       })
+  //       .catch((error) => console.log("Login error:", error));
+  //   }
+  // }, [response]);
 
   const InputFilad = ({
     placeholder,
@@ -260,7 +261,7 @@ useEffect(() => {
                     icon={email}
                     formikProps={formikProps}
                     formikKey="email"
-                    autoFocus={true}
+                    // autoFocus={true}
                     value={formikProps.values["email"]}
                   />
 
@@ -338,7 +339,10 @@ useEffect(() => {
         </View>
 
         <View style={styles.otherAccounts}>
-          <TouchableOpacity style={styles.account} onPress={() => promptAsync()}>
+          <TouchableOpacity
+            style={styles.account}
+            onPress={() => promptAsync()}
+          >
             <View style={styles.accountLogo}>
               <Image style={styles.accountImage} source={google} />
             </View>
@@ -352,6 +356,17 @@ useEffect(() => {
               Continue with Google
             </Text>
           </TouchableOpacity>
+
+          {/* <AppleAuthentication.AppleAuthenticationButton 
+          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          cornerRadius={8}
+          style={{
+            width: "100%",
+            height:55,
+            marginBottom: 20,
+          }}
+          /> */}
 
           {Platform.OS == "ios" ? (
             <TouchableOpacity style={styles.account} onPress={appleSignIn}>

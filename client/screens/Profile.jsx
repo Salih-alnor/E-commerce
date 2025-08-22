@@ -23,7 +23,7 @@ import camera from "../assets/images/icons/camera.png";
 import gallery from "../assets/images/icons/gallery.png";
 import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 
 import { logout } from "../services/authService"

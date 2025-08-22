@@ -45,7 +45,7 @@ const Oreders = ({ navigation }) => {
     const formattedDate = formatterWithTime.format(item.orderId);
     return (
       <View style={styles.ordersContainer}>
-        <TouchableOpacity style={styles.order}>
+        <TouchableOpacity style={styles.order} onLongPress={() => console.log("Good")}>
           <View
             style={{
               width: "100%",

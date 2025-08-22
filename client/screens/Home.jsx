@@ -6,29 +6,10 @@ import SearchBox from "../components/home-compnents/SearchBox";
 import SliderBox from "../components/home-compnents/SliderBox";
 import Featured from "../components/home-compnents/Featured";
 import Categories from "../components/home-compnents/Categories";
-import { useSelector, useDispatch } from "react-redux";
-import { getProducts } from "../services/productService";
-import { getCategories } from "../services/categoresService";
-import { getCartItems } from "../services/cartService";
-import { getFavoritesList } from "../services/favoritesService";
 
-const Home = ({route, navigation }) => {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [favorite, setFavorite] = useState([]);
 
-const {favoriteList, productsList, categoriesList} = route.params;
-  // useEffect(() => {
-  //   const fetchData = async () => {
-      
-  //     setCategories(categoriesList);
-  //     setProducts(productsList);
-  //     setFavorite(favoriteList)
-  //   }
-
-  //   fetchData();
-
-  // })
+const Home = ({ route, navigation }) => {
+  const { favoriteList, productsList, categoriesList } = route.params;
 
   return (
     <View style={styles.container}>
