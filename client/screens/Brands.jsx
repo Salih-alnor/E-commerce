@@ -36,7 +36,7 @@ const Brands = ({ route, navigation }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.4:4000/api/brand/${categoryId}/${subCategoryId}/brands`, {
+          `http://10.0.2.2:4000/api/brand/${categoryId}/${subCategoryId}/brands`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +103,7 @@ const Brands = ({ route, navigation }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://172.20.10.4:4000/BrandsImages/${item.image}`,
+              uri: `http://10.0.2.2:4000/BrandsImages/${item.image}`,
             }}
           />
         </View>
@@ -155,7 +155,7 @@ const Brands = ({ route, navigation }) => {
             height: "90%",
           }}
           source={{
-            uri: `http://172.20.10.4:4000/ProductsImages/${item.images[0]}`,
+            uri: `http://10.0.2.2:4000/ProductsImages/${item.images[0]}`,
           }}
         />
       </View>

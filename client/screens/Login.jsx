@@ -28,16 +28,16 @@ import { login } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 
-import * as Google from "expo-auth-session/providers/google";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
-import { auth } from "../config/config.firebase";
+// import * as Google from "expo-auth-session/providers/google";
+// import {
+//   getAuth,
+//   GoogleAuthProvider,
+//   signInWithCredential,
+// } from "firebase/auth";
+// import { auth } from "../config/config.firebase";
 import * as AppleAuthentication from "expo-apple-authentication";
 
-import * as WebBrowser from "expo-web-browser";
+// import * as WebBrowser from "expo-web-browser";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();

@@ -66,7 +66,7 @@ const sections = [
     page: "help",
   },
 ];
-const defaultProfile = "http://172.20.10.4:4000/ProfileImage/profile.png";
+const defaultProfile = "http://10.0.2.2:4000/ProfileImage/profile.png";
 const Profile = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(defaultProfile);
 

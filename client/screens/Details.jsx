@@ -97,7 +97,7 @@ const Details = ({ route, navigation }) => {
                   marginTop: 50,
                 }}
                 source={{
-                  uri: `http://172.20.10.4:4000/ProductsImages/${image}`,
+                  uri: `http://10.0.2.2:4000/ProductsImages/${image}`,
                 }}
               />
             );
