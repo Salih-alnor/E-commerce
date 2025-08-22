@@ -23,11 +23,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import Notification from "../components/notifications/Notification";
 import { createCashOrder, createCardOrder } from "../services/ordersService";
+import { PUBLISHABLE_KEY } from "@env";
 
 const { width, height } = Dimensions.get("screen");
 
-const publishableKey =
-  "pk_test_51Qr4PaKg2ri1qMe4GDJq8CvLFo3LkSqR0EXXkkLQqg6K9bPJQpQKHpRqTuNnij30fo2SNfvKdX8FP0e8AjaMICuH00YtgMQ1EC";
+const publishableKey = PUBLISHABLE_KEY;
 
 const CheckOut = ({ navigation }) => {
   const [items, setItems] = useState([]);

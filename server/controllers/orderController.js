@@ -1,12 +1,10 @@
-const stripe = require("stripe")(
-  "sk_test_51Qr4PaKg2ri1qMe4DKAB2gQqERZ8AZpfuaW0FqLVnibCumuPbXrqWjvUiF7GGmHA9rhfFeuMSEGNy1sZJ7SL45e6003cCxCmBQ"
-);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Order = require("../models/orderModel");
 const User = require("../models/userModel");
 const Cart = require("../models/cartModel");
 const asyncHandler = require("express-async-handler");
 const paypal = require("@paypal/checkout-server-sdk");
-const { request } = require("express");
+
 
 /*
   @desc Create cash order
@@ -88,7 +86,7 @@ const webHook = async (req, res) => {
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
-      "whsec_b490a40a6cea8aba1153826eaa5281b5acb2cc90a4ad37da71be32391f10207f"
+      process.env.STRIPE_SIGNATURE
     );
   } catch (err) {
     console.error("Webhook Error:", err.message);
