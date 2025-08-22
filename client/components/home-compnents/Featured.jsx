@@ -11,6 +11,8 @@ import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import FavoriteIcon from "../iconsComponents/FavoriteIcon";
 import { useSelector } from "react-redux";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const { width, height } = Dimensions.get("screen");
 
@@ -76,7 +78,7 @@ const Featured = ({ title, navigation, products }) => {
               height: "80%",
             }}
             source={{
-              uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+              uri: `${API}/ProductsImages/${item.images[0]}`,
             }}
           />
         </View>

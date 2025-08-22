@@ -23,6 +23,8 @@ import camera from "../assets/images/icons/camera.png";
 import gallery from "../assets/images/icons/gallery.png";
 import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 
 
@@ -66,7 +68,7 @@ const sections = [
     page: "help",
   },
 ];
-const defaultProfile = "http://172.20.10.2:4000/ProfileImage/profile.png";
+const defaultProfile = `${API}/ProfileImage/profile.png`;
 const Profile = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(defaultProfile);
 

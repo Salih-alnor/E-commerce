@@ -17,11 +17,14 @@ import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 const Brands = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [mainCategoryId, setMainCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
+  
 
   const productsList = useSelector(
     (state) => state.productsReducer.productsList
@@ -36,7 +39,7 @@ const Brands = ({ route, navigation }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.2:4000/api/brand/${categoryId}/${subCategoryId}/brands`, {
+          `${API}/api/brand/${categoryId}/${subCategoryId}/brands`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +106,7 @@ const Brands = ({ route, navigation }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://172.20.10.2:4000/BrandsImages/${item.image}`,
+              uri: `${API}/BrandsImages/${item.image}`,
             }}
           />
         </View>
@@ -155,7 +158,7 @@ const Brands = ({ route, navigation }) => {
             height: "90%",
           }}
           source={{
-            uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+            uri: `${API}/ProductsImages/${item.images[0]}`,
           }}
         />
       </View>

@@ -20,6 +20,8 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import {removeFromCart} from "../services/cartService"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const { width, height } = Dimensions.get("screen");
 const Cart = ({ route, navigation }) => {
@@ -69,7 +71,7 @@ const Cart = ({ route, navigation }) => {
 
     try {
       const response = await axios.post(
-        `http://172.20.10.4:4000/api/cart/${id}`,
+        `${API}/cart/${id}`,
         data,
 
         {
@@ -117,7 +119,7 @@ const Cart = ({ route, navigation }) => {
               resizeMode="contain"
               style={styles.image}
               source={{
-                uri: `http://172.20.10.2:4000/ProductsImages/${item.productId.images[0]}`,
+                uri: `${API}/ProductsImages/${item.productId.images[0]}`,
               }}
             />
           </View>

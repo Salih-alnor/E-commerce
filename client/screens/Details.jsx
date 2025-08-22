@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 import {addToCart} from "../services/cartService"
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const Details = ({ route, navigation }) => {
   const item = route.params;
@@ -97,7 +99,7 @@ const Details = ({ route, navigation }) => {
                   marginTop: 50,
                 }}
                 source={{
-                  uri: `http://172.20.10.2:4000/ProductsImages/${image}`,
+                  uri: `${API}/ProductsImages/${image}`,
                 }}
               />
             );

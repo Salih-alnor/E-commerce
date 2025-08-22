@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import COLORS from "../assets/colors";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import {removeFromFavorites} from "../services/favoritesService"
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const { width, height } = Dimensions.get("screen");
 const Favorites = ({ navigation }) => {
@@ -73,7 +75,7 @@ const Favorites = ({ navigation }) => {
               resizeMode="contain"
               style={styles.image}
               source={{
-                uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+                uri: `${API}/ProductsImages/${item.images[0]}`,
               }}
             />
           </View>

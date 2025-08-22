@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 const SubCategories = ({ route, navigation }) => {
   const [subCategories, setSubCategories] = useState([]);
   const [mainCategoryId, setMainCategoryId] = useState(null);
@@ -30,7 +32,7 @@ const SubCategories = ({ route, navigation }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://172.20.10.2:4000/api/category/${id}/subcategories`,
+          `${API}/api/category/${id}/subcategories`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +98,7 @@ const SubCategories = ({ route, navigation }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://172.20.10.2:4000/SubCategoriesImages/${item.image}`,
+              uri: `${API}/SubCategoriesImages/${item.image}`,
             }}
           />
         </View>
@@ -157,7 +159,7 @@ const SubCategories = ({ route, navigation }) => {
             height: "90%",
           }}
           source={{
-            uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+            uri: `${API}/ProductsImages/${item.images[0]}`,
           }}
         />
       </View>

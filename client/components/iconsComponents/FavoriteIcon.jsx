@@ -4,6 +4,8 @@ import heart from "../../assets/images/icons/heart.png";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const FavoriteIcon = ({ productId, style, heartIcon }) => {
   const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const FavoriteIcon = ({ productId, style, heartIcon }) => {
         const token = await AsyncStorage.getItem("token");
         try {
           const response = await axios.delete(
-            `http://172.20.10.2:4000/api/favorite/${id}`,
+            `${API}/api/favorite/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -42,7 +44,7 @@ const FavoriteIcon = ({ productId, style, heartIcon }) => {
         const token = await AsyncStorage.getItem("token");
         try {
           const response = await axios.post(
-            `http://172.20.10.4:4000/api/favorite/${id}`,
+            `${API}/api/favorite/${id}`,
             {},
             {
               headers: {

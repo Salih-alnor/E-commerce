@@ -12,6 +12,8 @@ import COLORS from "../assets/colors";
 import { useSelector } from "react-redux";
 import FavoriteIcon from "./iconsComponents/FavoriteIcon";
 import AddToCartIcon from "./iconsComponents/AddToCartIcon";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const { width, height } = Dimensions.get("screen");
 
@@ -72,7 +74,7 @@ const Product = ({ navigation, data }) => {
               height: "90%",
             }}
             source={{
-              uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+              uri: `${API}/ProductsImages/${item.images[0]}`,
             }}
           />
         </View>

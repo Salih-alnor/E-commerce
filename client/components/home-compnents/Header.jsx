@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import favorites from "../../assets/images/icons/heart.png";
 import { useSelector } from "react-redux";
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
+
 
 const Header = ({ navigation }) => {
   const [cartCount, setCartCount] = useState(0);
@@ -36,7 +39,7 @@ const Header = ({ navigation }) => {
             <Image
               style={styles.profileImage}
               source={{
-                uri: "http://172.20.10.2:4000/ProfileImage/profile.png",
+                uri: `${API}/ProfileImage/profile.png`,
               }}
             />
           </TouchableOpacity>

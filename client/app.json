@@ -33,6 +33,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
+      "API": "http://172.20.10.2:4000",
       "PUBLISHABLE_KEY": "pk_test_51Qr4PaKg2ri1qMe4GDJq8CvLFo3LkSqR0EXXkkLQqg6K9bPJQpQKHpRqTuNnij30fo2SNfvKdX8FP0e8AjaMICuH00YtgMQ1EC",
       "eas": {
         "projectId": "5f3ea15f-ceda-4d83-b225-4e6515f52aa9"

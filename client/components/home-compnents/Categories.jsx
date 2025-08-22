@@ -10,6 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 const { width, height } = Dimensions.get("screen");
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const Categories = ({ categories, navigation, }) => {
   const [data, setData] = useState();
@@ -59,7 +61,7 @@ const Categories = ({ categories, navigation, }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://172.20.10.2:4000/CategoriesImages/${item.image}`,
+              uri: `${API}/CategoriesImages/${item.image}`,
             }}
           />
         </View>

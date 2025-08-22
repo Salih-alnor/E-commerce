@@ -14,6 +14,8 @@ import AddToCartIcon from "../components/iconsComponents/AddToCartIcon";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import COLORS from "../assets/colors";
 const { width, height } = Dimensions.get("screen");
+import Constants from "expo-constants";
+const API = Constants.expoConfig.extra.API;
 
 const Brand = ({ route, navigation }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -77,7 +79,7 @@ const Brand = ({ route, navigation }) => {
             height: "90%",
           }}
           source={{
-            uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
+            uri: `${API}/ProductsImages/${item.images[0]}`,
           }}
         />
       </View>
