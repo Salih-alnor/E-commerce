@@ -56,13 +56,12 @@ const CheckOut = ({ navigation }) => {
             setModalVisible(true);
             setMessage(response.message);
             setStatus(response.status);
-
+            dispatch({ type: "clearCartItems" });
             setTimeout(() => {
               setModalVisible(false);
               navigation.navigate("cart");
             }, 3000);
           }
-          dispatch({ type: "clearCartItems" });
         } catch (error) {
           console.error(error.response);
         }
@@ -74,7 +73,7 @@ const CheckOut = ({ navigation }) => {
         try {
           const cartId = data.cartId;
 
-          const response = await createCardOrder(cartId)
+          const response = await createCardOrder(cartId);
 
           const { clientSecret } = response;
           return clientSecret;
@@ -88,7 +87,7 @@ const CheckOut = ({ navigation }) => {
         const clientSecret = await fetchPaymentIntent(items);
         if (!clientSecret) return;
         const { error } = await initPaymentSheet({
-          merchantDisplayName: "E-Commerce",
+          merchantDisplayName: "E-Shope",
           allowsDelayedPaymentMethods: true,
           paymentIntentClientSecret: clientSecret,
           returnURL: "myapp://stripe-redirect",
@@ -108,15 +107,17 @@ const CheckOut = ({ navigation }) => {
 
           setTimeout(() => {
             setModalVisible(false);
-          }, 2000);
+          }, 3000);
         } else {
           setModalVisible(true);
           setStatus("success");
           setMessage("Payment was successful!");
           dispatch({ type: "clearCartItems" });
+          
           setTimeout(() => {
             setModalVisible(false);
-          }, 2000);
+            navigation.navigate("cart");
+          }, 3000);
         }
       };
 

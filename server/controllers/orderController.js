@@ -64,12 +64,14 @@ const createCheckoutSessions = asyncHandler(async (req, res, next) => {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: cart.totalPrice * 100,
     currency: "usd",
-    payment_method_types: ["card"], // يمكن إضافة طرق أخرى مثل Apple Pay
+    payment_method_types: ["card"], //[apple pay]
     metadata: {
       cartId: cart._id.toString(),
       userId: req.user._id.toString(),
     },
   });
+
+
 
   res.status(200).json({
     status: "success",
@@ -89,11 +91,11 @@ const webHook = async (req, res) => {
       "whsec_b490a40a6cea8aba1153826eaa5281b5acb2cc90a4ad37da71be32391f10207f"
     );
   } catch (err) {
-    console.error("⚠️  Webhook Error:", err.message);
+    console.error("Webhook Error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // التحقق مما إذا كان الدفع ناجحًا
+  // check if payment is success
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
 

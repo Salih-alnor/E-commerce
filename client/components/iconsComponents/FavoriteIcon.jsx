@@ -18,7 +18,7 @@ const FavoriteIcon = ({ productId, style, heartIcon }) => {
         const token = await AsyncStorage.getItem("token");
         try {
           const response = await axios.delete(
-            `http://172.20.10.4:4000/api/favorite/${id}`,
+            `http://172.20.10.2:4000/api/favorite/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

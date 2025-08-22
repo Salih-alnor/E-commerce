@@ -30,7 +30,7 @@ const SubCategories = ({ route, navigation }) => {
       const token = await AsyncStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://10.0.2.2:4000/api/category/${id}/subcategories`,
+          `http://172.20.10.2:4000/api/category/${id}/subcategories`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const SubCategories = ({ route, navigation }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://10.0.2.2:4000/SubCategoriesImages/${item.image}`,
+              uri: `http://172.20.10.2:4000/SubCategoriesImages/${item.image}`,
             }}
           />
         </View>
@@ -157,7 +157,7 @@ const SubCategories = ({ route, navigation }) => {
             height: "90%",
           }}
           source={{
-            uri: `http://10.0.2.2:4000/ProductsImages/${item.images[0]}`,
+            uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
           }}
         />
       </View>

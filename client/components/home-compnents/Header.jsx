@@ -36,7 +36,7 @@ const Header = ({ navigation }) => {
             <Image
               style={styles.profileImage}
               source={{
-                uri: "http://10.0.2.2:4000/ProfileImage/profile.png",
+                uri: "http://172.20.10.2:4000/ProfileImage/profile.png",
               }}
             />
           </TouchableOpacity>

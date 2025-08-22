@@ -72,7 +72,7 @@ const Product = ({ navigation, data }) => {
               height: "90%",
             }}
             source={{
-              uri: `http://10.0.2.2:4000/ProductsImages/${item.images[0]}`,
+              uri: `http://172.20.10.2:4000/ProductsImages/${item.images[0]}`,
             }}
           />
         </View>

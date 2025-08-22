@@ -59,7 +59,7 @@ const Categories = ({ categories, navigation, }) => {
               resizeMode: "contain",
             }}
             source={{
-              uri: `http://10.0.2.2:4000/CategoriesImages/${item.image}`,
+              uri: `http://172.20.10.2:4000/CategoriesImages/${item.image}`,
             }}
           />
         </View>
