@@ -71,7 +71,7 @@ const Cart = ({ route, navigation }) => {
 
     try {
       const response = await axios.post(
-        `${API}/cart/${id}`,
+        `${API}/api/cart/${id}`,
         data,
 
         {
