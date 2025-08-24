@@ -1,43 +1,56 @@
+<h1>E-commerce mobile app</h1>
+1 - Front-end: 
+  - React Native
+2 - Back-end:
+  - Node.js runtime environment 
+  - Expriss.js Frame work
+3 - Database: 
+  - Using MongoDB
+4 - State management
+  - Using Redux
+5 - Auth
+  - JWT authentication
+
 ![moc page](./client/assets/screenshots/moc.jpg)
 
  Home screen
 ![Home page](./client/assets/screenshots/home.jpg)
 
  Login screen
-![Home page](./client/assets/screenshots/login.jpg)
+![Login page](./client/assets/screenshots/login.jpg)
 
  Register screen
-![Home page](./client/assets/screenshots/register.jpg)
+![Register page](./client/assets/screenshots/register.jpg)
 
 Categoris screen
-![Home page](./client/assets/screenshots/categoris.jpg)
+![Categoris page](./client/assets/screenshots/categoris.jpg)
 
-Sub categoris screen
-![Home page](./client/assets/screenshots/subCategoris.jpg)
+SubCategoris screen
+![SubCategoris page](./client/assets/screenshots/subCategoris.jpg)
 
 Brand screen
-![Home page](./client/assets/screenshots/brand.jpg)
+![Brand page](./client/assets/screenshots/brand.jpg)
 
 Search screen
-![Home page](./client/assets/screenshots/search.jpg)
+![Search page](./client/assets/screenshots/search.jpg)
 
 Cart screen
-![Home page](./client/assets/screenshots/cart.jpg) 
+![Cart page](./client/assets/screenshots/cart.jpg) 
 
-Empty cart screen
-![Home page](./client/assets/screenshots/empty-cart.jpg)
+Empty-cart screen
+![Empty-cart page](./client/assets/screenshots/empty-cart.jpg)
 
 Details screen
-![Home page](./client/assets/screenshots/details.jpg)
+![Details page](./client/assets/screenshots/details.jpg)
 
 Favorites screen
-![Home page](./client/assets/screenshots/favorites.jpg)
+![Favorites page](./client/assets/screenshots/favorites.jpg)
 
 Checkout screen
-![Home page](./client/assets/screenshots/checkout.jpg) 
+![Checkout page](./client/assets/screenshots/checkout.jpg) 
 
-Payment method screen
-![Home page](./client/assets/screenshots/payment-method.jpg)
+Payment-method screen
+![Payment-method page](./client/assets/screenshots/payment-method.jpg)
 
 Profile screen
-![Home page](./client/assets/screenshots/profile.jpg)
+![Profile page](./client/assets/screenshots/profile.jpg)
