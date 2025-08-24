@@ -1,13 +1,21 @@
 <h1>E-commerce mobile app</h1>
 <p>1 - Front-end:</p> 
   - React Native
+
+  
 <p>2 - Back-end:</p>
   - Node.js runtime environment 
   - Expriss.js Frame work
+
+
 <p>3 - Database:</p> 
   - Using MongoDB
+
+
 <p>4 - State management</p>
   - Using Redux
+
+  
 <p>5 - Auth</p>
   - JWT authentication
 
