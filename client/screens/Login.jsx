@@ -28,16 +28,7 @@ import { login } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 
-// import * as Google from "expo-auth-session/providers/google";
-// import {
-//   getAuth,
-//   GoogleAuthProvider,
-//   signInWithCredential,
-// } from "firebase/auth";
-// import { auth } from "../config/config.firebase";
 import * as AppleAuthentication from "expo-apple-authentication";
-
-// import * as WebBrowser from "expo-web-browser";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -60,27 +51,6 @@ const Login = ({ navigation }) => {
       }
     }
   };
-
-  // WebBrowser.maybeCompleteAuthSession();
-
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   clientId:
-  //     "651781481837-fkvu1i53bah3pdhs111qabdfldu3vopi.apps.googleusercontent.com",
-  //   redirectUri: "https://auth.expo.io/@salihkreem/e-commerce",
-  //   scopes: ["profile", "email"],
-  // });
-
-  // useEffect(() => {
-  //   if (response?.type === "success") {
-  //     const { id_token } = response.params;
-  //     const credential = GoogleAuthProvider.credential(id_token);
-  //     signInWithCredential(auth, credential)
-  //       .then((userCredential) => {
-  //         setUserInfo(userCredential.user);
-  //       })
-  //       .catch((error) => console.log("Login error:", error));
-  //   }
-  // }, [response]);
 
   const InputFilad = ({
     placeholder,
