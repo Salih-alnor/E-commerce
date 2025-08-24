@@ -16,7 +16,6 @@ import halfStar from "../assets/images/icons/half-star.png";
 import back from "../assets/images/icons/back.png";
 import FavoriteIcon from "../components/iconsComponents/FavoriteIcon";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
 import {addToCart} from "../services/cartService"
 import Constants from "expo-constants";
