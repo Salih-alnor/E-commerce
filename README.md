@@ -1,14 +1,14 @@
 <h1>E-commerce mobile app</h1>
-1 - Front-end: 
+<p>1 - Front-end:</p> 
   - React Native
-2 - Back-end:
+<p>2 - Back-end:</p>
   - Node.js runtime environment 
   - Expriss.js Frame work
-3 - Database: 
+<p>3 - Database:</p> 
   - Using MongoDB
-4 - State management
+<p>4 - State management</p>
   - Using Redux
-5 - Auth
+<p>5 - Auth</p>
   - JWT authentication
 
 ![moc page](./client/assets/screenshots/moc.jpg)
