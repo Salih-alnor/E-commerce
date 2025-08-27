@@ -22,7 +22,9 @@
 ![moc page](./client/assets/screenshots/moc.jpg)
 
  Home screen
-![Home page](./client/assets/screenshots/home.jpg)
+![Home page]()
+<img src="./client/assets/screenshots/home.jpg" width="100px" height="300px">
+<img src="./client/assets/screenshots/login.jpg" width="100px" height="300px">
 
  Login screen
 ![Login page](./client/assets/screenshots/login.jpg)
