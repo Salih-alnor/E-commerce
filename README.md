@@ -5,46 +5,46 @@ The app provides a modern shopping experience with authentication, product brows
 
 
 <h2>Features</h2>
-<p>	•	Splash & Onboarding: Introductory screens highlighting app features.</p>
-<p>	•	Home Screen: Browse categories and featured products.</p>
-<p>	•	Products Screen:</p>
+<p>Splash & Onboarding: Introductory screens highlighting app features.</p>
+<p>Home Screen: Browse categories and featured products.</p>
+<p>Products Screen:</p>
 <p>	•	Displays products using FlatList for efficient rendering.</p>
 <p>	•	Each product card shows image, name, price, and quick actions (Add to Cart / Add to Favourites).</p>
-<p>	•	Search Screen:</p>
+<p>Search Screen:</p>
 <p>	•	Search products by product name or brand name.</p>
-<p>	•	Product Details Screen:</p>
+<p>Product Details Screen:</p>
 <p>	•	Display multiple product images using ScrollView.</p>
 <p>	•	Show name, description, price, rating.</p>
 <p>	•	Add to Cart and Favourites.</p>
-<p>	•	Cart Screen:</p>
+<p>Cart Screen:</p>
 <p>	•	View products added to the cart.</p>
 <p>	•	Increase or decrease product quantity with instant update of the total price.</p>
 <p>	•	Remove a single product or clear all products at once.</p>
 <p>	•	Proceed to Checkout.</p>
-<p>	•	Favourites Screen:</p>
+<p>Favourites Screen:</p>
 <p>	•	Manage favourite products.</p>
 <p>	•	Add/remove products individually or clear all.</p>
-<p>	•	Profile Screen:</p>
+<p>Profile Screen:</p>
 <p>	•	View and edit user information.</p>
 <p>	•	Change profile picture using camera or photo gallery.</p>
-<p>	•	Authentication (Login & Register): Secure sign-up and login.</p>
+<p>Authentication (Login & Register): Secure sign-up and login.</p>
 <p>	•	Persistent User Session: Managed with JWT and AsyncStorage.</p>
 
 
 <h2>State Management with Redux</h2>
-<p>	•	User State: Manage logged-in user data including profile picture.</p>
-<h3>	•	Cart State:</h3>
+<p>User State: Manage logged-in user data including profile picture.</p>
+<p>Cart State:</p>
 <p>	•	Add products to cart.</p>
 <p>	•	Increase/decrease product quantity with live price calculation.</p>
 <p>	•	Remove single product or clear all.</p>
 <p>	•	Sync cart data with backend via API.</p>
-<p>	•	Favourites State:</p>
+<p>Favourites State:</p>
 <p>	•	Add/remove products individually or clear all.</p>
 <p>	•	Fetch favourite products from backend via API.</p>
-<p>	•	Products State:</p>
+<p>Products State:</p>
 <p>	•	Fetch product list from API.</p>
 <p>	•	Supports filtering/search.</p>
-<p>	•	API Integration:</p>
+<p>API Integration:</p>
 <p>	•	All cart, favourites, user profile, and product actions are synced with backend using RESTful APIs.</p>
 <p>	•	Ensures persistent and up-to-date data across sessions and devices.</p>
 
