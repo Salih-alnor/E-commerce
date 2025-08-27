@@ -33,7 +33,7 @@ The app provides a modern shopping experience with authentication, product brows
 
 <h2>State Management with Redux</h2>
 <p>	•	User State: Manage logged-in user data including profile picture.</p>
-<p>	•	Cart State:</p>
+<h3>	•	Cart State:</h3>
 <p>	•	Add products to cart.</p>
 <p>	•	Increase/decrease product quantity with live price calculation.</p>
 <p>	•	Remove single product or clear all.</p>
