@@ -74,8 +74,8 @@ The app provides a modern shopping experience with authentication, product brows
 <h3>Backend</h3>
 <p>cd server</p>
 <p>- npm install</p>
-<p>- npm start</p>
 <p>- connect mongoDB with (//localhost:27017/ecommerce-api)</p>
+<p>- npm start</p>
 
 <h3>Frontend</h3>
 <p>cd client</p>
