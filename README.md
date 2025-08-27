@@ -73,12 +73,12 @@ The app provides a modern shopping experience with authentication, product brows
 <h2>Installation & Setup</h2>
 
 <h3>Backend</h3>
-<p>cd backend</p>
+<p>cd server</p>
 <p>npm install</p>
 <p>npm start</p>
 
 <h3>Frontend</h3>
-<p>cd frontend</p>
+<p>cd client</p>
 <p>npm install</p>
 <p>npm start</p>
 
@@ -97,26 +97,10 @@ The app provides a modern shopping experience with authentication, product brows
 <p>	•	Cash on Delivery and PayPal supported.</p>
 
 
-
-Screenshots
-<p>	•	Splash / Onboarding</p>
-<p>	•	Home / Categories</p>
-<p>	•	Products (FlatList)</p>
-<p>	•	Search (by product name or brand name)</p>
-<p>	•	Product Details (ScrollView with multiple images)</p>
-<p>	•	Cart (Increase/decrease quantity, Remove single / Clear all products)</p>
-<p>	•	Checkout</p>
-<p>	•	Favourites</p>
-<p>	•	Profile (Change profile picture via Camera or Gallery)</p>
-<p>	•	Login / Register</p>
-
-
-
-  <h2>Future Improvements</h2>
+<h2>Future Improvements</h2>
 <p>	•	Push Notifications</p>
-<p>	•	Multi-language support (i18n)</p>
+<p>	•	Multi-language support</p>
 <p>	•	Admin Dashboard for product & order management</p>
-<p>	•	Enhanced UI/UX</p>
 
 
 ![moc page](./client/assets/screenshots/moc.jpg)
@@ -150,5 +134,3 @@ Screenshots
 <img src="./client/assets/screenshots/details.jpg" width="190px" height="600px">
 <img src="./client/assets/screenshots/favorites.jpg" width="190px" height="600px">
  
-
-
