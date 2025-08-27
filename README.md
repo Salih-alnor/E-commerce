@@ -21,10 +21,10 @@
 
 ![moc page](./client/assets/screenshots/moc.jpg)
 
-![Login page]
-<img src="./client/assets/screenshots/home.jpg" width="100px" height="400px">
-<img src="./client/assets/screenshots/login.jpg" width="100px" height="400px">
-<img src="./client/assets/screenshots/login.jpg" width="100px" height="400px">
+![]
+<img src="./client/assets/screenshots/home.jpg" width="200px" height="600px">
+<img src="./client/assets/screenshots/login.jpg" width="200px" height="600px">
+<img src="./client/assets/screenshots/login.jpg" width="200px" height="600px">
 
 
  Login screen
