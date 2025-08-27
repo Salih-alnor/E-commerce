@@ -24,7 +24,8 @@
 ![]
 <img src="./client/assets/screenshots/home.jpg" width="200px" height="600px">
 <img src="./client/assets/screenshots/login.jpg" width="200px" height="600px">
-<img src="./client/assets/screenshots/login.jpg" width="200px" height="600px">
+<img src="./client/assets/screenshots/register.jpg" width="200px" height="600px">
+<img src="./client/assets/screenshots/profile.jpg" width="200px" height="600px">
 
 
  Login screen
