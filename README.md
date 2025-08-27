@@ -25,7 +25,6 @@ The app provides a modern shopping experience with authentication, product brows
 <p>	•	Manage favourite products.</p>
 <p>	•	Add/remove products individually or clear all.</p>
 <p>Profile Screen:</p>
-<p>	•	View and edit user information.</p>
 <p>	•	Change profile picture using camera or photo gallery.</p>
 <p>Authentication (Login & Register): Secure sign-up and login.</p>
 <p>	•	Persistent User Session: Managed with JWT and AsyncStorage.</p>
