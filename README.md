@@ -28,41 +28,27 @@
 <img src="./client/assets/screenshots/profile.jpg" width="190px" height="600px">
 
 
- Login screen
-![Login page](./client/assets/screenshots/login.jpg)
+![]
+<img src="./client/assets/screenshots/categoris.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/subCategoris.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/brand.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/search.jpg" width="190px" height="600px">
 
- Register screen
-![Register page](./client/assets/screenshots/register.jpg)
 
-Categoris screen
-![Categoris page](./client/assets/screenshots/categoris.jpg)
 
-SubCategoris screen
-![SubCategoris page](./client/assets/screenshots/subCategoris.jpg)
+![]
+<img src="./client/assets/screenshots/cart.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/empty-cart.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/details.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/favorites.jpg" width="190px" height="600px">
 
-Brand screen
-![Brand page](./client/assets/screenshots/brand.jpg)
 
-Search screen
-![Search page](./client/assets/screenshots/search.jpg)
 
-Cart screen
-![Cart page](./client/assets/screenshots/cart.jpg) 
+![]
+<img src="./client/assets/screenshots/checkout.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/payment-method.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/details.jpg" width="190px" height="600px">
+<img src="./client/assets/screenshots/favorites.jpg" width="190px" height="600px">
+ 
 
-Empty-cart screen
-![Empty-cart page](./client/assets/screenshots/empty-cart.jpg)
 
-Details screen
-![Details page](./client/assets/screenshots/details.jpg)
-
-Favorites screen
-![Favorites page](./client/assets/screenshots/favorites.jpg)
-
-Checkout screen
-![Checkout page](./client/assets/screenshots/checkout.jpg) 
-
-Payment-method screen
-![Payment-method page](./client/assets/screenshots/payment-method.jpg)
-
-Profile screen
-![Profile page](./client/assets/screenshots/profile.jpg)
