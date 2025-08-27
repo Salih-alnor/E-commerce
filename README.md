@@ -5,118 +5,118 @@ The app provides a modern shopping experience with authentication, product brows
 
 
 <h2>Features</h2>
-	•	Splash & Onboarding: Introductory screens highlighting app features.
-	•	Home Screen: Browse categories and featured products.
-	•	Products Screen:
-	•	Displays products using FlatList for efficient rendering.
-	•	Each product card shows image, name, price, and quick actions (Add to Cart / Add to Favourites).
-	•	Search Screen:
-	•	Search products by product name or brand name.
-	•	Product Details Screen:
-	•	Display multiple product images using ScrollView.
-	•	Show name, description, price, rating.
-	•	Add to Cart and Favourites.
-	•	Cart Screen:
-	•	View products added to the cart.
-	•	Increase or decrease product quantity with instant update of the total price.
-	•	Remove a single product or clear all products at once.
-	•	Proceed to Checkout.
-	•	Favourites Screen:
-	•	Manage favourite products.
-	•	Add/remove products individually or clear all.
-	•	Profile Screen:
-	•	View and edit user information.
-	•	Change profile picture using camera or photo gallery.
-	•	Authentication (Login & Register): Secure sign-up and login.
-	•	Persistent User Session: Managed with JWT and AsyncStorage.
+<p>	•	Splash & Onboarding: Introductory screens highlighting app features.</p>
+<p>	•	Home Screen: Browse categories and featured products.</p>
+<p>	•	Products Screen:</p>
+<p>	•	Displays products using FlatList for efficient rendering.</p>
+<p>	•	Each product card shows image, name, price, and quick actions (Add to Cart / Add to Favourites).</p>
+<p>	•	Search Screen:</p>
+<p>	•	Search products by product name or brand name.</p>
+<p>	•	Product Details Screen:</p>
+<p>	•	Display multiple product images using ScrollView.</p>
+<p>	•	Show name, description, price, rating.</p>
+<p>	•	Add to Cart and Favourites.</p>
+<p>	•	Cart Screen:</p>
+<p>	•	View products added to the cart.</p>
+<p>	•	Increase or decrease product quantity with instant update of the total price.</p>
+<p>	•	Remove a single product or clear all products at once.</p>
+<p>	•	Proceed to Checkout.</p>
+<p>	•	Favourites Screen:</p>
+<p>	•	Manage favourite products.</p>
+<p>	•	Add/remove products individually or clear all.</p>
+<p>	•	Profile Screen:</p>
+<p>	•	View and edit user information.</p>
+<p>	•	Change profile picture using camera or photo gallery.</p>
+<p>	•	Authentication (Login & Register): Secure sign-up and login.</p>
+<p>	•	Persistent User Session: Managed with JWT and AsyncStorage.</p>
 
 
 <h2>State Management with Redux</h2>
-	•	User State: Manage logged-in user data including profile picture.
-	•	Cart State:
-	•	Add products to cart.
-	•	Increase/decrease product quantity with live price calculation.
-	•	Remove single product or clear all.
-	•	Sync cart data with backend via API.
-	•	Favourites State:
-	•	Add/remove products individually or clear all.
-	•	Fetch favourite products from backend via API.
-	•	Products State:
-	•	Fetch product list from API.
-	•	Supports filtering/search.
-	•	API Integration:
-	•	All cart, favourites, user profile, and product actions are synced with backend using RESTful APIs.
-	•	Ensures persistent and up-to-date data across sessions and devices.
+<p>	•	User State: Manage logged-in user data including profile picture.</p>
+<p>	•	Cart State:</p>
+<p>	•	Add products to cart.</p>
+<p>	•	Increase/decrease product quantity with live price calculation.</p>
+<p>	•	Remove single product or clear all.</p>
+<p>	•	Sync cart data with backend via API.</p>
+<p>	•	Favourites State:</p>
+<p>	•	Add/remove products individually or clear all.</p>
+<p>	•	Fetch favourite products from backend via API.</p>
+<p>	•	Products State:</p>
+<p>	•	Fetch product list from API.</p>
+<p>	•	Supports filtering/search.</p>
+<p>	•	API Integration:</p>
+<p>	•	All cart, favourites, user profile, and product actions are synced with backend using RESTful APIs.</p>
+<p>	•	Ensures persistent and up-to-date data across sessions and devices.</p>
 
 
 
 <h2>Tech Stack</h2>
 
 <h3>Frontend</h3>
-	•	React Native (Expo or CLI)
-	•	Redux (State Management)
-	•	AsyncStorage (Persistent User Data)
-	•	Stripe SDK
-	•	ScrollView (Multiple images in Product Details)
-	•	FlatList (Product Listing)
-	•	Image Picker / Camera Access (Profile Picture)
+<p>	•	React Native (Expo or CLI)</p>
+<p>	•	Redux (State Management)</p>
+<p>	•	AsyncStorage (Persistent User Data)</p>
+<p>	•	Stripe SDK</p>
+<p>	•	ScrollView (Multiple images in Product Details)</p>
+<p>	•	FlatList (Product Listing)</p>
+<p>	•	Image Picker / Camera Access (Profile Picture)</p>
 
 <h3>Backend</h3>
-	•	Node.js
-	•	Express.js
-	•	MongoDB
-	•	JWT (JSON Web Token)
-	•	bcrypt (Password Hashing)
+<p>	•	Node.js</p>
+<p>	•	Express.js</p>
+<p>	•	MongoDB</p>
+<p>	•	JWT (JSON Web Token)</p>
+<p>	•	bcrypt (Password Hashing)</p>
 
 
 
 <h2>Installation & Setup</h2>
 
 <h3>Backend</h3>
-cd backend
-npm install
-npm start
+<p>cd backend</p>
+<p>npm install</p>
+<p>npm start</p>
 
 <h3>Frontend</h3>
-cd frontend
-npm install
-npm start
+<p>cd frontend</p>
+<p>npm install</p>
+<p>npm start</p>
 
 
 
 
 <h2>Security</h2>
-	•	Password Hashing: Implemented with bcrypt before storing passwords.
-	•	Authentication: Secure session management with JWT.
-	•	Persistence: Tokens stored in AsyncStorage for persistent login.
+<p>	•	Password Hashing: Implemented with bcrypt before storing passwords.</p>
+<p>	•	Authentication: Secure session management with JWT.</p>
+<p>	•	Persistence: Tokens stored in AsyncStorage for persistent login.</p>
 
 
 
 <h2>Payment Integration</h2>
-	•	Stripe API for card payments.
-	•	Cash on Delivery and PayPal supported.
+<p>	•	Stripe API for card payments.</p>
+<p>	•	Cash on Delivery and PayPal supported.</p>
 
 
 
 Screenshots
-	•	Splash / Onboarding
-	•	Home / Categories
-	•	Products (FlatList)
-	•	Search (by product name or brand name)
-	•	Product Details (ScrollView with multiple images)
-	•	Cart (Increase/decrease quantity, Remove single / Clear all products)
-	•	Checkout
-	•	Favourites
-	•	Profile (Change profile picture via Camera or Gallery)
-	•	Login / Register
+<p>	•	Splash / Onboarding</p>
+<p>	•	Home / Categories</p>
+<p>	•	Products (FlatList)</p>
+<p>	•	Search (by product name or brand name)</p>
+<p>	•	Product Details (ScrollView with multiple images)</p>
+<p>	•	Cart (Increase/decrease quantity, Remove single / Clear all products)</p>
+<p>	•	Checkout</p>
+<p>	•	Favourites</p>
+<p>	•	Profile (Change profile picture via Camera or Gallery)</p>
+<p>	•	Login / Register</p>
 
 
 
   <h2>Future Improvements</h2>
-	•	Push Notifications
-	•	Multi-language support (i18n)
-	•	Admin Dashboard for product & order management
-	•	Enhanced UI/UX
+<p>	•	Push Notifications</p>
+<p>	•	Multi-language support (i18n)</p>
+<p>	•	Admin Dashboard for product & order management</p>
+<p>	•	Enhanced UI/UX</p>
 
 
 ![moc page](./client/assets/screenshots/moc.jpg)
