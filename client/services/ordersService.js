@@ -3,7 +3,7 @@ import api from "../api";
 const getOrders = async () => {
   try {
     const response = await api.get("/order");
-    return response.data;
+    return {data} = response;
   } catch (error) {
     throw error;
   }
@@ -12,7 +12,7 @@ const getOrders = async () => {
 const createCashOrder = async (cartId) => {
     try {
       const response = await api.post(`/order/cash/${cartId}`);
-      return response.data;
+      return {data} = response;
     } catch (error) {
       throw error;
     }
@@ -22,7 +22,7 @@ const createCashOrder = async (cartId) => {
 const createCardOrder = async (cartId) => {
     try {
       const response = await api.post(`order/checkout/${cartId}`);
-      return response.data;
+      return {data} = response;
     } catch (error) {
       throw error;
     }
@@ -32,7 +32,7 @@ const createPayPalOrder = async (cartItems) => {
   const cartId = cartItems.cartId;
     try {
       const response = await api.post(`/order/paypal/${cartId}`);
-      return response.data;
+      return {data} = response;
     } catch (error) {
       throw error;
     }

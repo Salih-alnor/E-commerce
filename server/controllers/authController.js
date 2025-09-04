@@ -72,7 +72,7 @@ const login = asyncHandler(async (req, res, next) => {
 
   if (!user) {
     const err = new Error("Invalid email or password");
-    err.code = 402;
+    err.code = 401;
     return next(err);
   }
 
@@ -80,7 +80,7 @@ const login = asyncHandler(async (req, res, next) => {
 
   if (!hashedPassword) {
     const err = new Error("Invalid email or password");
-    err.code = 402;
+    err.code = 401;
     return next(err);
   }
 

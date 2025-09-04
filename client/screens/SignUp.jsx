@@ -125,22 +125,15 @@ const SignUp = ({ navigation }) => {
   const handleFormSubmit = async (values) => {
     try {
       const response = await register(values);
-      
 
-      if (response.token) {
-        await AsyncStorage.setItem("token", response.token);
-        if (response.user) {
-          await AsyncStorage.setItem(
-            "user",
-            JSON.stringify(response.user)
-          );
+      if(response.user) {
           dispatch({ type: "setUserInfo", payload: response.user });
           navigation.replace("login");
-        }
       }
+      
       console.log(response.message)
     } catch (error) {
-      Alert.alert(error.response.data.error);
+      Alert.alert(error.response?.data?.error || "server error");
     }
   };
 

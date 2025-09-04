@@ -4,7 +4,7 @@ import api from "../api";
 export const getProducts = async () => {
   try {
     const response = await api.get("/product");
-    return response.data.products;
+    return {products} = response.data;
   } catch (error) {
     throw error;
   }
@@ -14,7 +14,7 @@ export const getProducts = async () => {
 export const createProduct = async (productData) => {
   try {
     const response = await api.post("/product", productData);
-    return response.data;
+    return {data} = response;
   } catch (error) {
     throw error;
   }

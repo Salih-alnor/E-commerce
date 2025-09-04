@@ -1,14 +1,23 @@
 import api from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import CookieManager from "@react-native-cookies/cookies";
+
 
 
 export const login = async (email, password) => {
   try {
     const response = await api.post("/auth/login", { email, password });
-    await AsyncStorage.setItem("token", response.data.token);
-    await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
-    return response.data;
+    const {token, user, status, message} = response.data;
+    if (token) {
+        await AsyncStorage.setItem("token", token);
+        if (user) {
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(user)
+          )
+          
+        }
+      }
+    return {token, user, status, message}
   } catch (error) {
     throw error;
   }
@@ -18,7 +27,19 @@ export const login = async (email, password) => {
 export const register = async (userData) => {
   try {
     const response = await api.post("/auth/register", userData);
-    return response.data;
+    const {token, user, status, message} = response.data;
+    
+     if (token) {
+        await AsyncStorage.setItem("token", token);
+        if (user) {
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(user)
+          )
+          
+        }
+      }
+      return {token, user, status, message};
   } catch (error) {
     throw error;
   }
@@ -26,7 +47,11 @@ export const register = async (userData) => {
 
 
 export const logout = async () => {
-  // await CookieManager.clearAll();
-  await AsyncStorage.removeItem("token");
-  await AsyncStorage.removeItem("user");
+
+  if (token) {
+        await AsyncStorage.removeItem("token");
+        if (user) {
+          await AsyncStorage.removeItem("user");
+        }
+      }  
 };

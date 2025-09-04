@@ -13,9 +13,10 @@ const Splash = ({ navigation }) => {
         "onboardingCompleted"
       );
 
-      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      
       
       if (isOnboardingCompleted === "true") {
+        const user = JSON.parse(await AsyncStorage.getItem("user"));
         if (user) {
           dispatch({ type: "setUserInfo", payload: user });
           navigation.navigate("tabBar");

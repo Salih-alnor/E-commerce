@@ -152,18 +152,14 @@ const Login = ({ navigation }) => {
       const response = await login(email, password);
 
       if (response.status === "success") {
-        if (response.token) {
-          await AsyncStorage.setItem("token", response.token);
-          if (response.user) {
-            await AsyncStorage.setItem("user", JSON.stringify(response.user));
-            dispatch({ type: "setUserInfo", payload: response.user });
-            navigation.replace("tabBar");
-          }
+        if (response.user) {
+          dispatch({ type: "setUserInfo", payload: response.user });
+          navigation.replace("tabBar");
         }
       }
       console.log(response.message);
     } catch (error) {
-      console.log(error.response.data.error);
+      console.log(error.response?.data?.error || "server error");
     }
   };
 
